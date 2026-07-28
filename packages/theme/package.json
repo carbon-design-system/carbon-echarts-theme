@@ -1,0 +1,64 @@
+{
+  "name": "@carbon/echarts-theme",
+  "version": "0.1.0",
+  "description": "Apache ECharts theme built on Carbon Design System v11 tokens and IBM data-vis color palettes",
+  "keywords": [
+    "carbon",
+    "carbon-design-system",
+    "echarts",
+    "theme",
+    "ibm",
+    "data-visualization"
+  ],
+  "homepage": "https://github.com/carbon-design-system/carbon-echarts-theme#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carbon-design-system/carbon-echarts-theme.git",
+    "directory": "packages/theme"
+  },
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./presets": {
+      "types": "./dist/presets/index.d.ts",
+      "import": "./dist/presets/index.js",
+      "require": "./dist/presets/index.cjs"
+    },
+    "./themes/*": {
+      "types": "./dist/themes/*.d.ts",
+      "import": "./dist/themes/*.js",
+      "require": "./dist/themes/*.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "echarts": ">=5.0.0"
+  },
+  "devDependencies": {
+    "@carbon/colors": "^11.30.0",
+    "@carbon/themes": "^11.53.0",
+    "@vitest/coverage-v8": "^3.0.0",
+    "echarts": "^6.1.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.8.3",
+    "vitest": "^3.0.0"
+  }
+}
