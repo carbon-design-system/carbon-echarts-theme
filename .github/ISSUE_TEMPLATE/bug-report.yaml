@@ -1,0 +1,97 @@
+name: Bug report 🐛
+description: Something not working as expected? Report it here.
+title: '[Bug]: '
+type: bug
+labels: ['type: bug 🐛']
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report.
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      description: Which package is affected?
+      multiple: true
+      options:
+        - '@carbon/echarts-theme'
+        - '@carbon/echarts-codemod'
+        - showcase site
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: e.g. 0.3.1
+    validations:
+      required: true
+
+  - type: input
+    id: echarts-version
+    attributes:
+      label: ECharts version
+      placeholder: e.g. 6.1.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Carbon theme
+      description: Which theme were you using when the bug occurred?
+      multiple: true
+      options:
+        - carbon-white
+        - carbon-g10
+        - carbon-g90
+        - carbon-g100
+        - all themes
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What did you expect to happen? What happened instead?
+    validations:
+      required: true
+
+  - type: input
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Link to a minimal reproduction (CodeSandbox, StackBlitz, or repo).
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Suggested severity
+      options:
+        - 'Critical (Severity 1) — visual or functional breakage affecting all users'
+        - 'High (Severity 2) — significant visual divergence from Carbon spec'
+        - 'Medium (Severity 3) — minor visual issue, workaround exists'
+        - 'Low (Severity 4) — cosmetic or edge case'
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: conduct
+    attributes:
+      label: Code of Conduct
+      options:
+        - label: I agree to follow this project's [Code of Conduct](../../blob/main/.github/CODE_OF_CONDUCT.md)
+          required: true
+        - label: I checked [existing issues](../../issues) for duplicates

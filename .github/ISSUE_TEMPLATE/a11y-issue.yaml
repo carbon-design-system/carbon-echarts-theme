@@ -1,0 +1,80 @@
+name: Accessibility issue ♿
+description: Report an accessibility or usability issue in the theme or showcase site.
+title: '[a11y]: '
+type: bug
+labels: ['type: a11y ♿', 'type: bug 🐛']
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        IBM is committed to accessible experiences. Thanks for helping us improve.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      multiple: true
+      options:
+        - showcase site
+        - theme (contrast / colour token)
+        - documentation
+    validations:
+      required: true
+
+  - type: input
+    id: tool
+    attributes:
+      label: Automated testing tool and ruleset
+      placeholder: e.g. IBM Equal Access Accessibility Checker — Latest Deployment
+    validations:
+      required: true
+
+  - type: input
+    id: assistive-tech
+    attributes:
+      label: Assistive technology
+      placeholder: e.g. JAWS, VoiceOver, NVDA
+
+  - type: input
+    id: wcag
+    attributes:
+      label: WCAG 2.1 checkpoint
+      placeholder: e.g. 1.4.3 Contrast (Minimum)
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What did you expect? What happened instead?
+    validations:
+      required: true
+
+  - type: input
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: URL or link to a minimal reproduction.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Suggested severity
+      options:
+        - 'Critical (Severity 1) — blocks users from accessing content'
+        - 'High (Severity 2) — task cannot be completed without assistive tech workaround'
+        - 'Medium (Severity 3) — task can be completed with effort'
+        - 'Low (Severity 4) — minor inconvenience'
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: conduct
+    attributes:
+      label: Code of Conduct
+      options:
+        - label: I agree to follow this project's [Code of Conduct](../../blob/main/.github/CODE_OF_CONDUCT.md)
+          required: true
+        - label: I checked [existing issues](../../issues) for duplicates

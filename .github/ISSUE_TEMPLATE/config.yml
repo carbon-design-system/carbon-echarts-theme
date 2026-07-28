@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Question or discussion 💬
+    url: https://github.com/carbon-design-system/carbon-echarts-theme/discussions/new
+    about: Ask usage questions or start a discussion rather than opening an issue.
+  - name: Carbon Design System Slack
+    url: https://ibm-studios.slack.com/archives/C0M053VPT
+    about: IBMers can ask questions in #carbon-design-system on Slack.

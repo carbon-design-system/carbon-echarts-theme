@@ -1,0 +1,69 @@
+# Build output
+dist
+build
+packages/*/dist/
+packages/*/build/
+es
+lib
+umd
+css
+
+# pnpm
+node_modules
+.pnpm-store
+
+# Lockfile integrity — keep pnpm-lock.yaml, ignore npm/yarn lockfiles
+package-lock.json
+yarn.lock
+
+# Caches
+.cache
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Certificates
+*.crt
+*.pem
+
+# Editor
+.DS_Store
+*.swp
+.history/
+.idea
+.vscode
+
+# Coverage
+coverage
+/junit.xml
+
+# Playwright
+.playwright
+blob-report
+
+# Accessibility Verification Testing
+.avt/
+
+# Environment / secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Vite
+packages/site/.vite/
+
+# Changesets
+.changeset/*.md
+!.changeset/README.md
+
+# macOS
+.DS_Store
