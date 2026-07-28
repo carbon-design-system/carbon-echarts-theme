@@ -1,0 +1,24 @@
+---
+title: Histogram
+---
+
+## Usage
+
+Histograms display the frequency distribution of a single continuous variable by dividing the data range into equal-width bins. They differ from bar charts in that the bars are gapless and the x-axis is continuous.
+
+**When to use:**
+- Understanding the distribution shape (normal, skewed, bimodal)
+- Showing frequency or density of a continuous variable
+- Exploring data before analysis
+
+**When not to use:**
+- Categorical data (use a bar chart)
+- Comparing distributions across groups (use boxplots or density plots)
+
+## Color
+
+Use a **single categorical color** — histograms represent one variable.
+
+## ECharts implementation notes
+
+Implemented as a `bar` series with `barCategoryGap: '1%'` (near-zero gap). `createHistogramOptions` bins raw observation arrays automatically using Sturges' rule.

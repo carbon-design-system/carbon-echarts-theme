@@ -1,0 +1,21 @@
+---
+title: Lollipop & Sparkline
+---
+
+## Usage
+
+**Lollipop charts** are a variation of bar charts where a line topped with a dot replaces the bar rectangle. They reduce visual noise when comparing many categories with similar values. **Sparklines** are miniature charts stripped of all decoration — axes, labels, legends — used inline within tables or dashboards.
+
+**When to use lollipop:**
+- Many categories where bar charts look cluttered
+- Emphasising individual data points rather than area/volume
+
+**When to use sparkline:**
+- Inline trend indicators in a table row or KPI card
+- Space-constrained dashboards
+
+## ECharts implementation notes
+
+Lollipops are implemented as `scatter` series (dots) with `markLine` for the stems. `createLollipopOptions` handles this combination automatically.
+
+Sparklines strip `xAxis`, `yAxis`, `tooltip`, `legend`, and `grid` padding entirely. `createSparklineOptions` returns a minimal option with `animation: false`.

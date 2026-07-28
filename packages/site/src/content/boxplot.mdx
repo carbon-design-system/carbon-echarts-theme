@@ -1,0 +1,24 @@
+---
+title: Boxplot
+---
+
+## Usage
+
+Boxplots (box-and-whisker plots) display the distribution of a dataset through its quartiles. They are effective for comparing distributions across categories and identifying outliers.
+
+**When to use:**
+- Comparing statistical distributions across groups
+- Identifying outliers, skewness, or spread
+- Summarizing large datasets where individual points would clutter a scatter chart
+
+**When not to use:**
+- Fewer than ~20 observations per group (use a dot plot)
+- Audiences unfamiliar with statistical charts (add explanatory annotations)
+
+## Color
+
+Use a single categorical color per group, or the categorical palette for multi-group comparison.
+
+## ECharts implementation notes
+
+ECharts `boxplot` series accepts pre-computed `[min, Q1, median, Q3, max]` tuples. `createBoxplotOptions` computes these statistics from raw observations automatically.

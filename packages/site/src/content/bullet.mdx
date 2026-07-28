@@ -1,0 +1,27 @@
+---
+title: Bullet chart
+---
+
+## Usage
+
+Bullet charts are a compact alternative to gauges for showing a primary measure against a target and qualitative ranges (poor / satisfactory / good). They were designed by Stephen Few to replace dashboard gauges.
+
+**When to use:**
+- Showing performance against a target in limited space
+- Comparing multiple KPIs in a compact dashboard layout
+- When qualitative background ranges (red/yellow/green) add context
+
+## Variants
+
+- **Horizontal** — default; multiple bullets stack vertically.
+- **Vertical** — rotated 90°; less common.
+
+## Color
+
+- Background range bands: alert palette (red → yellow → green, light to dark).
+- Actual value bar: first categorical color.
+- Target marker: `$text-primary` token.
+
+## ECharts implementation notes
+
+> **Examples coming in v2.** Bullet charts require custom layered `bar` series with transparent base bars to encode the range bands. The implementation approach is documented in [§2.8 of the implementation plan](/IMPLEMENTATION.md). The Overview tab is complete; live examples will ship in `@carbon/echarts-theme@0.2.0`.

@@ -1,0 +1,38 @@
+---
+title: Line chart
+---
+
+## Usage
+
+Use a line chart to display trends or changes over time. Line charts are best for continuous data with many data points where the shape of the trend matters.
+
+**When to use:**
+- Showing trends over time or a continuous range
+- Comparing multiple series over the same time range
+- Highlighting rate of change
+
+**When not to use:**
+- Comparing discrete, unordered categories (use a bar chart)
+- Fewer than 3 data points per series (use a bar chart)
+
+## Variants
+
+- **Discrete** — points connected by lines; each data point is a category.
+- **Time-series** — x-axis is a continuous time scale.
+- **Step** — lines change at right angles; useful for stepped thresholds or state changes.
+- **Dual-axis** — two y-axes for series with different scales.
+- **Log scale** — y-axis uses a logarithmic scale for wide-range data.
+
+## Color
+
+Use the categorical palette; each series gets a distinct color. Avoid more than 8 series in a single chart to maintain legibility.
+
+## Accessibility
+
+- Use both line style (solid, dashed, dotted) and color to differentiate series.
+- Provide a descriptive title and axis labels.
+- Ensure the tooltip contains all series values at the hovered point.
+
+## ECharts implementation notes
+
+For time-series data, set `xAxis.type: 'time'` and provide ISO date strings or timestamp values. Step lines use `series[].step: 'start' | 'middle' | 'end'`.

@@ -1,6 +1,7 @@
 import type { EChartsOption, SeriesOption } from 'echarts'
 import { groupByGroup } from './_transform'
 import type { ChartTabularData } from './_transform'
+import { lightCategorical, darkCategorical } from '../palettes'
 
 // ── Shared grid defaults (mirrors Carbon Charts spacing) ─────────────────────
 const GRID = { top: 48, bottom: 56, left: 48, right: 24, containLabel: true } as const
@@ -21,6 +22,11 @@ export interface BarPresetOptions {
   title?: string
   /** Override the x-axis field ('key' or 'date') */
   xField?: 'key' | 'date'
+  /**
+   * When 'dark', use the dark categorical palette for per-bar colouring.
+   * Defaults to 'light'. Only applies to single-series (simple) bar charts.
+   */
+  colorScheme?: 'light' | 'dark'
 }
 
 /**
@@ -88,12 +94,28 @@ export function createBarOptions(
     }
   }
 
-  series = groups.map((g) => ({
-    type: 'bar' as const,
-    name: g.name,
-    data: g.data,
-    ...(stacked ? { stack: 'total' } : {}),
-  }))
+  // Single-series simple bar: colour each bar individually to match Carbon Charts'
+  // per-N categorical palette behaviour (each category gets a distinct palette colour).
+  const isSingleSeries = groups.length === 1
+  const palette = (opts.colorScheme === 'dark' ? darkCategorical : lightCategorical) as string[]
+
+  series = groups.map((g, gi) =>
+    isSingleSeries
+      ? {
+          type: 'bar' as const,
+          name: g.name,
+          data: g.data.map((d, di) => ({
+            ...d,
+            itemStyle: { color: palette[di % palette.length] },
+          })),
+        }
+      : {
+          type: 'bar' as const,
+          name: g.name,
+          data: g.data,
+          ...(stacked ? { stack: 'total' } : {}),
+        },
+  )
 
   return {
     ...(title ? { title: { text: title } } : {}),

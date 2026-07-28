@@ -1,0 +1,26 @@
+---
+title: Tree chart
+---
+
+## Usage
+
+Tree charts display hierarchical relationships as a branching node-link diagram. They are used for org charts, file system structures, taxonomies, and any data with clear parent-child relationships.
+
+**When to use:**
+- Displaying parent-child hierarchical relationships
+- Org charts, taxonomies, decision trees
+- When the shape and branching of the hierarchy is meaningful
+
+**When not to use:**
+- Deeply nested hierarchies with many leaves (use a treemap for size-based view)
+- Non-hierarchical relationships (use a graph/network diagram)
+
+## Variants
+
+- **Left-to-right (LR)** — root on the left, leaves on the right (default).
+- **Top-to-bottom (TB)** — root at the top (classic org chart).
+- **Right-to-left (RL) / Bottom-to-top (BT)** — mirrored orientations.
+
+## ECharts implementation notes
+
+ECharts `tree` series accepts nested `{name, children}` objects. Set `series.orient` to `'LR'`, `'TB'`, `'RL'`, or `'BT'`. A tabular adapter (`createTreeOptionsFromTabular`) converts flat `{id, parentId, name}` rows into the nested structure automatically.

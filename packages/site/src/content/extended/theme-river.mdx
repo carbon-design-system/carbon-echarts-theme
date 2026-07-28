@@ -1,0 +1,20 @@
+---
+title: Theme River
+---
+
+## Usage
+
+Theme River (Stream Graph) charts show the evolution of multiple categories over time as stacked flows centered on a baseline. The height of each band represents the value at that time.
+
+**When to use:**
+- Showing change in relative proportions over time for many categories
+- Visualizing "streams" of data where the flowing aesthetic adds to understanding
+- Time-series with 4–12 categories
+
+**When not to use:**
+- Precise value reading (the baseline shifts; use stacked area instead)
+- Fewer than 4 categories
+
+## ECharts implementation notes
+
+This chart type has no Carbon Charts equivalent. ECharts `themeRiver` series with a `singleAxis` time axis. Data format: `[[date, value, categoryName], ...]`. All Carbon theme tokens apply.

@@ -1,0 +1,34 @@
+---
+title: Area chart
+---
+
+## Usage
+
+Area charts are line charts with the area below the line filled in. Use them to show cumulative totals or stacked comparisons over time where the filled area communicates volume.
+
+**When to use:**
+- Showing volume or magnitude over time
+- Displaying stacked totals where part-to-whole relationships matter
+- Emphasizing the area between two series
+
+**When not to use:**
+- Precise value comparison (filled areas obscure differences — use a line chart)
+- More than 4–5 stacked series (becomes unreadable)
+
+## Variants
+
+- **Simple** — single filled area below a line.
+- **Stacked** — multiple series stacked on top of each other; shows total and individual contribution.
+
+## Color
+
+Use categorical colors at reduced opacity (40–50%) for the fill so underlying grid lines remain visible. The line stroke uses the full categorical color.
+
+## Accessibility
+
+- Do not use stacked area charts with more than 5 series.
+- Ensure the fill opacity provides sufficient contrast for the fill boundary.
+
+## ECharts implementation notes
+
+Area fill is applied via `series[].areaStyle`. Stacked areas require `series[].stack: 'total'` on each series.

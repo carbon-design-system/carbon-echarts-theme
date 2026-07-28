@@ -1,0 +1,29 @@
+---
+title: Heatmap
+---
+
+## Usage
+
+Heatmaps encode a numeric value as color intensity across a two-dimensional grid. They are effective for showing patterns in large datasets where individual values are less important than the overall distribution.
+
+**When to use:**
+- Showing density or concentration across two categorical dimensions
+- Identifying patterns, clusters, or anomalies in a matrix
+- Calendar heatmaps (activity over days × weeks)
+
+**When not to use:**
+- Precise value comparison (color perception is imprecise)
+- Sparse matrices with few non-zero cells
+
+## Color
+
+Use a **sequential palette** — a single-hue ramp from low (light) to high (dark). The `@carbon/echarts-theme` sequential palettes are configured for the `visualMap` component automatically.
+
+## Accessibility
+
+- Always include a `visualMap` legend so users can map color to value.
+- Provide tooltips with exact values.
+
+## ECharts implementation notes
+
+Heatmaps use `series.type: 'heatmap'` paired with a `visualMap` component. `createHeatmapOptions` configures `visualMap.inRange.color` from the sequential palette automatically.

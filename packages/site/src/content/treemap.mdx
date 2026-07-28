@@ -1,0 +1,24 @@
+---
+title: Treemap
+---
+
+## Usage
+
+Treemaps display hierarchical data as a set of nested rectangles. Area encodes a quantitative value. Use them to show part-to-whole relationships within a hierarchy.
+
+**When to use:**
+- Displaying hierarchical proportions (e.g., file system usage, org breakdown)
+- When relative size within a category matters
+- Large datasets where a pie chart would have too many slices
+
+**When not to use:**
+- Flat data with no hierarchy (use a bar chart)
+- Precise value comparison (areas are hard to compare)
+
+## Color
+
+Use the categorical palette for top-level categories. Child nodes inherit parent colors at reduced opacity.
+
+## ECharts implementation notes
+
+ECharts `treemap` series handles nested data natively. Pass hierarchical data with `children` arrays. `createTreemapOptions` sets leaf node coloring and label truncation.

@@ -1,0 +1,21 @@
+---
+title: Candlestick (OHLC)
+---
+
+## Usage
+
+Candlestick charts display the open, high, low, and close (OHLC) values of a financial instrument over time. The candlestick body shows the open-to-close range; the wicks show the full high-to-low range.
+
+**When to use:**
+- Financial data visualization (stocks, crypto, commodities)
+- Any OHLC time-series data
+- When price movement direction (up/down) needs visual encoding
+
+## Color
+
+- Rising candles (close > open): use Green 60 from the alert palette.
+- Falling candles (close ≤ open): use Red 60 from the alert palette.
+
+## ECharts implementation notes
+
+This chart type has no Carbon Charts equivalent. ECharts `candlestick` series accepts `[open, close, low, high]` tuples. All Carbon theme tokens apply. Alert palette colors are used for the two candle states via `itemStyle.color` and `itemStyle.color0`.

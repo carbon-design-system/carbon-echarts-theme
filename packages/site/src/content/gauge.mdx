@@ -1,0 +1,29 @@
+---
+title: Gauge & Meter chart
+---
+
+## Usage
+
+Gauge charts display a single value on a circular arc scale. They are used for dashboards showing KPIs, utilization metrics, or progress toward a goal. Use meters for linear progress representations.
+
+**When to use:**
+- Displaying a single KPI against a scale (e.g., 72%)
+- Dashboard widgets where available space is limited
+- Showing utilization or capacity (CPU, memory, storage)
+
+**When not to use:**
+- Comparing multiple values (use a bar chart)
+- Showing precise values where the arc angle is ambiguous
+
+## Color
+
+Use the **alert palette** to indicate status ranges: green (good), yellow (warning), red (critical). Default single-value gauges use the first categorical color.
+
+## Accessibility
+
+- Always include the numeric value as text, not just the arc position.
+- Color-code ranges must also have text labels.
+
+## ECharts implementation notes
+
+ECharts `gauge` series is highly configurable. The `createGaugeOptions` preset sets the arc track, pointer, and axis tick styling to match Carbon Charts. Meters are emulated using a narrow `gauge` with `startAngle: 180` and `endAngle: 0`.

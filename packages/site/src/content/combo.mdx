@@ -1,0 +1,24 @@
+---
+title: Combo chart
+---
+
+## Usage
+
+Combo charts combine two or more series types (typically bar and line) in the same chart area. Use them when comparing a discrete measure (bars) against a continuous trend (line) over the same categories.
+
+**When to use:**
+- Comparing actual vs. target across categories
+- Overlaying a trend line on a bar chart
+- Dual-axis when series have different value scales
+
+**When not to use:**
+- More than two series types (becomes confusing)
+- When both series have similar scales (use a grouped bar chart instead)
+
+## Color
+
+Assign the first categorical color to bars and the second to lines. For dual-axis combos, associate each axis color with its series.
+
+## ECharts implementation notes
+
+Combo charts mix `bar` and `line` series in the same `series` array. Dual-axis uses `series[].yAxisIndex: 0` and `series[].yAxisIndex: 1` with two `yAxis` definitions.

@@ -1,0 +1,27 @@
+---
+title: Word cloud
+---
+
+## Usage
+
+Word clouds (tag clouds) display text data where word size encodes frequency or weight. They provide a quick visual summary of text content and are common in content analysis, social media, and survey response visualization.
+
+**When to use:**
+- Showing relative frequency of terms in a text corpus
+- Survey open-text response summaries
+- Tag/keyword prominence at a glance
+
+**When not to use:**
+- Precise value comparison (word size perception is imprecise)
+- Long phrases (only single words or short phrases work well)
+- When exact counts matter (use a horizontal bar chart of terms)
+
+## Color
+
+Use the categorical palette. Assign colors randomly or by semantic category.
+
+## ECharts implementation notes
+
+> **Examples coming in v2.** Word clouds require the `echarts-wordcloud` extension package (`npm install echarts-wordcloud`), which is a peer dependency outside the core `@carbon/echarts-theme` scope. Examples will ship in `@carbon/echarts-theme@0.2.0`.
+>
+> Install separately: `npm install echarts-wordcloud`

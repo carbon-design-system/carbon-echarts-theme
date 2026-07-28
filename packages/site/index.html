@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carbon ECharts Theme</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- IBM Plex (all families except JP/KR) — canonical IBM CDN artifact -->
+    <link rel="preconnect" href="https://1.www.s81c.com" />
+    <!-- Preload the two weights used most — eliminates FOUT on first paint -->
+    <link rel="preload" as="font" crossorigin
+      href="https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Sans/fonts/split/woff2/IBMPlexSans-Regular-Latin1.woff2" />
+    <link rel="preload" as="font" crossorigin
+      href="https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Sans/fonts/split/woff2/IBMPlexSans-SemiBold-Latin1.woff2" />
+    <link rel="stylesheet" href="https://1.www.s81c.com/common/carbon/plex/plex-full.css" />
+
+    <!-- Carbon CSS custom properties (--cds-* tokens) — enables theme-aware var() in styles -->
+    <link rel="stylesheet" href="https://1.www.s81c.com/common/carbon/web-components/tag/latest/themes.css" />
+
+    <!-- 1. digitalData — must precede ibm-common.js -->
+    <script>
+      window.digitalData = {
+        page: {
+          category: { primaryCategory: 'IBM_DESIGN_SYSTEMS' },
+          pageInfo: {
+            ibm: {
+              siteID: 'CARBON_CHARTS_ECHARTS_DEV',
+              country: 'US',
+              language: 'en',
+              owner: 'Carbon Design System',
+            },
+          },
+        },
+      }
+    </script>
+
+    <!-- 2. IBM common script — analytics, consent, cookie banner -->
+    <script src="//1.www.s81c.com/common/stats/ibm-common.js" defer></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

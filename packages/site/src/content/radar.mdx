@@ -1,0 +1,25 @@
+---
+title: Radar chart
+---
+
+## Usage
+
+Radar charts (spider charts) display multivariate data on equidistant axes arranged radially. Use them to compare multiple entities across several quantitative dimensions simultaneously.
+
+**When to use:**
+- Comparing profiles across 3–8 dimensions
+- Performance evaluation across multiple criteria
+- Showing strengths and weaknesses at a glance
+
+**When not to use:**
+- More than 8 axes (becomes unreadable)
+- Precise value comparison (use a grouped bar chart)
+- Single-variable data
+
+## Color
+
+Use categorical colors. Fills should use the color at reduced opacity (30–40%).
+
+## ECharts implementation notes
+
+ECharts `radar` series requires a `radar` component defining `indicator` (axis name + max). `createRadarOptions` derives the max from the data automatically.

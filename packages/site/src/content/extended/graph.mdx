@@ -1,0 +1,20 @@
+---
+title: Graph (Network)
+---
+
+## Usage
+
+Graph charts visualize relationships between entities as nodes and edges. Use them to show network topology, social connections, dependency graphs, or any system where links between items are the primary insight.
+
+**When to use:**
+- Visualizing relationships, connections, or dependencies between entities
+- Network topology diagrams
+- Social network or influence mapping
+
+**When not to use:**
+- Dense graphs with hundreds of nodes (use a matrix instead)
+- When hierarchy is the primary structure (use a tree chart)
+
+## ECharts implementation notes
+
+This chart type has no Carbon Charts equivalent (Carbon Charts uses a custom D3-based network diagram). ECharts `graph` series supports `force`, `circular`, and `none` layouts. All Carbon theme tokens apply.
