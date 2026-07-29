@@ -1,0 +1,663 @@
+// Pull in the Carbon token variables as CSS custom property references.
+// Each $token resolves to var(--cds-token) — the same values already loaded
+// at runtime by themes.css in index.html, so no extra CSS is emitted here.
+@use '@carbon/styles/scss/theme' as *;
+@use '@carbon/styles/scss/themes';
+
+// Emit --cds-* custom properties for the White theme on :root, and each of
+// the other three themes scoped to their data-carbon-theme attribute selectors.
+// This replaces the CDN themes.css dependency and makes the site fully
+// self-contained.
+:root {
+  @include theme(themes.$white);
+}
+
+[data-carbon-theme='g10'] {
+  @include theme(themes.$g10);
+}
+
+[data-carbon-theme='g90'] {
+  @include theme(themes.$g90);
+}
+
+[data-carbon-theme='g100'] {
+  @include theme(themes.$g100);
+}
+
+/* ── Reset & base ────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family:
+    'IBM Plex Sans',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: $text-primary;
+  background-color: $background;
+}
+
+/* ── Site layout ─────────────────────────────────────────────────────────── */
+.site-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.site-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: $background-inverse;
+  color: $text-inverse;
+  border-bottom: 1px solid $border-subtle-00;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 1rem;
+  gap: 1rem;
+}
+
+.site-header__wordmark {
+  color: $text-inverse;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.16px;
+  white-space: nowrap;
+}
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.site-header__github {
+  color: $text-on-color-disabled;
+  text-decoration: none;
+  font-size: 14px;
+
+  &:hover {
+    color: $text-inverse;
+  }
+}
+
+/* ── Left nav ────────────────────────────────────────────────────────────── */
+.site-nav {
+  width: 256px;
+  flex-shrink: 0;
+  background-color: $layer-01;
+  border-right: 1px solid $border-subtle-01;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+}
+
+.site-nav__group {
+  border-bottom: 1px solid $border-subtle-01;
+}
+
+.site-nav__group-heading {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $text-secondary;
+  text-align: left;
+}
+
+.site-nav__chevron {
+  font-size: 10px;
+}
+
+.site-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-nav__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem 0.5rem 1.5rem;
+  font-size: 14px;
+  color: $text-primary;
+  text-decoration: none;
+
+  &:hover {
+    background-color: $layer-hover-01;
+  }
+}
+
+.site-nav__link--active {
+  background-color: $layer-selected-01;
+  font-weight: 600;
+  border-left: 3px solid $interactive;
+  padding-left: calc(1.5rem - 3px);
+}
+
+.site-nav__badge {
+  font-size: 10px;
+  font-weight: 600;
+  background-color: #6929c4;
+  color: #ffffff;
+  border-radius: 2px;
+  padding: 1px 5px;
+  letter-spacing: 0;
+}
+
+/* ── Main content area ───────────────────────────────────────────────────── */
+.site-content {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+/* ── Chart page ──────────────────────────────────────────────────────────── */
+.chart-page__hero {
+  // Hero band is always the inverted/dark strip regardless of site theme
+  background-color: $background-inverse;
+  color: $text-inverse;
+  padding: 2rem;
+}
+
+.chart-page__title {
+  font-size: 32px;
+  font-weight: 400;
+  margin: 0 0 0.5rem;
+  line-height: 1.25;
+}
+
+.chart-page__description {
+  font-size: 16px;
+  color: $text-on-color-disabled;
+  margin: 0;
+}
+
+.chart-page__tabs {
+  background-color: $background;
+}
+
+.chart-page__tablist {
+  display: flex;
+  border-bottom: 1px solid $border-subtle-01;
+  padding: 0 2rem;
+}
+
+.chart-page__tab {
+  padding: 1rem 1.5rem;
+  font-size: 14px;
+  font-weight: 400;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  color: $text-secondary;
+  margin-bottom: -1px;
+}
+
+.chart-page__tab--active {
+  color: $text-primary;
+  border-bottom-color: $interactive;
+  font-weight: 600;
+}
+
+.chart-page__panel {
+  padding: 2rem;
+}
+
+.chart-page__v2-banner {
+  border: 1px solid $support-warning;
+  background-color: var(--cds-notification-background-warning, #fcf4d6);
+  color: $text-primary;
+  padding: 1rem 1.5rem;
+  border-radius: 2px;
+  font-size: 14px;
+}
+
+.chart-page__overview {
+  max-width: 720px;
+}
+
+.chart-page__overview h2 {
+  font-size: 20px;
+  font-weight: 400;
+  margin: 1.5rem 0 0.5rem;
+  border-bottom: 1px solid $border-subtle-01;
+  padding-bottom: 0.5rem;
+  color: $text-primary;
+}
+
+.chart-page__overview p {
+  margin: 0 0 1rem;
+  color: $text-secondary;
+}
+
+.chart-page__overview ul,
+.chart-page__overview ol {
+  color: $text-secondary;
+  padding-left: 1.5rem;
+  margin: 0 0 1rem;
+}
+
+/* ── Side-by-side ────────────────────────────────────────────────────────── */
+.side-by-side {
+  margin-bottom: 3rem;
+}
+
+.side-by-side__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.side-by-side__title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: $text-primary;
+}
+
+.side-by-side__extended-banner {
+  font-size: 14px;
+  color: $text-secondary;
+  background-color: $layer-01;
+  border-left: 4px solid $interactive;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.side-by-side__panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.side-by-side__panels--single {
+  grid-template-columns: 1fr;
+}
+
+.side-by-side__panel {
+  border: 1px solid $border-subtle-01;
+  border-radius: 2px;
+}
+
+.side-by-side__panel-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.32px;
+  color: $text-helper;
+  padding: 0.5rem 1rem;
+  background-color: $layer-01;
+  border-bottom: 1px solid $border-subtle-01;
+}
+
+.side-by-side__chart {
+  padding: 1rem;
+  background-color: $background;
+}
+
+/* ── Code tabs ───────────────────────────────────────────────────────────── */
+.code-tabs__bar {
+  display: flex;
+  align-items: center;
+  // Code block toolbar is always dark regardless of site theme
+  background-color: #393939;
+  border-radius: 2px 2px 0 0;
+}
+
+.code-tabs__tab {
+  padding: 0.5rem 1rem;
+  font-size: 12px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  color: #c6c6c6;
+}
+
+.code-tabs__tab--active {
+  color: #f4f4f4;
+  border-bottom-color: #0f62fe;
+}
+
+.code-tabs__copy {
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  font-size: 12px;
+  background: none;
+  border: none;
+  border-left: 1px solid #525252;
+  cursor: pointer;
+  color: #c6c6c6;
+
+  &:hover {
+    color: #f4f4f4;
+  }
+}
+
+.code-tabs__content {
+  // Code blocks are always dark
+  background-color: #282828;
+  color: #f4f4f4;
+  padding: 1.5rem;
+  border-radius: 0 0 2px 2px;
+  margin: 0;
+  overflow-x: auto;
+  font-family: 'IBM Plex Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre;
+}
+
+/* ── Theme switcher ──────────────────────────────────────────────────────── */
+.theme-switcher {
+  display: flex;
+  gap: 2px;
+}
+
+.theme-switcher__btn {
+  padding: 0.25rem 0.75rem;
+  font-size: 12px;
+  // Switcher lives in the always-dark header
+  background-color: #393939;
+  border: 1px solid #525252;
+  color: #c6c6c6;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.theme-switcher__btn--active {
+  background-color: #0f62fe;
+  border-color: #0f62fe;
+  color: #ffffff;
+}
+
+/* ── Generic content page ────────────────────────────────────────────────── */
+.content-page {
+  max-width: 800px;
+  padding: 2rem;
+}
+
+.content-page__hero {
+  // Hero band is always inverted
+  background-color: $background-inverse;
+  color: $text-inverse;
+  padding: 2rem;
+}
+
+.content-page h1 {
+  font-size: 32px;
+  font-weight: 400;
+  margin: 0 0 1rem;
+  color: $text-primary;
+}
+
+.content-page h2 {
+  font-size: 20px;
+  font-weight: 400;
+  margin: 2rem 0 0.5rem;
+  border-bottom: 1px solid $border-subtle-01;
+  padding-bottom: 0.5rem;
+  color: $text-primary;
+}
+
+.content-page p {
+  color: $text-secondary;
+}
+
+.content-page pre {
+  // Code blocks are always dark
+  background-color: #282828;
+  color: #f4f4f4;
+  padding: 1rem 1.5rem;
+  border-radius: 2px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.content-page code {
+  font-family: 'IBM Plex Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 0.9em;
+  background-color: $layer-01;
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+
+.content-page pre code {
+  background: none;
+  padding: 0;
+}
+
+/* ── Palette swatches ────────────────────────────────────────────────────── */
+.palette-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 1rem 0;
+}
+
+.palette-swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* ── Chart toolbar (overlaid inside chart) ───────────────────────────────── */
+
+// Wrapper that holds the ReactECharts div and the floating toolbar
+.side-by-side__chart-wrap {
+  position: relative;
+}
+
+// Toolbar floats in the upper-right of the chart canvas — always visible
+.chart-toolbar {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  background-color: $layer-01;
+  border-radius: 2px;
+  padding: 2px;
+}
+
+.chart-toolbar__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $text-secondary;
+  border-radius: 2px;
+  flex-shrink: 0;
+  pointer-events: auto;
+
+  &:hover:not(:disabled) {
+    background-color: $layer-hover-01;
+    color: $text-primary;
+  }
+}
+
+.chart-toolbar__btn--active {
+  background-color: $layer-selected-01;
+  color: $text-primary;
+}
+
+.chart-toolbar__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Overflow menu */
+.chart-toolbar__menu-wrap {
+  position: relative;
+}
+
+.chart-toolbar__menu {
+  position: absolute;
+  top: calc(100% + 2px);
+  right: 0;
+  z-index: 200;
+  background-color: $layer-01;
+  border: 1px solid $border-subtle-01;
+  border-radius: 2px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  min-width: 160px;
+  overflow: hidden;
+}
+
+.chart-toolbar__menu-item {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 14px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $text-primary;
+
+  &:hover {
+    background-color: $layer-hover-01;
+  }
+}
+
+/* Table modal — rendered via createPortal into document.body */
+.chart-toolbar__modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background-color: rgba(22, 22, 22, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.chart-toolbar__modal {
+  background-color: $layer-01;
+  border-top: 4px solid $interactive;
+  width: 100%;
+  max-width: 760px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chart-toolbar__modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem 1rem 1.5rem;
+  flex-shrink: 0;
+  border-bottom: 1px solid $border-subtle-01;
+}
+
+.chart-toolbar__modal-title {
+  font-size: 20px;
+  font-weight: 400;
+  color: $text-primary;
+}
+
+.chart-toolbar__modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $icon-primary;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: $layer-hover-01;
+  }
+}
+
+.chart-toolbar__modal-body {
+  overflow: auto;
+  flex: 1;
+}
+
+.chart-toolbar__modal-empty {
+  padding: 1.5rem;
+  color: $text-secondary;
+  font-size: 14px;
+}
+
+.chart-toolbar__modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1px;
+  flex-shrink: 0;
+  border-top: 1px solid $border-subtle-01;
+  padding: 1rem;
+}
+
+/* Fullscreen panel */
+.side-by-side__panel--fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background-color: $background;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+  border: none;
+}
+
+.side-by-side__panel--fullscreen .side-by-side__chart-wrap {
+  flex: 1;
+  min-height: 0;
+}
