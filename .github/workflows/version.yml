@@ -19,8 +19,6 @@ jobs:
         with:
           fetch-depth: 0
       - uses: pnpm/action-setup@0c17529a66aca453f9227af23103ed11469b1e47 # v4.0.0
-        with:
-          version: 9
       - uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
         with:
           node-version-file: '.nvmrc'
