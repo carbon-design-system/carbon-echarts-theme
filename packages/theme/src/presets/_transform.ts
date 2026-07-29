@@ -7,6 +7,24 @@
  * ECharts expects data split by series. This module contains the utilities
  * that every preset uses to perform that conversion.
  */
+import {
+  // Light N-palettes
+  purple70,
+  teal50,
+  magenta50,
+  cyan50,
+  cyan90,
+  teal70,
+  magenta70,
+  red90,
+  // Dark N-palettes
+  purple60,
+  teal40,
+  cyan20,
+  blue50,
+  magenta40,
+  purple30,
+} from '@carbon/colors'
 import { lightCategorical, darkCategorical } from '../palettes'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -91,20 +109,20 @@ export function groupByGroup(
 
 /** Light theme (white/g10) N-optimised palettes for N = 1..5 */
 const LIGHT_N_PALETTES: readonly (readonly string[])[] = [
-  ['#6929c4'],
-  ['#6929c4', '#009d9a'],
-  ['#ee5396', '#1192e8', '#6929c4'],
-  ['#6929c4', '#012749', '#009d9a', '#ee5396'],
-  ['#6929c4', '#1192e8', '#005d5d', '#9f1853', '#520408'],
+  [purple70],
+  [purple70, teal50],
+  [magenta50, cyan50, purple70],
+  [purple70, cyan90, teal50, magenta50],
+  [purple70, cyan50, teal70, magenta70, red90],
 ]
 
 /** Dark theme (g90/g100) N-optimised palettes for N = 1..5 */
 const DARK_N_PALETTES: readonly (readonly string[])[] = [
-  ['#d4bbff'],
-  ['#8a3ffc', '#08bdba'],
-  ['#8a3ffc', '#08bdba', '#bae6ff'],
-  ['#8a3ffc', '#08bdba', '#bae6ff', '#4589ff'],
-  ['#8a3ffc', '#08bdba', '#bae6ff', '#4589ff', '#ff7eb6'],
+  [purple30],
+  [purple60, teal40],
+  [purple60, teal40, cyan20],
+  [purple60, teal40, cyan20, blue50],
+  [purple60, teal40, cyan20, blue50, magenta40],
 ]
 
 /**

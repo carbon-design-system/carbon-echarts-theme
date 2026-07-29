@@ -1,5 +1,6 @@
 import type { CarbonChartTokens } from '../tokens'
 import type { CarbonPalettes } from '../palettes'
+import { alertColors } from '../palettes'
 
 /**
  * IBM Plex Sans font stack — identical to Carbon Charts' $font-family token
@@ -238,10 +239,10 @@ export function buildTheme(t: CarbonChartTokens, palettes: CarbonPalettes) {
 
     candlestick: {
       itemStyle: {
-        color: '#198038', // Green 60 — $support-success
-        color0: '#da1e28', // Red 60  — $support-error
-        borderColor: '#198038',
-        borderColor0: '#da1e28',
+        color: alertColors[3], // green60 — $support-success
+        color0: alertColors[0], // red60  — $support-error
+        borderColor: alertColors[3],
+        borderColor0: alertColors[0],
         borderWidth: 1,
       },
     },

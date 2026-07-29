@@ -336,6 +336,19 @@ describe('createDonutOptions', () => {
     const aEntry = s[0]?.data.find((d) => d.name === 'A')
     expect(aEntry?.value).toBe(30)
   })
+
+  it('preserves input group order for palette assignment', () => {
+    const opt = createDonutOptions(pieData)
+    const s = opt.series as Array<{ data: Array<{ name: string }> }>
+    expect(s[0]?.data.map((d) => d.name)).toEqual(['Slice A', 'Slice B', 'Slice C'])
+  })
+
+  it('uses Carbon N-color palette and percentage labels', () => {
+    const opt = createDonutOptions(pieData)
+    const s = (opt.series as Array<{ label: { formatter: string } }>)[0]
+    expect(opt.color).toEqual(pickColors(pieData.length, 'light'))
+    expect(s?.label.formatter).toBe('{d}%')
+  })
 })
 
 describe('createPieOptions', () => {
@@ -345,6 +358,13 @@ describe('createPieOptions', () => {
     expect(s?.type).toBe('pie')
     // radius should be a string (not tuple)
     expect(typeof s?.radius).toBe('string')
+  })
+
+  it('uses Carbon N-color palette and percentage labels', () => {
+    const opt = createPieOptions(pieData, { colorScheme: 'dark' })
+    const s = (opt.series as Array<{ label: { formatter: string } }>)[0]
+    expect(opt.color).toEqual(pickColors(pieData.length, 'dark'))
+    expect(s?.label.formatter).toBe('{d}%')
   })
 })
 
