@@ -314,22 +314,6 @@ body {
   margin: 0;
 }
 
-.side-by-side__diff-btn {
-  font-size: 12px;
-  padding: 0.25rem 0.75rem;
-  border: 1px solid #8d8d8d;
-  background: none;
-  cursor: pointer;
-  border-radius: 2px;
-  color: var(--cds-text-primary, #161616);
-}
-
-.side-by-side__diff-btn--active {
-  background-color: #0f62fe;
-  border-color: #0f62fe;
-  color: #ffffff;
-}
-
 .side-by-side__extended-banner {
   font-size: 14px;
   color: #525252;
@@ -387,79 +371,6 @@ body {
 .side-by-side__chart {
   padding: 1rem;
   background-color: var(--cds-background, #ffffff);
-}
-
-/* ── Diff overlay mode ── */
-.side-by-side__diff-stack {
-  position: relative;
-  border: 1px solid #e0e0e0;
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-[data-carbon-theme="g90"] .side-by-side__diff-stack,
-[data-carbon-theme="g100"] .side-by-side__diff-stack {
-  border-color: #393939;
-}
-
-.side-by-side__diff-base {
-  padding: 1rem;
-  background-color: var(--cds-background, #ffffff);
-}
-
-/* ECharts panel sits on top of the Carbon panel at 60% opacity — both visible */
-.side-by-side__diff-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 36px; /* leave room for the legend strip */
-  padding: 1rem;
-  opacity: 0.55;
-  pointer-events: none;
-}
-
-.side-by-side__diff-legend {
-  display: flex;
-  gap: 1.5rem;
-  padding: 0.5rem 1rem;
-  border-top: 1px solid #e0e0e0;
-  background-color: #f4f4f4;
-  font-size: 12px;
-}
-
-[data-carbon-theme="g90"] .side-by-side__diff-legend,
-[data-carbon-theme="g100"] .side-by-side__diff-legend {
-  background-color: #262626;
-  border-top-color: #393939;
-}
-
-.side-by-side__diff-legend-item {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  color: #525252;
-}
-
-[data-carbon-theme="g90"] .side-by-side__diff-legend-item,
-[data-carbon-theme="g100"] .side-by-side__diff-legend-item {
-  color: #c6c6c6;
-}
-
-.side-by-side__diff-legend-item::before {
-  content: '';
-  display: inline-block;
-  width: 12px;
-  height: 3px;
-  border-radius: 1px;
-}
-
-.side-by-side__diff-legend-item--carbon::before {
-  background: #525252;
-}
-
-.side-by-side__diff-legend-item--echarts::before {
-  background: #0f62fe;
 }
 
 /* ── Code tabs ───────────────────────────────────────────────────────────── */
