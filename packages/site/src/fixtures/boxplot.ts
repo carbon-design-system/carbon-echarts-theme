@@ -4,6 +4,6 @@ export const boxplotCategories = ['Dataset 1', 'Dataset 2', 'Dataset 3', 'Datase
 export const boxplotData: [number, number, number, number, number][] = [
   [10, 28, 42, 57, 78],
   [25, 38, 52, 67, 88],
-  [5,  20, 35, 50, 72],
+  [5, 20, 35, 50, 72],
   [15, 32, 48, 63, 85],
 ]

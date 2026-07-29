@@ -62,7 +62,14 @@ export function IntroductionPage() {
                 padding: '1rem',
               }}
             >
-              <strong style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.32px', color: '#525252' }}>
+              <strong
+                style={{
+                  fontSize: '12px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.32px',
+                  color: '#525252',
+                }}
+              >
                 {label}
               </strong>
               <ul style={{ margin: '0.5rem 0 0', padding: '0 0 0 1rem', listStyle: 'disc' }}>
@@ -77,10 +84,13 @@ export function IntroductionPage() {
         </div>
 
         <h2>Installation</h2>
-        <pre><code>{`npm install @carbon/echarts-theme echarts`}</code></pre>
+        <pre>
+          <code>{`npm install @carbon/echarts-theme echarts`}</code>
+        </pre>
 
         <h2>Quick start</h2>
-        <pre><code>{`import * as echarts from 'echarts'
+        <pre>
+          <code>{`import * as echarts from 'echarts'
 import { registerCarbonThemes } from '@carbon/echarts-theme'
 
 // Register once at app startup
@@ -89,7 +99,8 @@ registerCarbonThemes(echarts)
 // Then pass theme="carbon-white" to your adapter
 // React: <ReactECharts option={option} theme="carbon-white" />
 // Vue:   <v-chart :option="option" theme="carbon-white" />
-// Angular: [theme]="'carbon-white'"`}</code></pre>
+// Angular: [theme]="'carbon-white'"`}</code>
+        </pre>
 
         <h2>Four themes</h2>
         <p>

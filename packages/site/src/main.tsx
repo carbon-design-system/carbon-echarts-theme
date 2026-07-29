@@ -5,7 +5,7 @@ import * as echarts from 'echarts'
 import { registerCarbonThemes } from '@carbon/echarts-theme'
 import { ThemeProvider } from './components/ThemeContext'
 import { App } from './App'
-import './styles.css'
+import './styles.scss'
 
 // Register all four Carbon themes once at app startup
 registerCarbonThemes(echarts)

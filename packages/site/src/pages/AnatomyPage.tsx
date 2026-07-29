@@ -20,16 +20,26 @@ export function AnatomyPage() {
             View chart anatomy on the Carbon Design System →
           </a>
         </p>
-        <p>
-          Key anatomy elements common to all charts:
-        </p>
+        <p>Key anatomy elements common to all charts:</p>
         <ul>
-          <li><strong>Title</strong> — describes the chart content; mapped to <code>title.text</code></li>
-          <li><strong>Axes</strong> — x and y axes with labels and tick marks</li>
-          <li><strong>Grid lines</strong> — horizontal and vertical reference lines</li>
-          <li><strong>Series</strong> — the data itself (bars, lines, points)</li>
-          <li><strong>Legend</strong> — identifies each data series by color and label</li>
-          <li><strong>Tooltip</strong> — shows exact values on hover/focus</li>
+          <li>
+            <strong>Title</strong> — describes the chart content; mapped to <code>title.text</code>
+          </li>
+          <li>
+            <strong>Axes</strong> — x and y axes with labels and tick marks
+          </li>
+          <li>
+            <strong>Grid lines</strong> — horizontal and vertical reference lines
+          </li>
+          <li>
+            <strong>Series</strong> — the data itself (bars, lines, points)
+          </li>
+          <li>
+            <strong>Legend</strong> — identifies each data series by color and label
+          </li>
+          <li>
+            <strong>Tooltip</strong> — shows exact values on hover/focus
+          </li>
         </ul>
         <p>
           The <code>@carbon/echarts-theme</code> sets all visual properties — colors, fonts,

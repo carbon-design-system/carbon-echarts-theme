@@ -62,16 +62,14 @@ export function ChartPage({
         </div>
 
         <div className="chart-page__panel">
-          {activeTab === 'overview' && (
-            <div className="chart-page__overview">{overview}</div>
-          )}
+          {activeTab === 'overview' && <div className="chart-page__overview">{overview}</div>}
 
           {activeTab === 'examples' && (
             <div className="chart-page__examples">
               {v2Only ? (
                 <div className="chart-page__v2-banner">
-                  <strong>Examples coming in v2.</strong> This chart type is on the roadmap.
-                  Check back in the next release for live side-by-side examples.
+                  <strong>Examples coming in v2.</strong> This chart type is on the roadmap. Check
+                  back in the next release for live side-by-side examples.
                 </div>
               ) : (
                 examples

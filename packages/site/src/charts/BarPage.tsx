@@ -9,11 +9,7 @@ import {
   createHorizontalBarOptions,
 } from '@carbon/echarts-theme/presets'
 import { barData, groupedBarData } from '../fixtures/bar'
-import {
-  SimpleBarChart,
-  GroupedBarChart,
-  StackedBarChart,
-} from '@carbon/charts-react'
+import { SimpleBarChart, GroupedBarChart, StackedBarChart } from '@carbon/charts-react'
 import '@carbon/charts-react/styles.css'
 
 const simpleOption = createBarOptions(barData)
@@ -42,8 +38,23 @@ import '@carbon/charts-react/styles.css'
   options={{ axes: { bottom: { mapsTo: 'group', scaleType: 'labels' }, left: { mapsTo: 'value' } } }}
 />`
 
-const simpleBarAxes = { axes: { bottom: { mapsTo: 'group', scaleType: 'labels' }, left: { mapsTo: 'value' } } }
-const groupedBarAxes = { axes: { bottom: { mapsTo: 'key', scaleType: 'labels' }, left: { mapsTo: 'value' }, color: { scale: { 'Qty': '#6929c4', 'More': '#1192e8' } } } }
+const simpleBarAxes = {
+  axes: { bottom: { mapsTo: 'group', scaleType: 'labels' }, left: { mapsTo: 'value' } },
+}
+
+const groupedBarAxes = {
+  axes: {
+    bottom: { mapsTo: 'key', scaleType: 'labels' },
+    left: { mapsTo: 'value' },
+  },
+}
+
+const stackedBarAxes = {
+  axes: {
+    bottom: { mapsTo: 'key', scaleType: 'labels' },
+    left: { mapsTo: 'value', stacked: true },
+  },
+}
 
 export function BarPage() {
   return (
@@ -64,14 +75,34 @@ export function BarPage() {
           <SideBySide
             title="Grouped bar"
             echartsOption={groupedOption}
-            carbonChart={<GroupedBarChart data={groupedBarData as any} options={groupedBarAxes as any} />}
+            carbonChart={
+              <GroupedBarChart data={groupedBarData as any} options={groupedBarAxes as any} />
+            }
           />
           <SideBySide
             title="Stacked bar"
             echartsOption={stackedOption}
-            carbonChart={<StackedBarChart data={groupedBarData as any} options={groupedBarAxes as any} />}
+            carbonChart={
+              <StackedBarChart data={groupedBarData as any} options={stackedBarAxes as any} />
+            }
           />
-          <SideBySide title="Horizontal bar" echartsOption={horizontalOption} />
+          <SideBySide
+            title="Horizontal bar"
+            echartsOption={horizontalOption}
+            carbonChart={
+              <SimpleBarChart
+                data={barData as any}
+                options={
+                  {
+                    axes: {
+                      left: { mapsTo: 'group', scaleType: 'labels' },
+                      bottom: { mapsTo: 'value' },
+                    },
+                  } as any
+                }
+              />
+            }
+          />
         </>
       }
     />

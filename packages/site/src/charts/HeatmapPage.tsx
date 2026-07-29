@@ -48,7 +48,9 @@ export function HeatmapPage() {
         <SideBySide
           title="Heatmap"
           echartsOption={heatmapOption}
-          carbonChart={<HeatmapChart data={carbonHeatmapData as any} options={heatmapAxes as any} />}
+          carbonChart={
+            <HeatmapChart data={carbonHeatmapData as any} options={heatmapAxes as any} />
+          }
         />
       }
     />

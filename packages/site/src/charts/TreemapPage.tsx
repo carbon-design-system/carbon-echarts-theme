@@ -26,8 +26,8 @@ const option = createTreemapOptions(data)
 <ReactECharts option={option} theme="carbon-white" />`
 
 // Carbon Charts TreemapChart uses flat { group (parent), name (leaf), value }
-const carbonTreemapData = treemapData.flatMap(parent =>
-  parent.children.map(child => ({ group: parent.name, name: child.name, value: child.value }))
+const carbonTreemapData = treemapData.flatMap((parent) =>
+  parent.children.map((child) => ({ group: parent.name, name: child.name, value: child.value })),
 )
 
 export function TreemapPage() {

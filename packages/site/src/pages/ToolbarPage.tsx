@@ -8,13 +8,14 @@ export function ToolbarPage() {
       </div>
       <div className="content-page">
         <p>
-          ECharts provides a built-in <code>toolbox</code> component for chart interactions:
-          save as image, data view, zoom, and reset. The Carbon theme styles the toolbox icons
-          using Carbon token colors.
+          ECharts provides a built-in <code>toolbox</code> component for chart interactions: save as
+          image, data view, zoom, and reset. The Carbon theme styles the toolbox icons using Carbon
+          token colors.
         </p>
 
         <h2>Enable the toolbox</h2>
-        <pre><code>{`const option = {
+        <pre>
+          <code>{`const option = {
   toolbox: {
     show: true,
     feature: {
@@ -25,14 +26,17 @@ export function ToolbarPage() {
     },
   },
   // ...rest of option
-}`}</code></pre>
+}`}</code>
+        </pre>
 
         <h2>Toolbar position</h2>
-        <pre><code>{`toolbox: {
+        <pre>
+          <code>{`toolbox: {
   orient: 'horizontal', // 'horizontal' (default) or 'vertical'
   right: 16,            // position from right edge
   top: 16,              // position from top edge
-}`}</code></pre>
+}`}</code>
+        </pre>
 
         <p>
           All Carbon preset functions accept a <code>toolbox</code> option to inject toolbox config

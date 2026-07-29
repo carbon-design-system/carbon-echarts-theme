@@ -38,16 +38,8 @@ export interface TreeNode {
  * Accepts either a pre-built `TreeNode` hierarchy or flat tabular data
  * (via `createTreeOptionsFromTabular`).
  */
-export function createTreeOptions(
-  root: TreeNode,
-  opts: TreePresetOptions = {},
-): EChartsOption {
-  const {
-    title,
-    orient = 'LR',
-    initialDepth,
-    expandAndCollapse = true,
-  } = opts
+export function createTreeOptions(root: TreeNode, opts: TreePresetOptions = {}): EChartsOption {
+  const { title, orient = 'LR', initialDepth, expandAndCollapse = true } = opts
 
   return {
     ...(title ? { title: { text: title } } : {}),
@@ -108,14 +100,15 @@ export function createTreeOptionsFromTabular(
   }
 
   // Root = a group name that never appears as a child key
-  const rootName = [...childMap.keys()].find(k => !allChildren.has(k)) ?? [...childMap.keys()][0] ?? 'root'
+  const rootName =
+    [...childMap.keys()].find((k) => !allChildren.has(k)) ?? [...childMap.keys()][0] ?? 'root'
 
   function buildNode(name: string): TreeNode {
     const children = childMap.get(name)
     if (!children || children.length === 0) return { name }
     return {
       name,
-      children: children.map(c => buildNode(c.name)),
+      children: children.map((c) => buildNode(c.name)),
     }
   }
 

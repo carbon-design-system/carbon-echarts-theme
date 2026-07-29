@@ -16,7 +16,9 @@ const option = createLollipopOptions(data)
 
 <ReactECharts option={option} theme="carbon-white" />`
 
-const lollipopAxes = { axes: { bottom: { mapsTo: 'key', scaleType: 'labels' }, left: { mapsTo: 'value' } } }
+const lollipopAxes = {
+  axes: { bottom: { mapsTo: 'key', scaleType: 'labels' }, left: { mapsTo: 'value' } },
+}
 
 export function LollipopPage() {
   return (

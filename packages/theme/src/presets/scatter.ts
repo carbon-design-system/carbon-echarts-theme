@@ -1,4 +1,5 @@
 import type { EChartsOption } from 'echarts'
+import { pickColors } from './_transform'
 import type { ChartTabularData } from './_transform'
 
 const GRID = { top: 48, bottom: 56, left: 48, right: 24, containLabel: true } as const
@@ -10,6 +11,8 @@ export interface ScatterPresetOptions {
   timeSeries?: boolean
   /** Chart title text */
   title?: string
+  /** Color scheme for palette selection ('light' or 'dark'). Default: 'light' */
+  colorScheme?: 'light' | 'dark'
 }
 
 export interface BubblePresetOptions extends ScatterPresetOptions {
@@ -34,7 +37,7 @@ export function createScatterOptions(
   data: ChartTabularData,
   opts: ScatterPresetOptions = {},
 ): EChartsOption {
-  const { timeSeries = false, title } = opts
+  const { timeSeries = false, title, colorScheme = 'light' } = opts
 
   // Group by series name
   const seriesMap = new Map<string, Array<[string | number, number]>>()
@@ -48,10 +51,14 @@ export function createScatterOptions(
     seriesMap.get(d.group)!.push([xVal, d.value])
   }
 
-  const series = [...seriesMap.entries()].map(([name, pts]) => ({
+  const entries = [...seriesMap.entries()]
+  const colors = pickColors(entries.length, colorScheme)
+
+  const series = entries.map(([name, pts], i) => ({
     type: 'scatter' as const,
     name,
     data: pts,
+    itemStyle: { color: colors[i] },
   }))
 
   return {
@@ -77,7 +84,13 @@ export function createBubbleOptions(
   data: ChartTabularData,
   opts: BubblePresetOptions = {},
 ): EChartsOption {
-  const { timeSeries = false, title, sizeField = 'size', maxSize = 60 } = opts
+  const {
+    timeSeries = false,
+    title,
+    sizeField = 'size',
+    maxSize = 60,
+    colorScheme = 'light',
+  } = opts
 
   const seriesMap = new Map<string, Array<[string | number, number, number]>>()
   for (const d of data) {
@@ -98,10 +111,14 @@ export function createBubbleOptions(
   }
   const scale = maxRaw > 0 ? maxSize / Math.sqrt(maxRaw) : 1
 
-  const series = [...seriesMap.entries()].map(([name, pts]) => ({
+  const bubbleEntries = [...seriesMap.entries()]
+  const bubbleColors = pickColors(bubbleEntries.length, colorScheme)
+
+  const series = bubbleEntries.map(([name, pts], i) => ({
     type: 'scatter' as const,
     name,
     data: pts,
+    itemStyle: { color: bubbleColors[i] },
     symbolSize: (val: [string | number, number, number]) =>
       Math.max(4, Math.round(Math.sqrt(val[2]) * scale)),
   }))

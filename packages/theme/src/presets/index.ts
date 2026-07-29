@@ -73,7 +73,7 @@ export { createTreeOptions, createTreeOptionsFromTabular } from './tree'
 export type { TreePresetOptions, TreeNode } from './tree'
 
 // ── Shared data transform (re-exported for consumers building custom presets) ──
-export { groupByGroup } from './_transform'
+export { groupByGroup, pickColors } from './_transform'
 export type {
   ChartTabularData,
   ChartTabularDatum,

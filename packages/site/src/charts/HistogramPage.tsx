@@ -17,8 +17,8 @@ const option = createHistogramOptions(data)
 <ReactECharts option={option} theme="carbon-white" />`
 
 // Carbon Charts HistogramChart expects raw { group, value } observations — it bins automatically
-const carbonHistogramData = histogramData.flatMap(d =>
-  Array.from({ length: d.value }, () => ({ group: 'Frequency', value: parseInt(d.key as string) }))
+const carbonHistogramData = histogramData.flatMap((d) =>
+  Array.from({ length: d.value }, () => ({ group: 'Frequency', value: parseInt(d.key as string) })),
 )
 
 export function HistogramPage() {
@@ -33,7 +33,9 @@ export function HistogramPage() {
         <SideBySide
           title="Histogram"
           echartsOption={histogramOption}
-          carbonChart={<HistogramChart data={carbonHistogramData as any} options={{ bins: 9 } as any} />}
+          carbonChart={
+            <HistogramChart data={carbonHistogramData as any} options={{ bins: 9 } as any} />
+          }
         />
       }
     />

@@ -1,5 +1,5 @@
 import type { EChartsOption, SeriesOption } from 'echarts'
-import { groupByGroup } from './_transform'
+import { groupByGroup, pickColors } from './_transform'
 import type { ChartTabularData } from './_transform'
 
 const GRID = { top: 48, bottom: 56, left: 48, right: 24, containLabel: true } as const
@@ -24,6 +24,8 @@ export interface LinePresetOptions {
   secondaryGroups?: string[]
   /** Chart title text */
   title?: string
+  /** Color scheme for palette selection ('light' or 'dark'). Default: 'light' */
+  colorScheme?: 'light' | 'dark'
 }
 
 /**
@@ -43,6 +45,7 @@ export function createLineOptions(
     logScale = false,
     secondaryGroups = [],
     title,
+    colorScheme = 'light',
   } = opts
 
   const xField = timeSeries ? 'date' : 'key'
@@ -50,11 +53,15 @@ export function createLineOptions(
 
   const hasDualAxis = secondaryGroups.length > 0
 
-  const series: SeriesOption[] = groups.map((g) => ({
+  const colors = pickColors(groups.length, colorScheme)
+
+  const series: SeriesOption[] = groups.map((g, i) => ({
     type: 'line' as const,
     name: g.name,
     data: g.data,
     smooth,
+    itemStyle: { color: colors[i] },
+    lineStyle: { color: colors[i] },
     ...(step !== undefined ? { step: step === true ? 'start' : step } : {}),
     ...(hasDualAxis && secondaryGroups.includes(g.name) ? { yAxisIndex: 1 } : {}),
   }))

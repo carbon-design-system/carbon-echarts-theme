@@ -19,13 +19,18 @@ export interface DonutPresetOptions extends PiePresetOptions {
 
 type PieDataItem = { name: string; value: number }
 
-/** Aggregate flat tabular data into { name, value } pairs for pie/donut. */
+/** Aggregate flat tabular data into { name, value } pairs for pie/donut.
+ *  Sorted largest-first so ECharts assigns colors in the same order as
+ *  Carbon Charts, which renders slices largest → smallest.
+ */
 function toPieData(data: ChartTabularData): PieDataItem[] {
   const map = new Map<string, number>()
   for (const d of data) {
     map.set(d.group, (map.get(d.group) ?? 0) + d.value)
   }
-  return [...map.entries()].map(([name, value]) => ({ name, value }))
+  return [...map.entries()]
+    .map(([name, value]) => ({ name, value }))
+    .sort((a, b) => b.value - a.value)
 }
 
 // ── Donut preset ──────────────────────────────────────────────────────────────

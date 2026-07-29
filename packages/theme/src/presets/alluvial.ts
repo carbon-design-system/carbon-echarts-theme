@@ -51,13 +51,7 @@ export function createAlluvialOptions(
   data: AlluvialDatum[],
   opts: AlluvialPresetOptions = {},
 ): EChartsOption {
-  const {
-    title,
-    orient = 'horizontal',
-    nodeAlign = 'justify',
-    nodeWidth = 20,
-    nodeGap = 8,
-  } = opts
+  const { title, orient = 'horizontal', nodeAlign = 'justify', nodeWidth = 20, nodeGap = 8 } = opts
 
   // Collect unique node names in insertion order
   const nodeSet = new Set<string>()
@@ -65,7 +59,7 @@ export function createAlluvialOptions(
     nodeSet.add(d.source)
     nodeSet.add(d.target)
   }
-  const nodes = [...nodeSet].map(name => ({ name }))
+  const nodes = [...nodeSet].map((name) => ({ name }))
 
   return {
     ...(title ? { title: { text: title } } : {}),
@@ -81,7 +75,7 @@ export function createAlluvialOptions(
         nodeWidth,
         nodeGap,
         data: nodes,
-        links: data.map(d => ({ source: d.source, target: d.target, value: d.value })),
+        links: data.map((d) => ({ source: d.source, target: d.target, value: d.value })),
         label: { fontSize: 12 },
         lineStyle: { opacity: 0.3, curveness: 0.5 },
         emphasis: {
@@ -103,7 +97,7 @@ export function createAlluvialOptionsFromTabular(
   data: ChartTabularData,
   opts: AlluvialPresetOptions = {},
 ): EChartsOption {
-  const links: AlluvialDatum[] = data.map(d => ({
+  const links: AlluvialDatum[] = data.map((d) => ({
     source: String(d.key ?? ''),
     target: d.group,
     value: d.value,

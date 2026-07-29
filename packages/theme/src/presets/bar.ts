@@ -1,7 +1,6 @@
 import type { EChartsOption, SeriesOption } from 'echarts'
-import { groupByGroup } from './_transform'
+import { groupByGroup, pickColors } from './_transform'
 import type { ChartTabularData } from './_transform'
-import { lightCategorical, darkCategorical } from '../palettes'
 
 // ── Shared grid defaults (mirrors Carbon Charts spacing) ─────────────────────
 const GRID = { top: 48, bottom: 56, left: 48, right: 24, containLabel: true } as const
@@ -41,7 +40,12 @@ export function createBarOptions(
 ): EChartsOption {
   const { horizontal = false, stacked = false, floating = false, title, xField = 'key' } = opts
 
-  const { groups, categories } = groupByGroup(data, xField)
+  // If none of the rows have the requested xField, fall back to 'group' as the
+  // category axis (matches Carbon Charts' simple bar behaviour where `group` is
+  // both the series name and the axis label).
+  const hasXField = data.some((d) => d[xField] !== undefined)
+  const resolvedXField = hasXField ? xField : ('group' as const)
+  const { groups, categories } = groupByGroup(data, resolvedXField)
 
   let series: SeriesOption[]
 
@@ -94,33 +98,83 @@ export function createBarOptions(
     }
   }
 
-  // Single-series simple bar: colour each bar individually to match Carbon Charts'
-  // per-N categorical palette behaviour (each category gets a distinct palette colour).
+  const colorScheme = opts.colorScheme ?? 'light'
   const isSingleSeries = groups.length === 1
-  const palette = (opts.colorScheme === 'dark' ? darkCategorical : lightCategorical) as string[]
 
-  series = groups.map((g, gi) =>
+  if (resolvedXField === 'group') {
+    // Simple bar: one series, one bar per category, each bar individually coloured.
+    //
+    // The correct ECharts model is a SINGLE series with per-item itemStyle.color.
+    // Multi-series (one per group) causes ECharts to reserve N sub-slots per
+    // category, making each bar narrow and misaligned under its label.
+    //
+    // The legend is driven by a discrete visualMap component — the standard
+    // ECharts mechanism for colouring individual bars in a single series and
+    // showing a matching colour legend.
+    const colors = pickColors(groups.length, colorScheme)
+
+    series = [
+      {
+        type: 'bar' as const,
+        name: 'value',
+        data: groups.map((g, gi) => ({
+          value: g.data.find((d) => d.name === g.name)?.value ?? null,
+          itemStyle: { color: colors[gi] },
+        })),
+      },
+    ]
+
+    return {
+      ...(title ? { title: { text: title } } : {}),
+      tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+      legend: {
+        type: 'scroll' as const,
+        bottom: 0,
+        data: groups.map((g, gi) => ({ name: g.name, itemStyle: { color: colors[gi] } })),
+        // Legend entries are cosmetic only — they display the colour swatch for
+        // each group but do not map to a series name, so selectedMode is false.
+        selectedMode: false as const,
+      },
+      grid: GRID,
+      ...(horizontal
+        ? { xAxis: { type: 'value' }, yAxis: { type: 'category', data: categories } }
+        : { xAxis: { type: 'category', data: categories }, yAxis: { type: 'value' } }),
+      series,
+    }
+  }
+
+  // Multi-series or single-series with explicit key/date axis.
+  const colors = isSingleSeries
+    ? // Single series: colour each category bar individually
+      pickColors(groups[0].data.length, colorScheme)
+    : // Multi-series: one colour per series
+      pickColors(groups.length, colorScheme)
+
+  series = groups.map((g, i) =>
     isSingleSeries
       ? {
           type: 'bar' as const,
           name: g.name,
           data: g.data.map((d, di) => ({
             ...d,
-            itemStyle: { color: palette[di % palette.length] },
+            itemStyle: { color: colors[di] },
           })),
         }
       : {
           type: 'bar' as const,
           name: g.name,
+          itemStyle: { color: colors[i] },
           data: g.data,
           ...(stacked ? { stack: 'total' } : {}),
         },
   )
 
+  const legend = { type: 'scroll' as const, bottom: 0 }
+
   return {
     ...(title ? { title: { text: title } } : {}),
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-    legend: { type: 'scroll', bottom: 0 },
+    legend,
     grid: GRID,
     ...(horizontal
       ? { xAxis: { type: 'value' }, yAxis: { type: 'category', data: categories } }

@@ -16,7 +16,9 @@ const option = createLineOptions(data)
 
 <ReactECharts option={option} theme="carbon-white" />`
 
-const lineAxes = { axes: { bottom: { mapsTo: 'key', scaleType: 'labels' }, left: { mapsTo: 'value' } } }
+const lineAxes = {
+  axes: { bottom: { mapsTo: 'key', scaleType: 'labels' }, left: { mapsTo: 'value' } },
+}
 
 export function LinePage() {
   return (

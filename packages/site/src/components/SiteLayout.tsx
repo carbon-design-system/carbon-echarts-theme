@@ -84,6 +84,7 @@ interface SiteLayoutProps {
 
 export function SiteLayout({ children }: SiteLayoutProps) {
   const location = useLocation()
+  const contentRef = React.useRef<HTMLElement>(null)
   const [openGroups, setOpenGroups] = React.useState<Record<string, boolean>>(() =>
     Object.fromEntries(NAV.map((g) => [g.label, true])),
   )
@@ -98,6 +99,11 @@ export function SiteLayout({ children }: SiteLayoutProps) {
     if (activeGroup) {
       setOpenGroups((prev) => ({ ...prev, [activeGroup.label]: true }))
     }
+  }, [location.pathname])
+
+  // Scroll content panel back to top on every navigation
+  React.useEffect(() => {
+    contentRef.current?.scrollTo({ top: 0 })
   }, [location.pathname])
 
   return (
@@ -166,12 +172,11 @@ export function SiteLayout({ children }: SiteLayoutProps) {
         </nav>
 
         {/* ── Main content ── */}
-        <main className="site-content" id="main-content">
+        <main className="site-content" id="main-content" ref={contentRef}>
           {children}
+          <IbmFooter />
         </main>
       </div>
-
-      <IbmFooter />
     </div>
   )
 }

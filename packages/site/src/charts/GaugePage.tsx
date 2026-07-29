@@ -6,15 +6,11 @@ import { createGaugeOptions, createMeterOptions } from '@carbon/echarts-theme/pr
 import { gaugeValue, meterValue } from '../fixtures/gauge'
 import { GaugeChart, MeterChart } from '@carbon/charts-react'
 
-const gaugeOption = createGaugeOptions(
-  [{ group: 'Utilization', value: gaugeValue }],
-  { unit: '%' },
-)
+const gaugeOption = createGaugeOptions([{ group: 'Utilization', value: gaugeValue }], { unit: '%' })
 
-const meterOption = createMeterOptions(
-  [{ group: 'Storage used', value: meterValue }],
-  { total: 100 },
-)
+const meterOption = createMeterOptions([{ group: 'Storage used', value: meterValue }], {
+  total: 100,
+})
 
 const echartsCode = `import { createGaugeOptions } from '@carbon/echarts-theme/presets'
 import ReactECharts from 'echarts-for-react'
@@ -27,7 +23,10 @@ const option = createGaugeOptions(
 <ReactECharts option={option} theme="carbon-white" />`
 
 const carbonGaugeData = [{ group: 'Utilization', value: gaugeValue }]
-const carbonMeterData = [{ group: 'Storage used', value: meterValue }, { group: 'Remaining', value: 100 - meterValue }]
+const carbonMeterData = [
+  { group: 'Storage used', value: meterValue },
+  { group: 'Remaining', value: 100 - meterValue },
+]
 
 export function GaugePage() {
   return (
@@ -42,12 +41,19 @@ export function GaugePage() {
           <SideBySide
             title="Gauge"
             echartsOption={gaugeOption}
-            carbonChart={<GaugeChart data={carbonGaugeData as any} options={{ gauge: { type: 'semi' } } as any} />}
+            carbonChart={
+              <GaugeChart
+                data={carbonGaugeData as any}
+                options={{ gauge: { type: 'semi' } } as any}
+              />
+            }
           />
           <SideBySide
             title="Meter"
             echartsOption={meterOption}
-            carbonChart={<MeterChart data={carbonMeterData as any} options={{ meter: { peak: 100 } } as any} />}
+            carbonChart={
+              <MeterChart data={carbonMeterData as any} options={{ meter: { peak: 100 } } as any} />
+            }
           />
         </>
       }

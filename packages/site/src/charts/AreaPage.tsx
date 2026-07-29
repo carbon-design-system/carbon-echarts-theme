@@ -16,7 +16,16 @@ const option = createAreaOptions(data)
 
 <ReactECharts option={option} theme="carbon-white" />`
 
-const areaAxes = { axes: { bottom: { mapsTo: 'key', scaleType: 'labels' }, left: { mapsTo: 'value' } } }
+const areaAxes = {
+  axes: { bottom: { mapsTo: 'key', scaleType: 'labels' }, left: { mapsTo: 'value' } },
+}
+
+const stackedAreaAxes = {
+  axes: {
+    bottom: { mapsTo: 'key', scaleType: 'labels' },
+    left: { mapsTo: 'value', stacked: true },
+  },
+}
 
 export function AreaPage() {
   return (
@@ -36,7 +45,9 @@ export function AreaPage() {
           <SideBySide
             title="Stacked area"
             echartsOption={stackedOption}
-            carbonChart={<StackedAreaChart data={areaData as any} options={areaAxes as any} />}
+            carbonChart={
+              <StackedAreaChart data={areaData as any} options={stackedAreaAxes as any} />
+            }
           />
         </>
       }

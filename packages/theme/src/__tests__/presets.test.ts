@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   groupByGroup,
+  pickColors,
   createAlluvialOptions,
   createAlluvialOptionsFromTabular,
   createTreeOptions,
@@ -56,6 +57,15 @@ const pieData: ChartTabularData = [
   { group: 'Slice C', value: 20 },
 ]
 
+/** Simple bar: no `key` field — group IS the category axis */
+const simpleBarData: ChartTabularData = [
+  { group: 'Dataset 1', value: 65000 },
+  { group: 'Dataset 2', value: 29123 },
+  { group: 'Dataset 3', value: 35213 },
+  { group: 'Dataset 4', value: 51213 },
+  { group: 'Dataset 5', value: 16988 },
+]
+
 // ── _transform ────────────────────────────────────────────────────────────────
 
 describe('groupByGroup', () => {
@@ -93,6 +103,42 @@ describe('groupByGroup', () => {
     ]
     const { categories } = groupByGroup(timeData, 'date')
     expect(categories).toHaveLength(2)
+  })
+})
+
+// ── pickColors ────────────────────────────────────────────────────────────────
+
+describe('pickColors', () => {
+  it('returns the N-optimised 2-color light palette for 2 series', () => {
+    const colors = pickColors(2, 'light')
+    expect(colors).toEqual(['#6929c4', '#009d9a'])
+  })
+
+  it('returns a single color for 1 series (light)', () => {
+    const colors = pickColors(1, 'light')
+    expect(colors).toEqual(['#6929c4'])
+  })
+
+  it('returns the N-optimised 2-color dark palette for 2 series', () => {
+    const colors = pickColors(2, 'dark')
+    expect(colors).toEqual(['#8a3ffc', '#08bdba'])
+  })
+
+  it('defaults to light scheme', () => {
+    expect(pickColors(2)).toEqual(['#6929c4', '#009d9a'])
+  })
+
+  it('returns correct length array for all N=1..5', () => {
+    for (let n = 1; n <= 5; n++) {
+      expect(pickColors(n)).toHaveLength(n)
+    }
+  })
+
+  it('falls back to 14-color sequential palette for N > 5', () => {
+    const colors = pickColors(6, 'light')
+    expect(colors).toHaveLength(6)
+    // First color should match start of light categorical palette (purple70)
+    expect(colors[0]).toBe('#6929c4')
   })
 })
 
@@ -145,6 +191,72 @@ describe('createBarOptions', () => {
     const opt = createFloatingBarOptions(floatData)
     // 1 group × 2 (base + top) = 2 series
     expect((opt.series as unknown[]).length).toBe(2)
+  })
+
+  // ── Simple bar (no key field) — the resolvedXField === 'group' code path ──
+  // Single series, one bar per category, per-item itemStyle.color for colouring.
+  // Multi-series would reserve N sub-slots per category causing misalignment.
+
+  it('simple bar — produces exactly 1 series with N data items', () => {
+    const opt = createBarOptions(simpleBarData)
+    const series = opt.series as Array<{ data: unknown[] }>
+    expect(series).toHaveLength(1)
+    expect(series[0].data).toHaveLength(simpleBarData.length)
+  })
+
+  it('simple bar — per-item colours match pickColors(N, "light")', () => {
+    const opt = createBarOptions(simpleBarData)
+    const series = opt.series as Array<{ data: Array<{ itemStyle: { color: string } }> }>
+    const expected = pickColors(simpleBarData.length, 'light')
+    series[0].data.forEach((item, i) => {
+      expect(item.itemStyle.color).toBe(expected[i])
+    })
+  })
+
+  it('simple bar — dark colorScheme uses pickColors(N, "dark") per-item colours', () => {
+    const opt = createBarOptions(simpleBarData, { colorScheme: 'dark' })
+    const series = opt.series as Array<{ data: Array<{ itemStyle: { color: string } }> }>
+    const expected = pickColors(simpleBarData.length, 'dark')
+    series[0].data.forEach((item, i) => {
+      expect(item.itemStyle.color).toBe(expected[i])
+    })
+  })
+
+  it('simple bar — legend has N entries with correct names and colours', () => {
+    const opt = createBarOptions(simpleBarData)
+    const legend = opt.legend as {
+      data: Array<{ name: string; itemStyle: { color: string } }>
+      selectedMode: unknown
+    }
+    const expected = pickColors(simpleBarData.length, 'light')
+    expect(legend.data).toHaveLength(simpleBarData.length)
+    expect(legend.selectedMode).toBe(false)
+    legend.data.forEach((entry, i) => {
+      expect(entry.name).toBe(simpleBarData[i].group)
+      expect(entry.itemStyle.color).toBe(expected[i])
+    })
+  })
+
+  it('horizontal simple bar — yAxis is category, 1 series with N items', () => {
+    const opt = createHorizontalBarOptions(simpleBarData)
+    expect((opt.yAxis as { type: string }).type).toBe('category')
+    const series = opt.series as Array<{ data: unknown[] }>
+    expect(series).toHaveLength(1)
+    expect(series[0].data).toHaveLength(simpleBarData.length)
+  })
+
+  it('simple bar — scales to any N without hardcoding (N=2 uses pickColors(2))', () => {
+    const twoBarData: ChartTabularData = [
+      { group: 'A', value: 10 },
+      { group: 'B', value: 20 },
+    ]
+    const opt = createBarOptions(twoBarData)
+    const series = opt.series as Array<{ data: Array<{ itemStyle: { color: string } }> }>
+    const expected = pickColors(2, 'light')
+    expect(series).toHaveLength(1)
+    series[0].data.forEach((item, i) => {
+      expect(item.itemStyle.color).toBe(expected[i])
+    })
   })
 })
 

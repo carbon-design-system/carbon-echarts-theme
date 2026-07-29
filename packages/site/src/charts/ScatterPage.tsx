@@ -30,7 +30,9 @@ const option = createScatterOptions(data)
 
 <ReactECharts option={option} theme="carbon-white" />`
 
-const scatterAxes = { axes: { bottom: { mapsTo: 'key', scaleType: 'linear' }, left: { mapsTo: 'value' } } }
+const scatterAxes = {
+  axes: { bottom: { mapsTo: 'key', scaleType: 'linear' }, left: { mapsTo: 'value' } },
+}
 
 // Carbon Charts bubble data needs x/y/r shape — map our [x,y,size] triples
 const carbonBubbleData = bubbleData.map(([x, y, r], i) => ({
@@ -39,7 +41,13 @@ const carbonBubbleData = bubbleData.map(([x, y, r], i) => ({
   y,
   r,
 }))
-const bubbleAxes = { axes: { bottom: { mapsTo: 'x', scaleType: 'linear' }, left: { mapsTo: 'y' }, radius: { mapsTo: 'r' } } }
+const bubbleAxes = {
+  axes: {
+    bottom: { mapsTo: 'x', scaleType: 'linear' },
+    left: { mapsTo: 'y' },
+    radius: { mapsTo: 'r' },
+  },
+}
 
 export function ScatterPage() {
   return (

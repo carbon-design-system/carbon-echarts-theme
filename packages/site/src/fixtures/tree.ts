@@ -5,10 +5,7 @@ export const treeData: TreeNode = {
   children: [
     {
       name: 'Branch A',
-      children: [
-        { name: 'Leaf A1' },
-        { name: 'Leaf A2' },
-      ],
+      children: [{ name: 'Leaf A1' }, { name: 'Leaf A2' }],
     },
     {
       name: 'Branch B',
@@ -16,18 +13,13 @@ export const treeData: TreeNode = {
         { name: 'Leaf B1' },
         {
           name: 'Branch B2',
-          children: [
-            { name: 'Leaf B2a' },
-            { name: 'Leaf B2b' },
-          ],
+          children: [{ name: 'Leaf B2a' }, { name: 'Leaf B2b' }],
         },
       ],
     },
     {
       name: 'Branch C',
-      children: [
-        { name: 'Leaf C1' },
-      ],
+      children: [{ name: 'Leaf C1' }],
     },
   ],
 }

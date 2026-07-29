@@ -16,8 +16,8 @@ export function PalettesPage() {
 
         <h2>Categorical palette</h2>
         <p>
-          Use for discrete, unordered categories. Each series in a multi-series chart gets one
-          color from this palette. Never use sequential colors for unordered data.
+          Use for discrete, unordered categories. Each series in a multi-series chart gets one color
+          from this palette. Never use sequential colors for unordered data.
         </p>
         <div className="palette-row">
           {palettesLight.categorical.map((color, i) => (
@@ -29,8 +29,10 @@ export function PalettesPage() {
             />
           ))}
         </div>
-        <pre><code>{`import { palettesLight } from '@carbon/echarts-theme'
-// palettesLight.categorical — 14 colors`}</code></pre>
+        <pre>
+          <code>{`import { palettesLight } from '@carbon/echarts-theme'
+// palettesLight.categorical — 14 colors`}</code>
+        </pre>
 
         <h2>Sequential palettes</h2>
         <p>
@@ -39,14 +41,21 @@ export function PalettesPage() {
         </p>
         <div className="palette-row">
           {palettesLight.sequential.purple.map((color, i) => (
-            <div key={i} className="palette-swatch" style={{ backgroundColor: color }} title={color} />
+            <div
+              key={i}
+              className="palette-swatch"
+              style={{ backgroundColor: color }}
+              title={color}
+            />
           ))}
         </div>
-        <pre><code>{`import { palettesLight } from '@carbon/echarts-theme'
+        <pre>
+          <code>{`import { palettesLight } from '@carbon/echarts-theme'
 // palettesLight.sequential.purple
 // palettesLight.sequential.blue
 // palettesLight.sequential.cyan
-// palettesLight.sequential.teal`}</code></pre>
+// palettesLight.sequential.teal`}</code>
+        </pre>
 
         <h2>Diverging palettes</h2>
         <p>
@@ -55,7 +64,12 @@ export function PalettesPage() {
         </p>
         <div className="palette-row">
           {palettesLight.diverging.redCyan.map((color, i) => (
-            <div key={i} className="palette-swatch" style={{ backgroundColor: color }} title={color} />
+            <div
+              key={i}
+              className="palette-swatch"
+              style={{ backgroundColor: color }}
+              title={color}
+            />
           ))}
         </div>
 
@@ -66,7 +80,12 @@ export function PalettesPage() {
         </p>
         <div className="palette-row">
           {palettesLight.alert.map((color, i) => (
-            <div key={i} className="palette-swatch" style={{ backgroundColor: color }} title={color} />
+            <div
+              key={i}
+              className="palette-swatch"
+              style={{ backgroundColor: color }}
+              title={color}
+            />
           ))}
         </div>
       </div>

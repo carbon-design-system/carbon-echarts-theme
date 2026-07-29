@@ -14,7 +14,8 @@ export function ZoombarPage() {
         </p>
 
         <h2>Slider zoom bar</h2>
-        <pre><code>{`const option = {
+        <pre>
+          <code>{`const option = {
   dataZoom: [
     {
       type: 'slider',   // visible scrubber below the chart
@@ -28,12 +29,15 @@ export function ZoombarPage() {
     },
   ],
   // ...rest of option
-}`}</code></pre>
+}`}</code>
+        </pre>
 
         <h2>Zoom on Y axis</h2>
-        <pre><code>{`dataZoom: [
+        <pre>
+          <code>{`dataZoom: [
   { type: 'slider', yAxisIndex: 0 },
-]`}</code></pre>
+]`}</code>
+        </pre>
 
         <p>
           The Carbon theme styles the slider handle, rail, and selected range using{' '}

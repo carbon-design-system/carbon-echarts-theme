@@ -1,5 +1,5 @@
 import type { EChartsOption, SeriesOption } from 'echarts'
-import { groupByGroup } from './_transform'
+import { groupByGroup, pickColors } from './_transform'
 import type { ChartTabularData } from './_transform'
 
 const GRID = { top: 48, bottom: 56, left: 48, right: 24, containLabel: true } as const
@@ -13,6 +13,8 @@ export interface AreaPresetOptions {
   timeSeries?: boolean
   /** Chart title text */
   title?: string
+  /** Color scheme for palette selection ('light' or 'dark'). Default: 'light' */
+  colorScheme?: 'light' | 'dark'
 }
 
 /**
@@ -25,16 +27,20 @@ export function createAreaOptions(
   data: ChartTabularData,
   opts: AreaPresetOptions = {},
 ): EChartsOption {
-  const { stacked = false, timeSeries = false, title } = opts
+  const { stacked = false, timeSeries = false, title, colorScheme = 'light' } = opts
 
   const xField = timeSeries ? 'date' : 'key'
   const { groups, categories } = groupByGroup(data, xField)
 
-  const series: SeriesOption[] = groups.map((g) => ({
+  const colors = pickColors(groups.length, colorScheme)
+
+  const series: SeriesOption[] = groups.map((g, i) => ({
     type: 'line' as const,
     name: g.name,
     data: g.data,
     areaStyle: {},
+    itemStyle: { color: colors[i] },
+    lineStyle: { color: colors[i] },
     ...(stacked ? { stack: 'total' } : {}),
   }))
 

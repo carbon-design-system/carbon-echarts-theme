@@ -30,8 +30,8 @@ const option = createRadarOptions(data, {
 <ReactECharts option={option} theme="carbon-white" />`
 
 // Carbon Charts RadarChart expects flat { group, key, value } rows
-const carbonRadarData = radarData.flatMap(s =>
-  s.values.map((v, i) => ({ group: s.name, key: radarIndicators[i]?.name ?? String(i), value: v }))
+const carbonRadarData = radarData.flatMap((s) =>
+  s.values.map((v, i) => ({ group: s.name, key: radarIndicators[i]?.name ?? String(i), value: v })),
 )
 const radarAxes = { radar: { axes: { angle: 'key', value: 'value' } } }
 

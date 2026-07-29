@@ -31,7 +31,7 @@ const option = createBoxplotOptions(data)
 // Carbon Charts BoxplotChart expects raw observations per group
 const carbonBoxplotData = boxplotCategories.flatMap((cat, ci) => {
   const [min, q1, med, q3, max] = boxplotData[ci]!
-  return [min, q1, q1, med, med, med, q3, q3, max].map(v => ({ group: cat, key: cat, value: v }))
+  return [min, q1, q1, med, med, med, q3, q3, max].map((v) => ({ group: cat, key: cat, value: v }))
 })
 const boxplotAxes = {
   axes: { bottom: { mapsTo: 'key', scaleType: 'labels' }, left: { mapsTo: 'value' } },
@@ -49,7 +49,9 @@ export function BoxplotPage() {
         <SideBySide
           title="Boxplot"
           echartsOption={boxplotOption}
-          carbonChart={<BoxplotChart data={carbonBoxplotData as any} options={boxplotAxes as any} />}
+          carbonChart={
+            <BoxplotChart data={carbonBoxplotData as any} options={boxplotAxes as any} />
+          }
         />
       }
     />
