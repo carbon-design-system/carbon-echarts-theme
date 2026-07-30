@@ -1,4 +1,5 @@
 import React from 'react'
+import { ScaleTypes } from '@carbon/charts'
 import { ChartPage } from '../components/ChartPage'
 import { SideBySide } from '../components/SideBySide'
 import HistogramMdx from '../content/histogram.mdx'
@@ -16,10 +17,31 @@ const option = createHistogramOptions(data)
 
 <ReactECharts option={option} theme="carbon-white" />`
 
-// Carbon Charts HistogramChart expects raw { group, value } observations — it bins automatically
-const carbonHistogramData = histogramData.flatMap((d) =>
-  Array.from({ length: d.value }, () => ({ group: 'Frequency', value: parseInt(d.key as string) })),
-)
+// Carbon Charts HistogramChart bins raw observations. Expand pre-binned counts into individual
+// data points, using a unique offset per point so each lands in the correct bin.
+const carbonHistogramData = histogramData.flatMap((d) => {
+  const [lo, hi] = (d.key as string).split('–').map(Number)
+  const step = (hi - lo) / (d.value + 1)
+  return Array.from({ length: d.value }, (_, i) => ({
+    group: 'Frequency',
+    value: lo + step * (i + 1),
+  }))
+})
+
+const carbonHistogramOptions = {
+  axes: {
+    bottom: {
+      mapsTo: 'value',
+      bins: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+      limitDomainToBins: true,
+    },
+    left: {
+      scaleType: ScaleTypes.LINEAR,
+      stacked: true,
+      binned: true,
+    },
+  },
+}
 
 export function HistogramPage() {
   return (
@@ -34,7 +56,10 @@ export function HistogramPage() {
           title="Histogram"
           echartsOption={histogramOption}
           carbonChart={
-            <HistogramChart data={carbonHistogramData as any} options={{ bins: 9 } as any} />
+            <HistogramChart
+              data={carbonHistogramData as any}
+              options={carbonHistogramOptions as any}
+            />
           }
         />
       }
