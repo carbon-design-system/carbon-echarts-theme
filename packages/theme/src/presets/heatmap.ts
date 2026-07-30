@@ -39,7 +39,15 @@ export function createHeatmapOptions(
   data: ChartTabularData,
   opts: HeatmapPresetOptions = {},
 ): EChartsOption {
-  const { title, colors, minLabel, maxLabel, xAxisLabel, yAxisLabel, legendPosition = 'right' } = opts
+  const {
+    title,
+    colors,
+    minLabel,
+    maxLabel,
+    xAxisLabel,
+    yAxisLabel,
+    legendPosition = 'right',
+  } = opts
 
   const xSet = new Set<string>()
   const ySet = new Set<string>()

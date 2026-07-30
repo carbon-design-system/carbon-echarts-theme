@@ -1,16 +1,22 @@
 import type { EChartsOption } from 'echarts'
 import type { ChartTabularData } from './_transform'
+import { pickColors } from './_transform'
 
 // ── Treemap preset ────────────────────────────────────────────────────────────
 
 export interface TreemapPresetOptions {
   /** Chart title text */
   title?: string
-  /** Show breadcrumb trail (default: true) */
-  breadcrumb?: boolean
+  /** Color scheme for palette selection ('light' or 'dark'). Default: 'light' */
+  colorScheme?: 'light' | 'dark'
 }
 
-type TreemapNode = { name: string; value: number; children?: TreemapNode[] }
+type TreemapNode = {
+  name: string
+  value: number
+  children?: TreemapNode[]
+  itemStyle?: { color?: string }
+}
 
 /**
  * Build an ECharts option object for treemap charts.
@@ -25,12 +31,31 @@ export function createTreemapOptions(
   data: ChartTabularData,
   opts: TreemapPresetOptions = {},
 ): EChartsOption {
-  const { title, breadcrumb = true } = opts
+  const { title, colorScheme = 'light' } = opts
+
+  // Collect leaf names in insertion order to assign colors consistently
+  const leafNames: string[] = []
+  const leafNameSet = new Set<string>()
+  for (const d of data) {
+    const leaf = String(d.key ?? d.group)
+    if (!leafNameSet.has(leaf)) {
+      leafNameSet.add(leaf)
+      leafNames.push(leaf)
+    }
+  }
+
+  const colors = pickColors(leafNames.length, colorScheme)
+  const colorByLeaf = new Map(leafNames.map((name, i) => [name, colors[i]]))
 
   const groupMap = new Map<string, TreemapNode[]>()
   for (const d of data) {
     if (!groupMap.has(d.group)) groupMap.set(d.group, [])
-    groupMap.get(d.group)!.push({ name: String(d.key ?? d.group), value: d.value })
+    const leaf = String(d.key ?? d.group)
+    groupMap.get(d.group)!.push({
+      name: leaf,
+      value: d.value,
+      itemStyle: { color: colorByLeaf.get(leaf) },
+    })
   }
 
   let treeData: TreemapNode[]
@@ -45,18 +70,62 @@ export function createTreemapOptions(
     }))
   }
 
+  // ECharts assigns color[i] to series[i] in order.
+  // series[0] = treemap (ignores its series-level color; uses per-node itemStyle).
+  // series[1..N] = scatter legend proxies — they must align with the leaf palette.
+  // Prepend a transparent placeholder so the scatter slots start at index 1.
+  const colorArray = [
+    'transparent',
+    ...leafNames.map((name) => colorByLeaf.get(name) as string),
+  ]
+
   return {
     ...(title ? { title: { text: title } } : {}),
     tooltip: { trigger: 'item', formatter: '{b}: {c}' },
+    // ECharts legend only binds to series names, not treemap data node names.
+    // Invisible scatter series (one per leaf, data:[]) act as legend proxies.
+    color: colorArray,
+    legend: { type: 'scroll', bottom: 0, icon: 'rect' },
     series: [
       {
         type: 'treemap',
         data: treeData,
-        breadcrumb: { show: breadcrumb },
-        label: { fontSize: 12, overflow: 'truncate' },
-        upperLabel: { show: true, height: 24, fontSize: 12 },
+        breadcrumb: { show: false },
+        // Labels render natively on each tile — ECharts truncates automatically
+        // when the tile is too small. This is intentionally kept on (unlike the
+        // previous `show: false`) as it is a built-in ECharts feature that adds
+        // useful at-a-glance readability Carbon Charts does not provide.
+        label: { show: true, fontSize: 12, overflow: 'truncate' },
+        upperLabel: { show: false },
         itemStyle: { gapWidth: 2 },
       },
+      // TODO: Replace these scatter legend proxies with a custom legend component.
+      //
+      // ECharts' standard `legend` only binds to series names, not to treemap
+      // data node names. The workaround here is one invisible `scatter` series
+      // per leaf (data:[], symbolSize:0) so the legend has real series entries
+      // to display. This has two known limitations:
+      //   1. Clicking a legend item toggles the scatter proxy but does NOT hide
+      //      the corresponding tile in the treemap (the two are not linked).
+      //   2. The ghost series appear in the ECharts ARIA label string, so screen
+      //      readers will announce series names that have nothing drawn.
+      //
+      // A proper fix requires a legendselectchanged event handler at the app
+      // layer that re-filters and re-renders the treemap data on toggle, plus
+      // an aria-hidden mechanism for the proxy entries. Track as a follow-up.
+      ...leafNames.map((name) => ({
+        type: 'scatter' as const,
+        name,
+        // coordinateSystem: 'none' prevents ECharts from looking for xAxis/yAxis
+        // which don't exist in a treemap-only option — without this it throws
+        // "xAxis 0 not found" and the entire chart fails to render.
+        coordinateSystem: 'none' as const,
+        data: [] as number[],
+        symbolSize: 0,
+        silent: true,
+        animation: false,
+        legendHoverLink: false,
+      })),
     ],
   }
 }

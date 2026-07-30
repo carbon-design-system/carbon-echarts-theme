@@ -19,8 +19,18 @@ Treemaps display hierarchical data as a set of nested rectangles. Area encodes a
 
 ## Color
 
-Use the categorical palette for top-level categories. Child nodes inherit parent colors at reduced opacity.
+Each leaf node is assigned a color from the Carbon categorical palette via `pickColors`. The number of leaves determines the palette size (N-optimised for ≤ 5 items, full 14-color sequential for larger sets).
+
+## Labels
+
+Unlike Carbon Charts, ECharts renders tile labels natively. `createTreemapOptions` enables them by default — labels are truncated automatically when a tile is too small to fit the text. This adds at-a-glance readability without requiring hover. Set `label: { show: false }` in your own `series` override if you prefer the Carbon Charts no-label style.
+
+## Legend
+
+> **Known limitation:** The legend is currently cosmetic only. Clicking a legend item does not hide the corresponding tile in the treemap. This is because ECharts' `legend` component only binds to series names, not to individual data node names inside a `treemap` series. The current implementation uses invisible `scatter` series as legend proxies so that color swatches and labels render correctly.
+>
+> A future improvement will replace this with a custom legend component that wires `legendselectchanged` events to re-filter the treemap data, and suppresses the proxy series from the accessibility tree.
 
 ## ECharts implementation notes
 
-ECharts `treemap` series handles nested data natively. Pass hierarchical data with `children` arrays. `createTreemapOptions` sets leaf node coloring and label truncation.
+ECharts `treemap` series handles nested data natively. Pass hierarchical data with `children` arrays. `createTreemapOptions` assigns Carbon palette colors per leaf node and enables built-in label truncation.

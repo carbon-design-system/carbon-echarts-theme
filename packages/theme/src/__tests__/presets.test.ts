@@ -371,9 +371,11 @@ describe('createPieOptions', () => {
 
   it('uses Carbon N-color palette and percentage labels', () => {
     const opt = createPieOptions(pieData, { colorScheme: 'dark' })
-    const s = (opt.series as Array<{
-      label: { formatter: ({ percent }: { percent?: number }) => string; position: string }
-    }>)[0]
+    const s = (
+      opt.series as Array<{
+        label: { formatter: ({ percent }: { percent?: number }) => string; position: string }
+      }>
+    )[0]
     expect(opt.color).toEqual(pickColors(pieData.length, 'dark'))
     expect(s?.label.formatter({ percent: 46.2 })).toBe('46.2%')
     expect(s?.label.position).toBe('outer')

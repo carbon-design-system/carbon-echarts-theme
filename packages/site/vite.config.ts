@@ -56,10 +56,7 @@ export default defineConfig({
         __dirname,
         '../../packages/theme/src/presets/index.ts',
       ),
-      '@carbon/echarts-theme': path.resolve(
-        __dirname,
-        '../../packages/theme/src/index.ts',
-      ),
+      '@carbon/echarts-theme': path.resolve(__dirname, '../../packages/theme/src/index.ts'),
     },
   },
 })

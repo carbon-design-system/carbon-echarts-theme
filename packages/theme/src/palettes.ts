@@ -131,8 +131,8 @@ const lightCategorical: readonly string[] = [
   cyan50, // 2
   teal70, // 3
   magenta70, // 4
-  red90, // 5  matches Carbon Charts 5-series variant '5-1-5'
-  red50, // 6
+  red50, // 5  source: --cds-charts-14-1-5
+  red90, // 6  source: --cds-charts-14-1-6
   green60, // 7
   blue80, // 8
   magenta50, // 9
