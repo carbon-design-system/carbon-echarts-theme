@@ -30,9 +30,13 @@ export function CandlestickPage() {
       title="Candlestick (OHLC)"
       description="Display open, high, low, and close values of a financial instrument over time."
       overview={<CandlestickMdx />}
-      echartsCode={`<ReactECharts option={candlestickOption} theme="carbon-white" />`}
       examples={
-        <SideBySide title="Candlestick (OHLC)" echartsOption={candlestickOption} extended />
+        <SideBySide
+          title="Candlestick (OHLC)"
+          echartsOption={candlestickOption}
+          extended
+          echartsCode={`<ReactECharts option={candlestickOption} theme="carbon-white" />`}
+        />
       }
     />
   )

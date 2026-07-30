@@ -2,49 +2,33 @@ import React from 'react'
 import { ChartPage } from '../components/ChartPage'
 import { SideBySide } from '../components/SideBySide'
 import TreemapMdx from '../content/treemap.mdx'
-import { createTreemapOptions } from '@carbon/echarts-theme/presets'
-import { treemapData } from '../fixtures/treemap'
-import { TreemapChart } from '@carbon/charts-react'
+import { chartTypes, examples } from '../data/carboncharts/treemap'
+import { treemap } from '../data/echarts/treemap'
 
-// createTreemapOptions expects ChartTabularData (flat rows, group = parent, key = leaf name)
-const treemapTabular = treemapData.flatMap((parent) =>
-  parent.children.map((child) => ({
-    group: parent.name,
-    key: child.name,
-    value: child.value,
-  })),
-)
+// Filter to test-tagged examples only
+// Carbon test order: [0] Treemap, [1] Treemap (Custom colors)
+const testExamples = examples.filter((ex) => ex.tags?.includes('test'))
 
-const treemapOption = createTreemapOptions(treemapTabular)
-
-const echartsCode = `import { createTreemapOptions } from '@carbon/echarts-theme/presets'
-import ReactECharts from 'echarts-for-react'
-
-// data: { name, value, children? }[]
-const option = createTreemapOptions(data)
-
-<ReactECharts option={option} theme="carbon-white" />`
-
-// Carbon Charts TreemapChart uses flat { group (parent), name (leaf), value }
-const carbonTreemapData = treemapData.flatMap((parent) =>
-  parent.children.map((child) => ({ group: parent.name, name: child.name, value: child.value })),
-)
+const titles = [
+  'Treemap',
+  'Treemap (custom colors)',
+]
 
 export function TreemapPage() {
   return (
     <ChartPage
       title="Treemap"
-      description="Display hierarchical data as nested rectangles."
+      description="Display hierarchical data as nested rectangles sized by value."
       overview={<TreemapMdx />}
-      echartsCode={echartsCode}
-      optionsJson={JSON.stringify(treemapOption, null, 2)}
-      examples={
+      examples={testExamples.map((ex, i) => (
         <SideBySide
-          title="Treemap"
-          echartsOption={treemapOption}
-          carbonChart={<TreemapChart data={carbonTreemapData as any} options={{} as any} />}
+          key={i}
+          title={titles[i] ?? `Example ${i + 1}`}
+          echartsOption={treemap}
+          carbonExample={ex}
+          chartClass={chartTypes.vanilla}
         />
-      }
+      ))}
     />
   )
 }

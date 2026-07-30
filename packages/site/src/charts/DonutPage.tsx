@@ -2,44 +2,34 @@ import React from 'react'
 import { ChartPage } from '../components/ChartPage'
 import { SideBySide } from '../components/SideBySide'
 import DonutMdx from '../content/donut.mdx'
-import { createDonutOptions, createPieOptions } from '@carbon/echarts-theme/presets'
-import { donutData } from '../fixtures/donut'
-import { DonutChart, PieChart } from '@carbon/charts-react'
+import { chartTypes, examples } from '../data/carboncharts/donut'
+import { donut } from '../data/echarts/donut'
 
-const donutOption = createDonutOptions(donutData)
-const pieOption = createPieOptions(donutData)
+// Filter to test-tagged examples only
+// Carbon test order: [0] Donut, [1] Donut (centered), [2] Donut (value maps to count)
+const testExamples = examples.filter((ex) => ex.tags?.includes('test'))
 
-const echartsCode = `import { createDonutOptions } from '@carbon/echarts-theme/presets'
-import ReactECharts from 'echarts-for-react'
-
-const option = createDonutOptions(data)
-
-<ReactECharts option={option} theme="carbon-white" />`
-
-const pieAxes = { pie: { alignment: 'center' } }
+const titles = [
+  'Donut',
+  'Donut (centered)',
+  'Donut (value maps to count)',
+]
 
 export function DonutPage() {
   return (
     <ChartPage
-      title="Donut & Pie"
-      description="Show part-to-whole relationships."
+      title="Donut"
+      description="Show part-to-whole relationships with a center cutout."
       overview={<DonutMdx />}
-      echartsCode={echartsCode}
-      optionsJson={JSON.stringify(donutOption, null, 2)}
-      examples={
-        <>
-          <SideBySide
-            title="Donut"
-            echartsOption={donutOption}
-            carbonChart={<DonutChart data={donutData as any} options={pieAxes as any} />}
-          />
-          <SideBySide
-            title="Pie"
-            echartsOption={pieOption}
-            carbonChart={<PieChart data={donutData as any} options={pieAxes as any} />}
-          />
-        </>
-      }
+      examples={testExamples.map((ex, i) => (
+        <SideBySide
+          key={i}
+          title={titles[i] ?? `Example ${i + 1}`}
+          echartsOption={donut}
+          carbonExample={ex}
+          chartClass={chartTypes.vanilla}
+        />
+      ))}
     />
   )
 }

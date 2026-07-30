@@ -27,8 +27,14 @@ export function FunnelPage() {
       title="Funnel"
       description="Show conversion rates through a sequential multi-step process."
       overview={<FunnelMdx />}
-      echartsCode={`<ReactECharts option={funnelOption} theme="carbon-white" />`}
-      examples={<SideBySide title="Funnel" echartsOption={funnelOption} extended />}
+      examples={
+        <SideBySide
+          title="Funnel"
+          echartsOption={funnelOption}
+          extended
+          echartsCode={`<ReactECharts option={funnelOption} theme="carbon-white" />`}
+        />
+      }
     />
   )
 }

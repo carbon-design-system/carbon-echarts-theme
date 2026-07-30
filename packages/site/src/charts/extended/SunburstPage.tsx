@@ -45,8 +45,14 @@ export function SunburstPage() {
       title="Sunburst"
       description="Display hierarchical data as concentric rings."
       overview={<SunburstMdx />}
-      echartsCode={`<ReactECharts option={sunburstOption} theme="carbon-white" />`}
-      examples={<SideBySide title="Sunburst" echartsOption={sunburstOption} extended />}
+      examples={
+        <SideBySide
+          title="Sunburst"
+          echartsOption={sunburstOption}
+          extended
+          echartsCode={`<ReactECharts option={sunburstOption} theme="carbon-white" />`}
+        />
+      }
     />
   )
 }

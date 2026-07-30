@@ -2,54 +2,41 @@ import React from 'react'
 import { ChartPage } from '../components/ChartPage'
 import { SideBySide } from '../components/SideBySide'
 import RadarMdx from '../content/radar.mdx'
-import { createRadarOptions } from '@carbon/echarts-theme/presets'
-import { radarIndicators, radarData } from '../fixtures/radar'
-import { RadarChart } from '@carbon/charts-react'
+import { chartTypes, examples } from '../data/carboncharts/radar'
+import { radar } from '../data/echarts/radar'
 
-const radarOption = createRadarOptions(
-  radarData.flatMap((s) =>
-    s.values.map((v, i) => ({
-      group: s.name,
-      key: radarIndicators[i]?.name ?? String(i),
-      value: v,
-    })),
-  ),
-  { indicators: radarIndicators },
-)
+// Filter to test-tagged examples only
+// Carbon test order (5 test examples):
+//  [0] Radar
+//  [1] Radar (centered)
+//  [2] Radar - Missing datapoints
+//  [3] Radar - Dense
+//  [4] Radar - Custom Max Score (100)
+const testExamples = examples.filter((ex) => ex.tags?.includes('test'))
 
-const echartsCode = `import { createRadarOptions } from '@carbon/echarts-theme/presets'
-import ReactECharts from 'echarts-for-react'
-
-const option = createRadarOptions(data, {
-  indicators: [
-    { name: 'Sales', max: 100 },
-    { name: 'Marketing', max: 100 },
-  ]
-})
-
-<ReactECharts option={option} theme="carbon-white" />`
-
-// Carbon Charts RadarChart expects flat { group, key, value } rows
-const carbonRadarData = radarData.flatMap((s) =>
-  s.values.map((v, i) => ({ group: s.name, key: radarIndicators[i]?.name ?? String(i), value: v })),
-)
-const radarAxes = { radar: { axes: { angle: 'key', value: 'value' } } }
+const titles = [
+  'Radar',
+  'Radar (centered)',
+  'Radar (missing datapoints)',
+  'Radar (dense)',
+  'Radar (custom max score)',
+]
 
 export function RadarPage() {
   return (
     <ChartPage
       title="Radar"
-      description="Compare profiles across multiple quantitative dimensions."
+      description="Compare multiple variables across categories on a radial axis."
       overview={<RadarMdx />}
-      echartsCode={echartsCode}
-      optionsJson={JSON.stringify(radarOption, null, 2)}
-      examples={
+      examples={testExamples.map((ex, i) => (
         <SideBySide
-          title="Radar"
-          echartsOption={radarOption}
-          carbonChart={<RadarChart data={carbonRadarData as any} options={radarAxes as any} />}
+          key={i}
+          title={titles[i] ?? `Example ${i + 1}`}
+          echartsOption={radar}
+          carbonExample={ex}
+          chartClass={chartTypes.vanilla}
         />
-      }
+      ))}
     />
   )
 }

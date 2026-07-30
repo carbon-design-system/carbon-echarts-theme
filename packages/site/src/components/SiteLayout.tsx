@@ -6,7 +6,6 @@ import { IbmFooter } from './IbmFooter'
 interface NavItem {
   label: string
   path: string
-  v2?: boolean
 }
 
 interface NavGroup {
@@ -45,35 +44,40 @@ const NAV: NavGroup[] = [
   {
     label: 'Chart types',
     items: [
-      { label: 'Bar', path: '/bar' },
-      { label: 'Line', path: '/line' },
+      { label: 'Alluvial / Sankey', path: '/alluvial' },
       { label: 'Area', path: '/area' },
-      { label: 'Scatter & Bubble', path: '/scatter' },
-      { label: 'Donut & Pie', path: '/donut' },
-      { label: 'Gauge & Meter', path: '/gauge' },
-      { label: 'Heatmap', path: '/heatmap' },
-      { label: 'Treemap', path: '/treemap' },
-      { label: 'Radar', path: '/radar' },
+      { label: 'Bar', path: '/bar' },
       { label: 'Boxplot', path: '/boxplot' },
-      { label: 'Histogram', path: '/histogram' },
+      { label: 'Bubble', path: '/bubble' },
+      { label: 'Bullet', path: '/bullet' },
+      { label: 'Choropleth', path: '/choropleth' },
+      { label: 'Circle pack', path: '/circlepack' },
       { label: 'Combo', path: '/combo' },
-      { label: 'Lollipop & Sparkline', path: '/lollipop' },
-      { label: 'Alluvial & Sankey', path: '/alluvial' },
+      { label: 'Donut', path: '/donut' },
+      { label: 'Gauge', path: '/gauge' },
+      { label: 'Heatmap', path: '/heatmap' },
+      { label: 'Histogram', path: '/histogram' },
+      { label: 'Line', path: '/line' },
+      { label: 'Lollipop', path: '/lollipop' },
+      { label: 'Meter', path: '/meter' },
+      { label: 'Network Diagrams', path: '/network-diagrams' },
+      { label: 'Pie', path: '/pie' },
+      { label: 'Radar', path: '/radar' },
+      { label: 'Scatter', path: '/scatter' },
       { label: 'Tree', path: '/tree' },
-      { label: 'Bullet', path: '/bullet', v2: true },
-      { label: 'Choropleth', path: '/choropleth', v2: true },
-      { label: 'Word cloud', path: '/wordcloud', v2: true },
+      { label: 'Treemap', path: '/treemap' },
+      { label: 'Word cloud', path: '/wordcloud' },
     ],
   },
   {
     label: 'ECharts extended',
     items: [
-      { label: 'Sunburst', path: '/extended/sunburst' },
-      { label: 'Graph', path: '/extended/graph' },
-      { label: 'Funnel', path: '/extended/funnel' },
-      { label: 'Parallel', path: '/extended/parallel' },
-      { label: 'Theme River', path: '/extended/theme-river' },
       { label: 'Candlestick', path: '/extended/candlestick' },
+      { label: 'Funnel', path: '/extended/funnel' },
+      { label: 'Graph', path: '/extended/graph' },
+      { label: 'Parallel', path: '/extended/parallel' },
+      { label: 'Sunburst', path: '/extended/sunburst' },
+      { label: 'Theme River', path: '/extended/theme-river' },
     ],
   },
 ]
@@ -157,11 +161,6 @@ export function SiteLayout({ children }: SiteLayoutProps) {
                         }
                       >
                         {item.label}
-                        {item.v2 && (
-                          <span className="site-nav__badge" aria-label="Coming in v2">
-                            v2
-                          </span>
-                        )}
                       </NavLink>
                     </li>
                   ))}

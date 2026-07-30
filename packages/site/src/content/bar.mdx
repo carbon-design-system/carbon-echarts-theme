@@ -2,46 +2,7 @@
 title: Bar chart
 ---
 
-## Usage
+Bar charts are a staple in data visualization, useful for comparing quantities across different categories.
+This package allows for the creation of simple, grouped, stacked, and floating bar charts to suit various data presentation needs.
 
-Use a bar chart to compare values across discrete categories. Bar charts are most effective with a moderate number of categories (2–12). When displaying data over time with many data points, consider a line chart instead.
-
-**When to use:**
-
-- Comparing values across multiple categories
-- Showing rankings or distributions
-- Displaying survey results or count data
-
-**When not to use:**
-
-- Data has more than 20 categories (use a table instead)
-- Showing trends over continuous time (use a line chart)
-- Values are parts of a whole (use a donut or pie chart)
-
-## Anatomy
-
-A bar chart consists of a categorical axis (typically the x-axis for vertical bars), a value axis (y-axis), rectangular bars whose lengths are proportional to the values they represent, axis labels, grid lines, and an optional legend for grouped or stacked variants.
-
-## Variants
-
-- **Simple (vertical)** — one bar per category, vertical orientation.
-- **Horizontal** — bars run left-to-right; useful when category labels are long.
-- **Grouped** — multiple bars per category group, using the categorical color palette.
-- **Stacked** — bars divided into segments; shows part-to-whole within each category.
-- **Floating** — bars start at a non-zero baseline; useful for Gantt-style or range data.
-
-## Color
-
-- Use a **single categorical color** for simple bars (one series).
-- Use the **categorical palette** for grouped and stacked variants (multiple series).
-- Never use a sequential palette for unordered categorical data.
-
-## Accessibility
-
-- Ensure tooltip text is present for screen-reader users.
-- Do not rely on color alone to distinguish series — use legend labels.
-- Maintain a minimum 3:1 contrast ratio between bar fill and background.
-
-## ECharts implementation notes
-
-Horizontal bars are achieved by swapping the axis types: set `xAxis.type: 'value'` and `yAxis.type: 'category'`. The `@carbon/echarts-theme` preset handles this automatically via `createHorizontalBarOptions`.
+Details on bar chart options can be found in the [ECharts bar series docs](https://echarts.apache.org/en/option.html#series-bar).

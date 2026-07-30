@@ -3,30 +3,39 @@ import type { EChartsOption, EChartsType } from 'echarts'
 import ReactECharts from 'echarts-for-react'
 import { useTheme } from './ThemeContext'
 import { ChartToolbar } from './ChartToolbar'
+import { CarbonChart } from './CarbonChart'
+import type { CarbonChartExample } from './CarbonChart'
 
 export interface SideBySideProps {
   title: string
-  /** Live @carbon/charts-react component */
-  carbonChart?: React.ReactNode
+  /** Vanilla class name string from chartTypes.vanilla, e.g. 'SimpleBarChart' */
+  chartClass?: string
+  /** Inline Carbon Charts example (rendered via vanilla @carbon/charts) */
+  carbonExample?: CarbonChartExample
   /** ECharts option object */
   echartsOption: EChartsOption
   /** Whether this is an extended chart (no Carbon Charts equivalent) */
   extended?: boolean
+  /** ECharts code snippet shown in the code block beneath this example */
+  echartsCode?: string
 }
 
 export function SideBySide({
   title,
-  carbonChart,
+  chartClass,
+  carbonExample,
   echartsOption,
   extended = false,
+  echartsCode,
 }: SideBySideProps) {
-  const { theme, echartsTheme } = useTheme()
+  const { echartsTheme } = useTheme()
   const echartsRef = React.useRef<any>(null)
   const [chartInstance, setChartInstance] = React.useState<EChartsType | null>(null)
   const [fullscreen, setFullscreen] = React.useState(false)
+  const [codeCopied, setCodeCopied] = React.useState(false)
 
   // A chart variant with no Carbon Charts equivalent but still within a parity page
-  const noCarbonEquivalent = !extended && carbonChart === undefined
+  const noCarbonEquivalent = !extended && carbonExample === undefined
 
   // Close fullscreen on Escape
   React.useEffect(() => {
@@ -40,6 +49,14 @@ export function SideBySide({
 
   const handleChartReady = (instance: EChartsType) => {
     setChartInstance(instance)
+  }
+
+  function handleCopyCode() {
+    if (!echartsCode) return
+    void navigator.clipboard.writeText(echartsCode).then(() => {
+      setCodeCopied(true)
+      setTimeout(() => setCodeCopied(false), 2000)
+    })
   }
 
   const echartsPanel = (
@@ -87,21 +104,35 @@ export function SideBySide({
       <div
         className={`side-by-side__panels${extended || noCarbonEquivalent ? ' side-by-side__panels--single' : ''}`}
       >
-        {!extended && !noCarbonEquivalent && (
+        {!extended && !noCarbonEquivalent && carbonExample && chartClass && (
           <div className="side-by-side__panel side-by-side__panel--carbon">
             <div className="side-by-side__panel-label">Carbon Charts</div>
-            <div className="side-by-side__chart">
-              {carbonChart && React.isValidElement(carbonChart)
-                ? React.cloneElement(
-                    carbonChart as React.ReactElement<{ options?: Record<string, unknown> }>,
-                    { options: { ...(carbonChart.props as any).options, theme } },
-                  )
-                : carbonChart}
+            <div className="carbon-chart-holder">
+              <CarbonChart chartClass={chartClass} example={carbonExample} />
             </div>
           </div>
         )}
         {echartsPanel}
       </div>
+
+      {echartsCode && (
+        <div className="side-by-side__code">
+          <div className="side-by-side__code-bar">
+            <span className="side-by-side__code-label">ECharts</span>
+            <button
+              type="button"
+              className="side-by-side__code-copy"
+              onClick={handleCopyCode}
+              aria-label="Copy code to clipboard"
+            >
+              {codeCopied ? 'Copied!' : 'Copy'}
+            </button>
+          </div>
+          <pre className="side-by-side__code-content">
+            <code>{echartsCode}</code>
+          </pre>
+        </div>
+      )}
     </div>
   )
 }

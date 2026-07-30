@@ -210,36 +210,32 @@ body {
   margin: 0;
 }
 
-.chart-page__tabs {
+.chart-page__body {
   background-color: $background;
-}
-
-.chart-page__tablist {
-  display: flex;
-  border-bottom: 1px solid $border-subtle-01;
-  padding: 0 2rem;
-}
-
-.chart-page__tab {
-  padding: 1rem 1.5rem;
-  font-size: 14px;
-  font-weight: 400;
-  background: none;
-  border: none;
-  border-bottom: 3px solid transparent;
-  cursor: pointer;
-  color: $text-secondary;
-  margin-bottom: -1px;
-}
-
-.chart-page__tab--active {
-  color: $text-primary;
-  border-bottom-color: $interactive;
-  font-weight: 600;
-}
-
-.chart-page__panel {
   padding: 2rem;
+}
+
+.chart-page__overview {
+  max-width: 720px;
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid $border-subtle-01;
+}
+
+.chart-page__overview p {
+  font-size: 16px;
+  margin: 0 0 1rem;
+  color: $text-secondary;
+  line-height: 1.6;
+}
+
+.chart-page__overview a {
+  color: $link-primary;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .chart-page__v2-banner {
@@ -249,31 +245,6 @@ body {
   padding: 1rem 1.5rem;
   border-radius: 2px;
   font-size: 14px;
-}
-
-.chart-page__overview {
-  max-width: 720px;
-}
-
-.chart-page__overview h2 {
-  font-size: 20px;
-  font-weight: 400;
-  margin: 1.5rem 0 0.5rem;
-  border-bottom: 1px solid $border-subtle-01;
-  padding-bottom: 0.5rem;
-  color: $text-primary;
-}
-
-.chart-page__overview p {
-  margin: 0 0 1rem;
-  color: $text-secondary;
-}
-
-.chart-page__overview ul,
-.chart-page__overview ol {
-  color: $text-secondary;
-  padding-left: 1.5rem;
-  margin: 0 0 1rem;
 }
 
 /* ── Side-by-side ────────────────────────────────────────────────────────── */
@@ -335,31 +306,43 @@ body {
   background-color: $background;
 }
 
-/* ── Code tabs ───────────────────────────────────────────────────────────── */
-.code-tabs__bar {
+/* Carbon Charts inline holder — matches ECharts panel height */
+.carbon-chart-holder {
+  height: 320px;
+  width: 100%;
+  background-color: $background;
+  overflow: hidden;
+
+  // The @carbon/charts SVG fills its holder via CSS height
+  > div {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+/* ── Inline example code block (below each SideBySide) ──────────────────── */
+.side-by-side__code {
+  margin-top: 1rem;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.side-by-side__code-bar {
   display: flex;
   align-items: center;
   // Code block toolbar is always dark regardless of site theme
   background-color: #393939;
-  border-radius: 2px 2px 0 0;
 }
 
-.code-tabs__tab {
+.side-by-side__code-label {
   padding: 0.5rem 1rem;
   font-size: 12px;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  cursor: pointer;
+  font-weight: 600;
   color: #c6c6c6;
+  letter-spacing: 0.16px;
 }
 
-.code-tabs__tab--active {
-  color: #f4f4f4;
-  border-bottom-color: #0f62fe;
-}
-
-.code-tabs__copy {
+.side-by-side__code-copy {
   margin-left: auto;
   padding: 0.5rem 1rem;
   font-size: 12px;
@@ -374,12 +357,11 @@ body {
   }
 }
 
-.code-tabs__content {
+.side-by-side__code-content {
   // Code blocks are always dark
   background-color: #282828;
   color: #f4f4f4;
   padding: 1.5rem;
-  border-radius: 0 0 2px 2px;
   margin: 0;
   overflow-x: auto;
   font-family: 'IBM Plex Mono', 'Menlo', 'Consolas', monospace;

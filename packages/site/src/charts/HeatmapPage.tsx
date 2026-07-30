@@ -2,43 +2,27 @@ import React from 'react'
 import { ChartPage } from '../components/ChartPage'
 import { SideBySide } from '../components/SideBySide'
 import HeatmapMdx from '../content/heatmap.mdx'
-import { createHeatmapOptions } from '@carbon/echarts-theme/presets'
-import { heatmapData, heatmapXLabels, heatmapYLabels } from '../fixtures/heatmap'
-import { HeatmapChart } from '@carbon/charts-react'
+import { chartTypes, examples } from '../data/carboncharts/heatmap'
+import { heatmap } from '../data/echarts/heatmap'
 
-// createHeatmapOptions expects ChartTabularData (group=y, key=x, value)
-const heatmapTabular = heatmapData.map(([xi, yi, v]) => ({
-  group: heatmapYLabels[yi] ?? String(yi),
-  key: heatmapXLabels[xi] ?? String(xi),
-  value: v,
-}))
+// Filter to test-tagged examples only
+// Carbon test order (6 test examples):
+//  [0] Heatmap (basic)
+//  [1] Heatmap (quantize legend)
+//  [2] Heatmap (quantile legend)
+//  [3] Heatmap (linear legend)
+//  [4] Heatmap (always ruler tooltip)
+//  [5] Heatmap (missing data)
+const testExamples = examples.filter((ex) => ex.tags?.includes('test'))
 
-const heatmapOption = createHeatmapOptions(heatmapTabular, {
-  xAxisLabel: 'Day',
-  yAxisLabel: 'Time',
-  legendPosition: 'bottom',
-})
-
-const echartsCode = `import { createHeatmapOptions } from '@carbon/echarts-theme/presets'
-import ReactECharts from 'echarts-for-react'
-
-// data: { group (y-axis), key (x-axis), value }[]
-const option = createHeatmapOptions(data)
-
-<ReactECharts option={option} theme="carbon-white" />`
-
-const carbonHeatmapData = heatmapData.map(([xi, yi, v]) => ({
-  day: heatmapXLabels[xi],
-  time: heatmapYLabels[yi],
-  value: v,
-}))
-const heatmapAxes = {
-  axes: {
-    bottom: { title: 'Day', mapsTo: 'day', scaleType: 'labels' },
-    left: { title: 'Time', mapsTo: 'time', scaleType: 'labels' },
-  },
-  heatmap: { colorLegend: { title: 'Count' } },
-}
+const titles = [
+  'Heatmap',
+  'Heatmap (quantize legend)',
+  'Heatmap (quantile legend)',
+  'Heatmap (linear legend)',
+  'Heatmap (always show ruler tooltip)',
+  'Heatmap (missing data)',
+]
 
 export function HeatmapPage() {
   return (
@@ -46,17 +30,15 @@ export function HeatmapPage() {
       title="Heatmap"
       description="Encode values as color intensity across a two-dimensional grid."
       overview={<HeatmapMdx />}
-      echartsCode={echartsCode}
-      optionsJson={JSON.stringify(heatmapOption, null, 2)}
-      examples={
+      examples={testExamples.map((ex, i) => (
         <SideBySide
-          title="Heatmap"
-          echartsOption={heatmapOption}
-          carbonChart={
-            <HeatmapChart data={carbonHeatmapData as any} options={heatmapAxes as any} />
-          }
+          key={i}
+          title={titles[i] ?? `Example ${i + 1}`}
+          echartsOption={heatmap}
+          carbonExample={ex}
+          chartClass={chartTypes.vanilla}
         />
-      }
+      ))}
     />
   )
 }

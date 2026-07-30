@@ -36,8 +36,14 @@ export function GraphPage() {
       title="Graph (Network)"
       description="Visualize relationships between entities as nodes and edges."
       overview={<GraphMdx />}
-      echartsCode={`<ReactECharts option={graphOption} theme="carbon-white" />`}
-      examples={<SideBySide title="Force-directed graph" echartsOption={graphOption} extended />}
+      examples={
+        <SideBySide
+          title="Force-directed graph"
+          echartsOption={graphOption}
+          extended
+          echartsCode={`<ReactECharts option={graphOption} theme="carbon-white" />`}
+        />
+      }
     />
   )
 }

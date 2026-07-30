@@ -20,26 +20,29 @@ import { DashboardsPage } from './pages/DashboardsPage'
 import { LegendsPage } from './pages/LegendsPage'
 import { TooltipsPage } from './pages/TooltipsPage'
 
-// Chart types — parity
-import { BarPage } from './charts/BarPage'
-import { LinePage } from './charts/LinePage'
+// Chart types — alphabetical
+import { AlluvialPage } from './charts/AlluvialPage'
 import { AreaPage } from './charts/AreaPage'
-import { ScatterPage } from './charts/ScatterPage'
+import { BarPage } from './charts/BarPage'
+import { BoxplotPage } from './charts/BoxplotPage'
+import { BubblePage } from './charts/BubblePage'
+import { BulletPage } from './charts/BulletPage'
+import { ChoroplethPage } from './charts/ChoroplethPage'
+import { CirclepackPage } from './charts/CirclepackPage'
+import { ComboPage } from './charts/ComboPage'
 import { DonutPage } from './charts/DonutPage'
 import { GaugePage } from './charts/GaugePage'
 import { HeatmapPage } from './charts/HeatmapPage'
-import { TreemapPage } from './charts/TreemapPage'
-import { RadarPage } from './charts/RadarPage'
-import { BoxplotPage } from './charts/BoxplotPage'
 import { HistogramPage } from './charts/HistogramPage'
-import { ComboPage } from './charts/ComboPage'
+import { LinePage } from './charts/LinePage'
 import { LollipopPage } from './charts/LollipopPage'
-import { AlluvialPage } from './charts/AlluvialPage'
+import { MeterPage } from './charts/MeterPage'
+import { NetworkDiagramPage } from './charts/NetworkDiagramPage'
+import { PiePage } from './charts/PiePage'
+import { RadarPage } from './charts/RadarPage'
+import { ScatterPage } from './charts/ScatterPage'
 import { TreePage } from './charts/TreePage'
-
-// v2-only overview pages
-import { BulletPage } from './charts/BulletPage'
-import { ChoroplethPage } from './charts/ChoroplethPage'
+import { TreemapPage } from './charts/TreemapPage'
 import { WordcloudPage } from './charts/WordcloudPage'
 
 // Extended chart types
@@ -72,26 +75,29 @@ export function App() {
         <Route path="/legends" element={<LegendsPage />} />
         <Route path="/tooltips" element={<TooltipsPage />} />
 
-        {/* Chart types */}
-        <Route path="/bar" element={<BarPage />} />
-        <Route path="/line" element={<LinePage />} />
+        {/* Chart types — alphabetical */}
+        <Route path="/alluvial" element={<AlluvialPage />} />
         <Route path="/area" element={<AreaPage />} />
-        <Route path="/scatter" element={<ScatterPage />} />
+        <Route path="/bar" element={<BarPage />} />
+        <Route path="/boxplot" element={<BoxplotPage />} />
+        <Route path="/bubble" element={<BubblePage />} />
+        <Route path="/bullet" element={<BulletPage />} />
+        <Route path="/choropleth" element={<ChoroplethPage />} />
+        <Route path="/circlepack" element={<CirclepackPage />} />
+        <Route path="/combo" element={<ComboPage />} />
         <Route path="/donut" element={<DonutPage />} />
         <Route path="/gauge" element={<GaugePage />} />
         <Route path="/heatmap" element={<HeatmapPage />} />
-        <Route path="/treemap" element={<TreemapPage />} />
-        <Route path="/radar" element={<RadarPage />} />
-        <Route path="/boxplot" element={<BoxplotPage />} />
         <Route path="/histogram" element={<HistogramPage />} />
-        <Route path="/combo" element={<ComboPage />} />
+        <Route path="/line" element={<LinePage />} />
         <Route path="/lollipop" element={<LollipopPage />} />
-        <Route path="/alluvial" element={<AlluvialPage />} />
+        <Route path="/meter" element={<MeterPage />} />
+        <Route path="/network-diagrams" element={<NetworkDiagramPage />} />
+        <Route path="/pie" element={<PiePage />} />
+        <Route path="/radar" element={<RadarPage />} />
+        <Route path="/scatter" element={<ScatterPage />} />
         <Route path="/tree" element={<TreePage />} />
-
-        {/* v2-only */}
-        <Route path="/bullet" element={<BulletPage />} />
-        <Route path="/choropleth" element={<ChoroplethPage />} />
+        <Route path="/treemap" element={<TreemapPage />} />
         <Route path="/wordcloud" element={<WordcloudPage />} />
 
         {/* Extended */}

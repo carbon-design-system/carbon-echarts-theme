@@ -3,36 +3,50 @@ import { ChartPage } from '../components/ChartPage'
 import { SideBySide } from '../components/SideBySide'
 import AlluvialMdx from '../content/alluvial.mdx'
 import { createAlluvialOptions } from '@carbon/echarts-theme/presets'
-import { alluvialData } from '../fixtures/alluvial'
-import { AlluvialChart } from '@carbon/charts-react'
+import type { AlluvialDatum } from '@carbon/echarts-theme/presets'
+import { chartTypes, examples } from '../data/carboncharts/alluvial'
+import { alluvialBasic, alluvialMultiCategory } from '../data/echarts/alluvial'
 
-const alluvialOption = createAlluvialOptions(alluvialData)
+// Filter to test-tagged examples only
+const testExamples = examples.filter((ex) => ex.tags?.includes('test'))
 
-const echartsCode = `import { createAlluvialOptions } from '@carbon/echarts-theme/presets'
-import ReactECharts from 'echarts-for-react'
+// ECharts equivalents paired by test example index
+const echartsOptions = [
+  alluvialBasic, // [0] Basic
+  alluvialBasic, // [1] Gradient (same structure, different styling)
+  alluvialMultiCategory, // [2] Multiple Categories
+  alluvialBasic, // [3] Monochrome with Custom Node Padding
+  alluvialBasic, // [4] Aligned Nodes
+  alluvialMultiCategory, // [5] Custom Colors
+]
 
-const option = createAlluvialOptions([
-  { source: 'A', target: 'B', value: 100 },
-  { source: 'A', target: 'C', value: 50 },
-])
-
-<ReactECharts option={option} theme="carbon-white" />`
+const titles = [
+  'Basic',
+  'Gradient',
+  'Multiple categories',
+  'Monochrome with custom node padding',
+  'Aligned nodes',
+  'Custom colors',
+]
 
 export function AlluvialPage() {
   return (
     <ChartPage
-      title="Alluvial & Sankey"
+      title="Alluvial / Sankey"
       description="Visualize flows and redistribution between nodes."
       overview={<AlluvialMdx />}
-      echartsCode={echartsCode}
-      optionsJson={JSON.stringify(alluvialOption, null, 2)}
-      examples={
+      examples={testExamples.map((ex, i) => (
         <SideBySide
-          title="Alluvial / Sankey"
-          echartsOption={alluvialOption}
-          carbonChart={<AlluvialChart data={alluvialData as any} options={{} as any} />}
+          key={i}
+          title={titles[i] ?? `Example ${i + 1}`}
+          echartsOption={
+            echartsOptions[i] ??
+            createAlluvialOptions(ex.data as AlluvialDatum[])
+          }
+          carbonExample={ex}
+          chartClass={chartTypes.vanilla}
         />
-      }
+      ))}
     />
   )
 }

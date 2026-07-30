@@ -2,55 +2,55 @@ import React from 'react'
 import { ChartPage } from '../components/ChartPage'
 import { SideBySide } from '../components/SideBySide'
 import AreaMdx from '../content/area.mdx'
-import { createAreaOptions, createStackedAreaOptions } from '@carbon/echarts-theme/presets'
-import { areaData } from '../fixtures/area'
-import { AreaChart, StackedAreaChart } from '@carbon/charts-react'
+import { chartTypes, examples } from '../data/carboncharts/area'
+import {
+  areaTimeSeries,
+  areaSparkline,
+  areaDiscrete,
+  areaStacked,
+} from '../data/echarts/area'
 
-const areaOption = createAreaOptions(areaData)
-const stackedOption = createStackedAreaOptions(areaData)
+// Filter to test-tagged examples only
+const testExamples = examples.filter((ex) => ex.tags?.includes('test'))
 
-const echartsCode = `import { createAreaOptions } from '@carbon/echarts-theme/presets'
-import ReactECharts from 'echarts-for-react'
+// ECharts equivalents paired by test example index
+// Carbon test order: [0] optionsAlwaysRulerTooltip, [1] optionsSpark, [2] optionsDiscrete,
+// [3] optionsCurved, [4] optionsMultipleBounded, [5] optionsZoomBar, [6] optionsSkeleton
+const echartsOptions = [
+  areaTimeSeries,    // [0] Time series area
+  areaSparkline,     // [1] Sparkline area
+  areaDiscrete,      // [2] Discrete domain area
+  areaTimeSeries,    // [3] Natural curve area
+  areaStacked,       // [4] Bounded highlights area
+  areaStacked,       // [5] Zoombar area
+  areaTimeSeries,    // [6] Skeleton (show live echarts equivalent)
+]
 
-const option = createAreaOptions(data)
-
-<ReactECharts option={option} theme="carbon-white" />`
-
-const areaAxes = {
-  axes: { bottom: { mapsTo: 'key', scaleType: 'labels' }, left: { mapsTo: 'value' } },
-}
-
-const stackedAreaAxes = {
-  axes: {
-    bottom: { mapsTo: 'key', scaleType: 'labels' },
-    left: { mapsTo: 'value', stacked: true },
-  },
-}
+const titles = [
+  'Time series area',
+  'Sparkline area',
+  'Discrete domain area',
+  'Natural curve area',
+  'Stacked area',
+  'Area with zoombar',
+  'Area (standard)',
+]
 
 export function AreaPage() {
   return (
     <ChartPage
-      title="Area chart"
+      title="Area"
       description="Show volume or cumulative totals over time."
       overview={<AreaMdx />}
-      echartsCode={echartsCode}
-      optionsJson={JSON.stringify(areaOption, null, 2)}
-      examples={
-        <>
-          <SideBySide
-            title="Simple area"
-            echartsOption={areaOption}
-            carbonChart={<AreaChart data={areaData as any} options={areaAxes as any} />}
-          />
-          <SideBySide
-            title="Stacked area"
-            echartsOption={stackedOption}
-            carbonChart={
-              <StackedAreaChart data={areaData as any} options={stackedAreaAxes as any} />
-            }
-          />
-        </>
-      }
+      examples={testExamples.map((ex, i) => (
+        <SideBySide
+          key={i}
+          title={titles[i] ?? `Example ${i + 1}`}
+          echartsOption={echartsOptions[i] ?? areaTimeSeries}
+          carbonExample={ex}
+          chartClass={chartTypes.vanilla}
+        />
+      ))}
     />
   )
 }

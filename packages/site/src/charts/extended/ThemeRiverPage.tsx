@@ -32,8 +32,14 @@ export function ThemeRiverPage() {
       title="Theme River"
       description="Show evolution of multiple categories over time as flowing stacked bands."
       overview={<ThemeRiverMdx />}
-      echartsCode={`<ReactECharts option={themeRiverOption} theme="carbon-white" />`}
-      examples={<SideBySide title="Theme River" echartsOption={themeRiverOption} extended />}
+      examples={
+        <SideBySide
+          title="Theme River"
+          echartsOption={themeRiverOption}
+          extended
+          echartsCode={`<ReactECharts option={themeRiverOption} theme="carbon-white" />`}
+        />
+      }
     />
   )
 }

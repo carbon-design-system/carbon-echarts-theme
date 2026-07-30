@@ -30,8 +30,14 @@ export function ParallelPage() {
       title="Parallel coordinates"
       description="Explore multivariate data across multiple vertical axes."
       overview={<ParallelMdx />}
-      echartsCode={`<ReactECharts option={parallelOption} theme="carbon-white" />`}
-      examples={<SideBySide title="Parallel coordinates" echartsOption={parallelOption} extended />}
+      examples={
+        <SideBySide
+          title="Parallel coordinates"
+          echartsOption={parallelOption}
+          extended
+          echartsCode={`<ReactECharts option={parallelOption} theme="carbon-white" />`}
+        />
+      }
     />
   )
 }

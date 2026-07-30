@@ -1,47 +1,24 @@
 import React from 'react'
-import { ScaleTypes } from '@carbon/charts'
 import { ChartPage } from '../components/ChartPage'
 import { SideBySide } from '../components/SideBySide'
 import HistogramMdx from '../content/histogram.mdx'
-import { createHistogramOptions } from '@carbon/echarts-theme/presets'
-import { histogramData } from '../fixtures/histogram'
-import { HistogramChart } from '@carbon/charts-react'
+import { chartTypes, examples } from '../data/carboncharts/histogram'
+import { histogram } from '../data/echarts/histogram'
 
-const histogramOption = createHistogramOptions(histogramData)
+// Filter to test-tagged examples only
+// Carbon test order (4 test examples):
+//  [0] Histogram (linear)
+//  [1] Histogram (tooltip.alwaysShowRulerTooltip=true)
+//  [2] Histogram (defined bins number, linear)
+//  [3] Histogram (defined bins width)
+const testExamples = examples.filter((ex) => ex.tags?.includes('test'))
 
-const echartsCode = `import { createHistogramOptions } from '@carbon/echarts-theme/presets'
-import ReactECharts from 'echarts-for-react'
-
-// data: { group, key (bin label), value (count) }[]
-const option = createHistogramOptions(data)
-
-<ReactECharts option={option} theme="carbon-white" />`
-
-// Carbon Charts HistogramChart bins raw observations. Expand pre-binned counts into individual
-// data points, using a unique offset per point so each lands in the correct bin.
-const carbonHistogramData = histogramData.flatMap((d) => {
-  const [lo, hi] = (d.key as string).split('–').map(Number)
-  const step = (hi - lo) / (d.value + 1)
-  return Array.from({ length: d.value }, (_, i) => ({
-    group: 'Frequency',
-    value: lo + step * (i + 1),
-  }))
-})
-
-const carbonHistogramOptions = {
-  axes: {
-    bottom: {
-      mapsTo: 'value',
-      bins: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-      limitDomainToBins: true,
-    },
-    left: {
-      scaleType: ScaleTypes.LINEAR,
-      stacked: true,
-      binned: true,
-    },
-  },
-}
+const titles = [
+  'Histogram (linear)',
+  'Histogram (always show ruler tooltip)',
+  'Histogram (defined bins number)',
+  'Histogram (defined bins width)',
+]
 
 export function HistogramPage() {
   return (
@@ -49,20 +26,15 @@ export function HistogramPage() {
       title="Histogram"
       description="Display the frequency distribution of a continuous variable."
       overview={<HistogramMdx />}
-      echartsCode={echartsCode}
-      optionsJson={JSON.stringify(histogramOption, null, 2)}
-      examples={
+      examples={testExamples.map((ex, i) => (
         <SideBySide
-          title="Histogram"
-          echartsOption={histogramOption}
-          carbonChart={
-            <HistogramChart
-              data={carbonHistogramData as any}
-              options={carbonHistogramOptions as any}
-            />
-          }
+          key={i}
+          title={titles[i] ?? `Example ${i + 1}`}
+          echartsOption={histogram}
+          carbonExample={ex}
+          chartClass={chartTypes.vanilla}
         />
-      }
+      ))}
     />
   )
 }
