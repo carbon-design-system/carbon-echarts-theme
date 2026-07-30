@@ -140,6 +140,15 @@ export function buildTheme(t: CarbonChartTokens, palettes: CarbonPalettes) {
       emphasis: { itemStyle: { opacity: 0.7 } },
     },
 
+    boxplot: {
+      // barMaxWidth constrains the box body width (same API as bar series)
+      barMaxWidth: 40,
+      // itemStyle.color fills the box body; append '33' (20 % alpha) to the
+      // first categorical token so the fill is semi-transparent, matching the
+      // lightly shaded boxes rendered by Carbon Charts
+      itemStyle: { color: `${palettes.categorical[0]}33` },
+    },
+
     scatter: {
       symbol: 'circle',
       symbolSize: 8,

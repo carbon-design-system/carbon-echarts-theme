@@ -28,13 +28,23 @@ const option = createBoxplotOptions(data)
 
 <ReactECharts option={option} theme="carbon-white" />`
 
-// Carbon Charts BoxplotChart expects raw observations per group
+// Carbon Charts BoxplotChart expects multiple rows per group with distinct keys
+// Use day-like sub-keys so Carbon Charts can compute Q1/median/Q3/whiskers from the observations
 const carbonBoxplotData = boxplotCategories.flatMap((cat, ci) => {
   const [min, q1, med, q3, max] = boxplotData[ci]!
-  return [min, q1, q1, med, med, med, q3, q3, max].map((v) => ({ group: cat, key: cat, value: v }))
+  const keys = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']
+  return [min, q1, q1, med, med, med, q3, q3, max].map((v, i) => ({
+    group: cat,
+    key: keys[i]!,
+    value: v,
+  }))
 })
 const boxplotAxes = {
-  axes: { bottom: { mapsTo: 'key', scaleType: 'labels' }, left: { mapsTo: 'value' } },
+  axes: {
+    left: { mapsTo: 'value' },
+    bottom: { scaleType: 'labels', mapsTo: 'group' },
+  },
+  height: '320px',
 }
 
 export function BoxplotPage() {
