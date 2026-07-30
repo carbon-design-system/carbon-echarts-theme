@@ -458,10 +458,10 @@ describe('createGaugeOptions', () => {
 })
 
 describe('createMeterOptions', () => {
-  it('simple meter — produces a gauge series', () => {
+  it('simple meter — produces a bar series', () => {
     const opt = createMeterOptions([{ group: 'Progress', value: 60 }], { total: 100 })
     const s = opt.series as Array<{ type: string }>
-    expect(s[0]?.type).toBe('gauge')
+    expect(s[0]?.type).toBe('bar')
   })
 
   it('proportional meter — produces stacked bar series', () => {

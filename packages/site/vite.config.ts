@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
 const require = createRequire(import.meta.url)
 
 // @carbon/styles is a peer dep of @carbon/react. In pnpm's virtual store each
@@ -47,7 +49,17 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      // Allow importing from @carbon/echarts-theme source directly in dev
+      // In dev, point directly at the theme TypeScript source so Vite
+      // compiles it on-the-fly and HMR picks up changes immediately —
+      // no need to rebuild the theme package separately.
+      '@carbon/echarts-theme/presets': path.resolve(
+        __dirname,
+        '../../packages/theme/src/presets/index.ts',
+      ),
+      '@carbon/echarts-theme': path.resolve(
+        __dirname,
+        '../../packages/theme/src/index.ts',
+      ),
     },
   },
 })

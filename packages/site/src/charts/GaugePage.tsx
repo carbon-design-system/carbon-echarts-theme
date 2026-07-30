@@ -3,14 +3,10 @@ import { ChartPage } from '../components/ChartPage'
 import { SideBySide } from '../components/SideBySide'
 import GaugeMdx from '../content/gauge.mdx'
 import { createGaugeOptions, createMeterOptions } from '@carbon/echarts-theme/presets'
-import { gaugeValue, meterValue } from '../fixtures/gauge'
+import { tokens, IBM_PLEX_FONT_FAMILY } from '@carbon/echarts-theme'
+import { gaugeValue, meterValue, meterMax } from '../fixtures/gauge'
 import { GaugeChart, MeterChart } from '@carbon/charts-react'
-
-const gaugeOption = createGaugeOptions([{ group: 'Utilization', value: gaugeValue }], { unit: '%' })
-
-const meterOption = createMeterOptions([{ group: 'Storage used', value: meterValue }], {
-  total: 100,
-})
+import { useTheme } from '../components/ThemeContext'
 
 const echartsCode = `import { createGaugeOptions } from '@carbon/echarts-theme/presets'
 import ReactECharts from 'echarts-for-react'
@@ -28,6 +24,22 @@ const carbonGaugeData = [{ group: 'value', value: gaugeValue }]
 const carbonMeterData = [{ group: 'Storage used', value: meterValue }]
 
 export function GaugePage() {
+  const { theme } = useTheme()
+  const t = tokens[theme]
+
+  const gaugeOption = createGaugeOptions([{ group: 'Utilization', value: gaugeValue }], {
+    unit: '%',
+    type: 'semi',
+    fontFamily: IBM_PLEX_FONT_FAMILY,
+    color: t.textSecondary,
+  })
+
+  const meterOption = createMeterOptions([{ group: 'Storage used', value: meterValue }], {
+    total: meterMax,
+    fontFamily: IBM_PLEX_FONT_FAMILY,
+    color: t.textPrimary,
+  })
+
   return (
     <ChartPage
       title="Gauge & Meter"
