@@ -61,7 +61,8 @@ export function createDonutOptions(
     ...(title ? { title: { text: title } } : {}),
     color: pickColors(pieData.length, colorScheme),
     tooltip: { trigger: 'item' },
-    legend: { type: 'scroll', bottom: 0 },
+    // Explicitly list real series names so the ghost "_total_" item is excluded.
+    legend: { type: 'scroll', bottom: 0, data: pieData.map((d) => d.name) },
     series: [
       {
         type: 'pie',
