@@ -74,10 +74,7 @@ export function createTreemapOptions(
   // series[0] = treemap (ignores its series-level color; uses per-node itemStyle).
   // series[1..N] = scatter legend proxies — they must align with the leaf palette.
   // Prepend a transparent placeholder so the scatter slots start at index 1.
-  const colorArray = [
-    'transparent',
-    ...leafNames.map((name) => colorByLeaf.get(name) as string),
-  ]
+  const colorArray = ['transparent', ...leafNames.map((name) => colorByLeaf.get(name) as string)]
 
   return {
     ...(title ? { title: { text: title } } : {}),
