@@ -15,6 +15,16 @@ export interface HeatmapPresetOptions {
   minLabel?: string
   /** Label for the visualMap max value */
   maxLabel?: string
+  /** X-axis title (e.g. "Day") */
+  xAxisLabel?: string
+  /** Y-axis title (e.g. "Time") */
+  yAxisLabel?: string
+  /**
+   * Position of the visualMap (colour legend).
+   * - `'right'` (default) – vertical legend to the right of the chart
+   * - `'bottom'` – horizontal legend below the chart (like Carbon Charts)
+   */
+  legendPosition?: 'right' | 'bottom'
 }
 
 /**
@@ -29,7 +39,7 @@ export function createHeatmapOptions(
   data: ChartTabularData,
   opts: HeatmapPresetOptions = {},
 ): EChartsOption {
-  const { title, colors, minLabel, maxLabel } = opts
+  const { title, colors, minLabel, maxLabel, xAxisLabel, yAxisLabel, legendPosition = 'right' } = opts
 
   const xSet = new Set<string>()
   const ySet = new Set<string>()
@@ -51,20 +61,38 @@ export function createHeatmapOptions(
   const min = Math.min(...allValues)
   const max = Math.max(...allValues)
 
+  const isBottom = legendPosition === 'bottom'
+
   return {
     ...(title ? { title: { text: title } } : {}),
     tooltip: { trigger: 'item', formatter: '{a} <br/>{b}: {c}' },
-    grid: { top: 48, bottom: 80, left: 80, right: 100, containLabel: false },
-    xAxis: { type: 'category', data: xCategories, splitArea: { show: true } },
-    yAxis: { type: 'category', data: yCategories, splitArea: { show: true } },
+    grid: {
+      top: 48,
+      bottom: isBottom ? 120 : 80,
+      left: yAxisLabel ? 96 : 80,
+      right: isBottom ? 20 : 100,
+      containLabel: false,
+    },
+    xAxis: {
+      type: 'category',
+      data: xCategories,
+      splitArea: { show: true },
+      ...(xAxisLabel ? { name: xAxisLabel, nameLocation: 'middle', nameGap: 32 } : {}),
+    },
+    yAxis: {
+      type: 'category',
+      data: yCategories,
+      splitArea: { show: true },
+      ...(yAxisLabel ? { name: yAxisLabel, nameLocation: 'middle', nameGap: 56 } : {}),
+    },
     visualMap: {
       min,
       max,
       ...(minLabel ? { text: [maxLabel ?? '', minLabel] } : {}),
       calculable: true,
-      orient: 'vertical',
-      right: 0,
-      top: 'center',
+      ...(isBottom
+        ? { orient: 'horizontal', left: 'center', bottom: 16 }
+        : { orient: 'vertical', right: 0, top: 'center' }),
       ...(colors ? { inRange: { color: colors } } : {}),
     },
     series: [

@@ -22,11 +22,10 @@ const option = createGaugeOptions(
 
 <ReactECharts option={option} theme="carbon-white" />`
 
-const carbonGaugeData = [{ group: 'Utilization', value: gaugeValue }]
-const carbonMeterData = [
-  { group: 'Storage used', value: meterValue },
-  { group: 'Remaining', value: 100 - meterValue },
-]
+// Carbon Charts GaugeChart requires group:'value' (and optionally group:'delta')
+const carbonGaugeData = [{ group: 'value', value: gaugeValue }]
+// Carbon Charts MeterChart (non-proportional) uses a single data point
+const carbonMeterData = [{ group: 'Storage used', value: meterValue }]
 
 export function GaugePage() {
   return (
@@ -44,7 +43,7 @@ export function GaugePage() {
             carbonChart={
               <GaugeChart
                 data={carbonGaugeData as any}
-                options={{ gauge: { type: 'semi' } } as any}
+                options={{ gauge: { type: 'semi' }, height: '250px', resizable: true } as any}
               />
             }
           />
@@ -52,7 +51,10 @@ export function GaugePage() {
             title="Meter"
             echartsOption={meterOption}
             carbonChart={
-              <MeterChart data={carbonMeterData as any} options={{ meter: { peak: 100 } } as any} />
+              <MeterChart
+                data={carbonMeterData as any}
+                options={{ meter: { peak: 100 }, height: '100px', resizable: true } as any}
+              />
             }
           />
         </>

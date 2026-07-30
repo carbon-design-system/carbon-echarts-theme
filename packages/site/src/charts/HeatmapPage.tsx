@@ -13,7 +13,11 @@ const heatmapTabular = heatmapData.map(([xi, yi, v]) => ({
   value: v,
 }))
 
-const heatmapOption = createHeatmapOptions(heatmapTabular)
+const heatmapOption = createHeatmapOptions(heatmapTabular, {
+  xAxisLabel: 'Day',
+  yAxisLabel: 'Time',
+  legendPosition: 'bottom',
+})
 
 const echartsCode = `import { createHeatmapOptions } from '@carbon/echarts-theme/presets'
 import ReactECharts from 'echarts-for-react'

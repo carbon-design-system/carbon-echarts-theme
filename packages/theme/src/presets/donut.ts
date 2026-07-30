@@ -28,7 +28,9 @@ function toPieData(data: ChartTabularData): PieDataItem[] {
   for (const d of data) {
     map.set(d.group, (map.get(d.group) ?? 0) + d.value)
   }
-  return [...map.entries()].map(([name, value]) => ({ name, value }))
+  return [...map.entries()]
+    .map(([name, value]) => ({ name, value }))
+    .sort((a, b) => b.value - a.value)
 }
 
 // ── Donut preset ──────────────────────────────────────────────────────────────
@@ -50,7 +52,11 @@ export function createDonutOptions(
     outerRadius = '70%',
   } = opts
   const pieData = toPieData(data)
+  const total = pieData.reduce((sum, item) => sum + item.value, 0)
+  const totalLabel = new Intl.NumberFormat('en-US').format(total)
 
+  // ECharts renders center text via a second transparent series with position:'center'.
+  // This is the canonical approach — graphic elements can't reliably vertically-center text.
   return {
     ...(title ? { title: { text: title } } : {}),
     color: pickColors(pieData.length, colorScheme),
@@ -60,8 +66,41 @@ export function createDonutOptions(
       {
         type: 'pie',
         radius: [innerRadius, outerRadius],
-        label: { show: showLabels, formatter: '{d}%' },
+        center: ['50%', '42%'],
+        startAngle: 90,
+        clockwise: true,
+        avoidLabelOverlap: true,
+        minShowLabelAngle: 0,
+        labelLine: { show: showLabels, length: 10, length2: 5 },
+        label: {
+          show: showLabels,
+          position: 'outer',
+          formatter: ({ percent }: { percent?: number }) =>
+            `${Math.round((percent ?? 0) * 10) / 10}%`,
+        },
         data: pieData,
+      },
+      {
+        // Transparent ghost series solely to render the center total label.
+        // ECharts requires a non-empty-name data item for the label to render;
+        // we hide the slice and exclude it from the legend.
+        type: 'pie',
+        radius: [0, innerRadius],
+        center: ['50%', '42%'],
+        silent: true,
+        animation: false,
+        tooltip: { show: false },
+        legendHoverLink: false,
+        label: {
+          show: true,
+          position: 'center',
+          fontSize: 14,
+          fontWeight: 400,
+          formatter: () => totalLabel,
+        },
+        labelLine: { show: false },
+        itemStyle: { color: 'transparent', borderWidth: 0 },
+        data: [{ value: 1, name: '_total_', itemStyle: { color: 'transparent' } }],
       },
     ],
   }
@@ -90,7 +129,18 @@ export function createPieOptions(
       {
         type: 'pie',
         radius: '60%',
-        label: { show: showLabels, formatter: '{d}%' },
+        center: ['50%', '42%'],
+        startAngle: 90,
+        clockwise: true,
+        avoidLabelOverlap: true,
+        minShowLabelAngle: 0,
+        labelLine: { show: showLabels, length: 10, length2: 5 },
+        label: {
+          show: showLabels,
+          position: 'outer',
+          formatter: ({ percent }: { percent?: number }) =>
+            `${Math.round((percent ?? 0) * 10) / 10}%`,
+        },
         data: pieData,
       },
     ],

@@ -107,7 +107,9 @@ export function groupByGroup(
  * Source: Carbon Charts _color-palette.scss, cds-charts-N-1-* CSS variables.
  */
 
-/** Light theme (white/g10) N-optimised palettes for N = 1..5 */
+/** Light theme (white/g10) N-optimised palettes for N = 1..5.
+ * Source: Carbon Charts _color-palette.scss $white-theme-colors variant '1' for each N.
+ */
 const LIGHT_N_PALETTES: readonly (readonly string[])[] = [
   [purple70],
   [purple70, teal50],
@@ -116,7 +118,9 @@ const LIGHT_N_PALETTES: readonly (readonly string[])[] = [
   [purple70, cyan50, teal70, magenta70, red90],
 ]
 
-/** Dark theme (g90/g100) N-optimised palettes for N = 1..5 */
+/** Dark theme (g90/g100) N-optimised palettes for N = 1..5.
+ * Source: Carbon Charts _color-palette.scss $dark-theme-colors variant '1' for each N.
+ */
 const DARK_N_PALETTES: readonly (readonly string[])[] = [
   [purple30],
   [purple60, teal40],

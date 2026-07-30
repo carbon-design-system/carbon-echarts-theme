@@ -337,17 +337,26 @@ describe('createDonutOptions', () => {
     expect(aEntry?.value).toBe(30)
   })
 
-  it('preserves input group order for palette assignment', () => {
+  it('sorts slices by value for palette assignment', () => {
     const opt = createDonutOptions(pieData)
     const s = opt.series as Array<{ data: Array<{ name: string }> }>
-    expect(s[0]?.data.map((d) => d.name)).toEqual(['Slice A', 'Slice B', 'Slice C'])
+    expect(s[0]?.data.map((d) => d.name)).toEqual(['Slice B', 'Slice A', 'Slice C'])
   })
 
   it('uses Carbon N-color palette and percentage labels', () => {
     const opt = createDonutOptions(pieData)
-    const s = (opt.series as Array<{ label: { formatter: string } }>)[0]
+    const series = opt.series as Array<{
+      label: { formatter: ((...args: unknown[]) => string) | string; position: string }
+    }>
+    const s = series[0]
+    const ghostSeries = series[1] as { label: { formatter: () => string; position: string } }
     expect(opt.color).toEqual(pickColors(pieData.length, 'light'))
-    expect(s?.label.formatter).toBe('{d}%')
+    expect(s?.label.formatter({ percent: 46.2 })).toBe('46.2%')
+    expect(s?.label.position).toBe('outer')
+    // Ghost series renders the total in the donut center
+    expect(typeof ghostSeries?.label.formatter).toBe('function')
+    expect(ghostSeries?.label.formatter()).toBe('100')
+    expect(ghostSeries?.label.position).toBe('center')
   })
 })
 
@@ -362,9 +371,12 @@ describe('createPieOptions', () => {
 
   it('uses Carbon N-color palette and percentage labels', () => {
     const opt = createPieOptions(pieData, { colorScheme: 'dark' })
-    const s = (opt.series as Array<{ label: { formatter: string } }>)[0]
+    const s = (opt.series as Array<{
+      label: { formatter: ({ percent }: { percent?: number }) => string; position: string }
+    }>)[0]
     expect(opt.color).toEqual(pickColors(pieData.length, 'dark'))
-    expect(s?.label.formatter).toBe('{d}%')
+    expect(s?.label.formatter({ percent: 46.2 })).toBe('46.2%')
+    expect(s?.label.position).toBe('outer')
   })
 })
 
