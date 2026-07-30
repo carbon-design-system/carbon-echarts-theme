@@ -137,6 +137,8 @@ export interface RadarPresetOptions {
    * `key` values found in the data with max = highest value for that key.
    */
   indicators?: Array<{ name: string; max?: number }>
+  /** Color scheme for palette selection ('light' or 'dark'). Default: 'light' */
+  colorScheme?: 'light' | 'dark'
 }
 
 /**
@@ -149,7 +151,7 @@ export function createRadarOptions(
   data: ChartTabularData,
   opts: RadarPresetOptions = {},
 ): EChartsOption {
-  const { title } = opts
+  const { title, colorScheme = 'light' } = opts
 
   // Collect keys in insertion order
   const keyOrder: string[] = []
@@ -183,9 +185,15 @@ export function createRadarOptions(
     groupMap.get(d.group)!.set(String(d.key ?? ''), d.value)
   }
 
-  const seriesData = [...groupMap.entries()].map(([name, kvMap]) => ({
+  const groups = [...groupMap.keys()]
+  const colors = pickColors(groups.length, colorScheme)
+
+  const seriesData = [...groupMap.entries()].map(([name, kvMap], i) => ({
     name,
     value: keyOrder.map((k) => kvMap.get(k) ?? 0),
+    lineStyle: { color: colors[i] },
+    itemStyle: { color: colors[i] },
+    areaStyle: { color: colors[i], opacity: 0.3 },
   }))
 
   return {
