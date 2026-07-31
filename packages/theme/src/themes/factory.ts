@@ -114,7 +114,10 @@ export function buildTheme(t: CarbonChartTokens, palettes: CarbonPalettes) {
       axisLine: { show: true, lineStyle: { color: t.borderSubtle01, width: 1 } },
       axisTick: { show: false },
       axisLabel: { fontSize: 12, color: t.textSecondary, margin: 8 },
-      splitLine: { show: true, lineStyle: { color: t.borderSubtle00, type: 'solid' as const, width: 1 } },
+      splitLine: {
+        show: true,
+        lineStyle: { color: t.borderSubtle00, type: 'solid' as const, width: 1 },
+      },
       splitArea: { show: false },
     },
 

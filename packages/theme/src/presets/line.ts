@@ -112,9 +112,7 @@ export function createLineOptions(
     // For time-series x-axis, ECharts needs [date, value] pairs.
     // groupByGroup stores the category label in `name`; re-pair it with the numeric value.
     // When xDomain is a category filter, keep only the matching data points.
-    const rawData = xCategoryFilter
-      ? g.data.filter((d) => xCategoryFilter.has(d.name))
-      : g.data
+    const rawData = xCategoryFilter ? g.data.filter((d) => xCategoryFilter.has(d.name)) : g.data
     const seriesData = timeSeries ? rawData.map((d) => [d.name, d.value as number]) : rawData
 
     return {

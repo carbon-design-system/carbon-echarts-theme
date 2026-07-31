@@ -101,7 +101,12 @@ export function createScatterOptions(
   const xAxis = timeSeries
     ? { type: 'time' as const }
     : isDiscrete
-      ? { type: 'category' as const, data: categoryLabels, boundaryGap: false, splitLine: { show: true } }
+      ? {
+          type: 'category' as const,
+          data: categoryLabels,
+          boundaryGap: false,
+          splitLine: { show: true },
+        }
       : { type: 'value' as const }
 
   return {

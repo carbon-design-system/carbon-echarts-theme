@@ -149,9 +149,7 @@ export function createAreaOptions(
   })
 
   return {
-    ...(title
-      ? { title: { text: title, top: dataZoom ? 44 : 'auto' } }
-      : {}),
+    ...(title ? { title: { text: title, top: dataZoom ? 44 : 'auto' } } : {}),
     tooltip: { trigger: 'axis' },
     legend: {
       type: 'scroll',
@@ -167,16 +165,12 @@ export function createAreaOptions(
                 new Date(value),
               ),
           },
-          ...(xAxisTitle
-            ? { name: xAxisTitle, nameLocation: 'middle', nameGap: 32 }
-            : {}),
+          ...(xAxisTitle ? { name: xAxisTitle, nameLocation: 'middle', nameGap: 32 } : {}),
         }
       : {
           type: 'category',
           data: categories,
-          ...(xAxisTitle
-            ? { name: xAxisTitle, nameLocation: 'middle', nameGap: 32 }
-            : {}),
+          ...(xAxisTitle ? { name: xAxisTitle, nameLocation: 'middle', nameGap: 32 } : {}),
         },
     yAxis: {
       type: 'value',
@@ -402,16 +396,15 @@ export function createBoundedAreaOptions(
   const valueSeriesIndices = groupNames.map((_, i) => i * 5 + 4)
 
   return {
-    ...(title
-      ? { title: { text: title, top: dataZoom ? 44 : 'auto' } }
-      : {}),
+    ...(title ? { title: { text: title, top: dataZoom ? 44 : 'auto' } } : {}),
     tooltip: {
       trigger: 'axis',
       // Suppress the internal __lower/__upper series from the tooltip
       formatter: (params: unknown) => {
         if (!Array.isArray(params)) return ''
-        const visible = (params as Array<{ seriesName: string; marker: string; value: unknown[] | number }>)
-          .filter((p) => !p.seriesName.includes('__'))
+        const visible = (
+          params as Array<{ seriesName: string; marker: string; value: unknown[] | number }>
+        ).filter((p) => !p.seriesName.includes('__'))
         if (!visible.length) return ''
         const header = timeSeries
           ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(
@@ -421,7 +414,10 @@ export function createBoundedAreaOptions(
         return (
           `<b>${header}</b><br/>` +
           visible
-            .map((p) => `${p.marker} ${p.seriesName}: ${p.value instanceof Array ? p.value[1] : p.value}`)
+            .map(
+              (p) =>
+                `${p.marker} ${p.seriesName}: ${p.value instanceof Array ? p.value[1] : p.value}`,
+            )
             .join('<br/>')
         )
       },
@@ -439,16 +435,12 @@ export function createBoundedAreaOptions(
                 new Date(value),
               ),
           },
-          ...(xAxisTitle
-            ? { name: xAxisTitle, nameLocation: 'middle', nameGap: 32 }
-            : {}),
+          ...(xAxisTitle ? { name: xAxisTitle, nameLocation: 'middle', nameGap: 32 } : {}),
         }
       : {
           type: 'category',
           data: categories,
-          ...(xAxisTitle
-            ? { name: xAxisTitle, nameLocation: 'middle', nameGap: 32 }
-            : {}),
+          ...(xAxisTitle ? { name: xAxisTitle, nameLocation: 'middle', nameGap: 32 } : {}),
         },
     yAxis: {
       type: 'value',

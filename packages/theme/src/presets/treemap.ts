@@ -227,7 +227,7 @@ export function createTreemapOptionsFromHierarchy(
         levels,
       },
       // Legend proxies — one invisible scatter series per parent category
-      ...roots.map((root, i) => ({
+      ...roots.map((root) => ({
         type: 'scatter' as const,
         name: root.name,
         coordinateSystem: 'none' as const,

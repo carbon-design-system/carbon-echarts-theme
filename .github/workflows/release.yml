@@ -52,7 +52,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Promote packages to `latest`
         run: |
-          for pkg in @carbon/echarts-theme @carbon/echarts-codemod; do
+          # @carbon/echarts-codemod is not yet published — add it back when codemods ship
+          for pkg in @carbon/echarts-theme; do
             version=$(npm view $pkg@next version)
             npm dist-tag add $pkg@$version latest
           done

@@ -361,10 +361,9 @@ describe('createAreaOptions', () => {
     const xAxis = opt.xAxis as { type: string; axisLabel?: unknown }
     expect(xAxis.type).toBe('category')
 
-    const tsOpt = createAreaOptions(
-      [{ group: 'A', date: '2023-01-01', value: 1 }],
-      { timeSeries: true },
-    )
+    const tsOpt = createAreaOptions([{ group: 'A', date: '2023-01-01', value: 1 }], {
+      timeSeries: true,
+    })
     const tsXAxis = tsOpt.xAxis as { type: string; axisLabel?: { formatter?: unknown } }
     expect(tsXAxis.type).toBe('time')
     expect(typeof tsXAxis.axisLabel?.formatter).toBe('function')
@@ -390,10 +389,10 @@ describe('createAreaOptions', () => {
   })
 
   it('xAxisTitle adds name to time xAxis', () => {
-    const opt = createAreaOptions(
-      [{ group: 'A', date: '2023-01-01', value: 1 }],
-      { timeSeries: true, xAxisTitle: '2023 Annual Sales Figures' },
-    )
+    const opt = createAreaOptions([{ group: 'A', date: '2023-01-01', value: 1 }], {
+      timeSeries: true,
+      xAxisTitle: '2023 Annual Sales Figures',
+    })
     const xAxis = opt.xAxis as { name?: string; nameLocation?: string }
     expect(xAxis.name).toBe('2023 Annual Sales Figures')
     expect(xAxis.nameLocation).toBe('middle')
@@ -407,7 +406,10 @@ describe('createAreaOptions', () => {
 
   it('areaStyle includes explicit color matching itemStyle', () => {
     const opt = createAreaOptions(groupedBarData)
-    const series = opt.series as Array<{ areaStyle?: { color?: string }; itemStyle?: { color?: string } }>
+    const series = opt.series as Array<{
+      areaStyle?: { color?: string }
+      itemStyle?: { color?: string }
+    }>
     series.forEach((s) => {
       expect(s.areaStyle?.color).toBe(s.itemStyle?.color)
     })
@@ -455,7 +457,11 @@ describe('createBoundedAreaOptions', () => {
 
   it('lower_line and upper_line have dashed lineStyle and no areaStyle', () => {
     const opt = createBoundedAreaOptions(boundedData, { timeSeries: true })
-    const series = opt.series as Array<{ name: string; lineStyle?: { type?: string }; areaStyle?: unknown }>
+    const series = opt.series as Array<{
+      name: string
+      lineStyle?: { type?: string }
+      areaStyle?: unknown
+    }>
     const lowerLine = series.find((s) => s.name === 'Dataset 1__lower_line')
     const upperLine = series.find((s) => s.name === 'Dataset 1__upper_line')
     expect(lowerLine?.lineStyle?.type).toBe('dashed')
@@ -492,7 +498,6 @@ describe('createBoundedAreaOptions', () => {
     const legend = opt.legend as { data?: Array<{ name: string }> }
     expect(legend.data).toEqual([{ name: 'Dataset 1' }])
   })
-
 
   it('showLegend:false hides the legend', () => {
     const opt = createBoundedAreaOptions(boundedData, { timeSeries: true, showLegend: false })
@@ -551,9 +556,9 @@ describe('createDonutOptions', () => {
     const ghostSeries = series[1] as { label: { formatter: () => string; position: string } }
     expect(opt.color).toEqual(pickColors(pieData.length, 'light'))
     expect(typeof s?.label.formatter).toBe('function')
-    expect((s?.label.formatter as ({ percent }: { percent?: number }) => string)({ percent: 46.2 })).toBe(
-      '46.2%',
-    )
+    expect(
+      (s?.label.formatter as ({ percent }: { percent?: number }) => string)({ percent: 46.2 }),
+    ).toBe('46.2%')
     expect(s?.label.position).toBe('outer')
     // Ghost series renders the total in the donut center
     expect(typeof ghostSeries?.label.formatter).toBe('function')

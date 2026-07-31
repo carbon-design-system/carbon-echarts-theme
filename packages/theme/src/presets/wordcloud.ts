@@ -57,13 +57,13 @@ export function createWordCloudOptions(
     ...(title ? { title: { text: title } } : {}),
     tooltip: { show: true },
     series: [
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       {
         type: 'wordCloud',
         shape,
         sizeRange: [minFontSize, maxFontSize],
         rotationRange: [-90, 90],
         data: coloredData,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any,
     ],
   }

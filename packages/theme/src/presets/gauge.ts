@@ -124,7 +124,7 @@ export function createGaugeOptions(
           ...textColor,
           // When there's a delta, shift the main value up slightly so both
           // labels are vertically centred within the arc opening.
-          offsetCenter: [0, hasDelta ? mainOffsetY : (type === 'full' ? '40%' : '-15%')],
+          offsetCenter: [0, hasDelta ? mainOffsetY : type === 'full' ? '40%' : '-15%'],
           valueAnimation: true,
         },
         data: [{ value, name: label }],
