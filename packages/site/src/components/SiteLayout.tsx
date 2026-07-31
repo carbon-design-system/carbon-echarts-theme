@@ -119,6 +119,7 @@ export function SiteLayout({ children }: SiteLayoutProps) {
         <div className="site-header__inner">
           <NavLink to="/" className="site-header__wordmark">
             Carbon ECharts Theme
+            <span className="site-header__version">v{__THEME_VERSION__}</span>
           </NavLink>
           <nav className="site-header__actions" aria-label="Site actions">
             <ThemeSwitcher />

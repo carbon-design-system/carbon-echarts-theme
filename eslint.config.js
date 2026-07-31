@@ -56,13 +56,13 @@ export default [
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
     },
   },
-  // Build / test config files — use the dedicated tsconfig.node.json
+  // Build / test config files — use the dedicated tsconfig.node.json for each package
   {
-    files: ['**/tsup.config.ts', '**/vitest.config.ts'],
+    files: ['**/tsup.config.ts', '**/vitest.config.ts', '**/vite.config.ts'],
     languageOptions: {
       parser: tsparser,
       parserOptions: {
-        project: ['./packages/theme/tsconfig.node.json'],
+        project: ['./packages/theme/tsconfig.node.json', './packages/site/tsconfig.node.json'],
         tsconfigRootDir: import.meta.dirname,
       },
     },

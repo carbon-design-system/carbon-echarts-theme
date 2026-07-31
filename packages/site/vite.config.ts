@@ -4,11 +4,16 @@ import mdx from '@mdx-js/rollup'
 import remarkFrontmatter from 'remark-frontmatter'
 import { fileURLToPath } from 'node:url'
 import { createRequire } from 'node:module'
+import fs from 'node:fs'
 import path from 'node:path'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const require = createRequire(import.meta.url)
+
+const themePkg = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, '../../packages/theme/package.json'), 'utf-8'),
+) as { version: string }
 
 // @carbon/styles is a peer dep of @carbon/react. In pnpm's virtual store each
 // package gets its own isolated node_modules, so we resolve the styles package
@@ -46,6 +51,7 @@ export default defineConfig({
     __IBM_SITE_ID__: JSON.stringify(
       process.env.NODE_ENV === 'production' ? 'CARBON_CHARTS_ECHARTS' : 'CARBON_CHARTS_ECHARTS_DEV',
     ),
+    __THEME_VERSION__: JSON.stringify(themePkg.version),
   },
   resolve: {
     alias: {
