@@ -90,11 +90,17 @@ export function createAlluvialOptions(
 
   // Collect unique node names in insertion order
   const nodeSet = new Set<string>()
+  const targetSet = new Set<string>()
   for (const d of data) {
     nodeSet.add(d.source)
     nodeSet.add(d.target)
+    targetSet.add(d.target)
   }
   const nodeNames = [...nodeSet]
+  // Source-only nodes: appear as source but never as target (left-side nodes).
+  // Carbon Charts assigns palette colours only to these nodes; right-side
+  // (target-only) nodes are coloured implicitly by the links flowing into them.
+  const sourceOnlyNodes = nodeNames.filter((n) => !targetSet.has(n))
 
   // Resolve node colours
   let nodeColorMap: Record<string, string>
@@ -105,10 +111,10 @@ export function createAlluvialOptions(
     // Only override nodes that have an explicit entry; leave others uncoloured
     nodeColorMap = colors
   } else {
-    // Auto-assign palette colours per source node; target-only nodes get no
-    // explicit colour so ECharts assigns them automatically.
-    const paletteColors = pickColors(nodeNames.length, colorScheme)
-    nodeColorMap = Object.fromEntries(nodeNames.map((n, i) => [n, paletteColors[i]!]))
+    // Auto-assign palette colours only to source-only nodes, matching Carbon
+    // Charts which colours nodes by their left-side category group.
+    const paletteColors = pickColors(sourceOnlyNodes.length, colorScheme)
+    nodeColorMap = Object.fromEntries(sourceOnlyNodes.map((n, i) => [n, paletteColors[i]!]))
   }
 
   const nodes = nodeNames.map((name) => {

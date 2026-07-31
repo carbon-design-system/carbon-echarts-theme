@@ -11,6 +11,7 @@
  */
 import type { EChartsOption } from 'echarts'
 import { createRadarOptions } from '@carbon/echarts-theme/presets'
+import type { ChartTabularData } from '@carbon/echarts-theme/presets'
 
 // ── Slot [0] and [1] — standard product × feature data ───────────────────────
 // Matches carboncharts/radar.ts radarData (product/feature/score fields)
@@ -116,11 +117,14 @@ export const radarMultiSeries: EChartsOption = createRadarOptions(radarData)
 export const radarMissingDatapoints: EChartsOption = createRadarOptions(radarMissingData)
 
 /** Slot [3] — Radar dense (month × activity × hoursAvg) */
-export const radarDense: EChartsOption = createRadarOptions(radarDenseData, {
-  groupField: 'month',
-  axisField: 'activity',
-  valueField: 'hoursAvg',
-})
+export const radarDense: EChartsOption = createRadarOptions(
+  radarDenseData as unknown as ChartTabularData,
+  {
+    groupField: 'month',
+    axisField: 'activity',
+    valueField: 'hoursAvg',
+  },
+)
 
 /** Slot [4] — Radar custom max score (single product, maxValue: 100) */
 export const radarCustomMax: EChartsOption = createRadarOptions(radarCustomMaxData, {

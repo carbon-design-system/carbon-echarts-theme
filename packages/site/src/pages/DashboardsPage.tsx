@@ -14,8 +14,8 @@ export function DashboardsPage() {
 
         <h2>Grid layout</h2>
         <p>
-          Use CSS Grid or Carbon's 16-column grid to lay out chart panels. Each chart occupies a
-          grid cell; charts resize when the grid column width changes.
+          Use CSS Grid or Carbon&apos;s 16-column grid to lay out chart panels. Each chart occupies
+          a grid cell; charts resize when the grid column width changes.
         </p>
         <pre>
           <code>{`.dashboard {

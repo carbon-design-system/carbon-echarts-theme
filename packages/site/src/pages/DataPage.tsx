@@ -9,8 +9,8 @@ export function DataPage() {
       <div className="content-page">
         <p>
           The chart preset functions accept a flat tabular array of objects matching{' '}
-          <code>ChartTabularData</code>. This mirrors Carbon Charts' own data format so migration
-          requires only changing the function call, not the data shape.
+          <code>ChartTabularData</code>. This mirrors Carbon Charts&apos; own data format so
+          migration requires only changing the function call, not the data shape.
         </p>
 
         <h2>ChartTabularData format</h2>
@@ -65,8 +65,8 @@ const option = createTimeSeriesLineOptions(data)`}</code>
         <h2>Dates</h2>
         <p>
           For time-series charts, use the <code>date</code> field with a <code>Date</code> object.
-          The preset sets <code>xAxis.type: 'time'</code> automatically. For all other charts, use
-          the <code>key</code> field for x-axis categories.
+          The preset sets <code>{"xAxis.type: 'time'"}</code> automatically. For all other charts,
+          use the <code>key</code> field for x-axis categories.
         </p>
       </div>
     </div>

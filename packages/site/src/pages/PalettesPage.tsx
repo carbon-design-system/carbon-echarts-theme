@@ -10,8 +10,8 @@ export function PalettesPage() {
       <div className="content-page" style={{ maxWidth: '800px' }}>
         <p>
           IBM data-vis color palettes are sourced directly from the IBM Design Language. They are
-          not Carbon Charts–specific — they represent IBM's official guidance for data visualization
-          and apply equally to any charting library styled with Carbon.
+          not Carbon Charts–specific — they represent IBM&apos;s official guidance for data
+          visualization and apply equally to any charting library styled with Carbon.
         </p>
 
         <h2>Categorical palette</h2>

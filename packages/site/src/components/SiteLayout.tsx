@@ -102,6 +102,7 @@ export function SiteLayout({ children }: SiteLayoutProps) {
   React.useEffect(() => {
     const activeGroup = NAV.find((g) => g.items.some((i) => i.path === location.pathname))
     if (activeGroup) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpenGroups((prev) => ({ ...prev, [activeGroup.label]: true }))
     }
   }, [location.pathname])

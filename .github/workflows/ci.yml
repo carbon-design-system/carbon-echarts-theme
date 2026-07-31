@@ -94,4 +94,4 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @carbon/echarts-theme typecheck
+      - run: pnpm typecheck

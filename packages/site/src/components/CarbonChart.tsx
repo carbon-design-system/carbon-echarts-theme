@@ -31,7 +31,6 @@ interface CarbonChartProps {
  * All classes are imported from @carbon/charts.
  */
 function resolveChartClass(name: string): ChartConstructor | null {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const cls = (Charts as any)[name]
   return typeof cls === 'function' ? (cls as ChartConstructor) : null
 }
@@ -75,7 +74,6 @@ export function CarbonChart({ chartClass, example }: CarbonChartProps) {
       holder.parentNode?.removeChild(holder)
     }
     // Re-mount when class name or data identity changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartClass, example.data, example.options])
 
   return <div ref={wrapperRef} className="carbon-chart-holder" />

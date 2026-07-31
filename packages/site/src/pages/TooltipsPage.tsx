@@ -33,8 +33,8 @@ tooltip: { trigger: 'item' }`}</code>
 
         <h2>Grouping behaviour</h2>
         <p>
-          For multi-series charts, always use <code>trigger: 'axis'</code> so all series values at
-          the same x position appear in a single tooltip. This reduces cognitive load compared to
+          For multi-series charts, always use <code>{"trigger: 'axis'"}</code> so all series values
+          at the same x position appear in a single tooltip. This reduces cognitive load compared to
           separate tooltips per series.
         </p>
 

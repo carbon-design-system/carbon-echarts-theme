@@ -3,11 +3,7 @@
  * Data mirrors carboncharts/treemap.ts exactly.
  */
 import type { EChartsOption } from 'echarts'
-import {
-  createTreemapOptions,
-  createTreemapOptionsFromHierarchy,
-} from '@carbon/echarts-theme/presets'
-import type { TreemapHierarchyNode } from '@carbon/echarts-theme/presets'
+import { createTreemapOptions } from '@carbon/echarts-theme/presets'
 
 // ── Flat format for slot [0] — same hierarchy expressed as group/key rows ────
 const flatData = [
@@ -56,85 +52,6 @@ const flatData = [
   { group: 'Asia', key: 'China', value: 12500 },
   { group: 'Asia', key: 'Iran', value: 22500 },
   { group: 'Asia', key: 'Myanmar', value: 12500 },
-]
-
-// ── Hierarchical format for slot [1] — Carbon's native nested structure ──────
-const hierarchyData: TreemapHierarchyNode[] = [
-  {
-    name: 'Oceania',
-    children: [
-      { name: 'A', value: 800 },
-      { name: 'B', value: 200 },
-      { name: 'C', value: 100 },
-      { name: 'D', value: 900 },
-    ],
-  },
-  {
-    name: 'Europe',
-    children: [
-      { name: 'France', value: 2800 },
-      { name: 'Germany', value: 10000 },
-      { name: 'Sweden', value: 500 },
-      { name: 'England', value: 500 },
-      { name: 'Italy', value: 200 },
-    ],
-  },
-  {
-    name: 'America',
-    children: [
-      { name: 'U.S.', value: 3500 },
-      { name: 'Brazil', value: 3000 },
-      { name: 'Mexico', value: 2000 },
-      { name: 'AA', value: 500 },
-      { name: 'BB', value: 100 },
-      { name: 'CC', value: 500 },
-      { name: 'DD', value: 500 },
-      { name: 'EE', value: 400 },
-      { name: 'FF', value: 600 },
-      { name: 'GG', value: 200 },
-      { name: 'HH', value: 800 },
-      { name: 'II', value: 900 },
-      { name: 'JJ', value: 100 },
-      { name: 'KK', value: 900 },
-    ],
-  },
-  {
-    name: 'Australia',
-    children: [
-      { name: 'KH', value: 2000 },
-      { name: 'LL', value: 400 },
-      { name: 'MM', value: 500 },
-      { name: 'NN', value: 100 },
-      { name: 'OO', value: 1000 },
-      { name: 'PP', value: 800 },
-      { name: 'QQ', value: 700 },
-      { name: 'RR', value: 200 },
-      { name: 'ST', value: 300 },
-    ],
-  },
-  {
-    name: 'Africa',
-    children: [
-      { name: 'Nigeria', value: 2300 },
-      { name: 'TT', value: 2000 },
-      { name: 'UU', value: 500 },
-      { name: 'VV', value: 1200 },
-      { name: 'WW', value: 2000 },
-      { name: 'XX', value: 800 },
-      { name: 'YY', value: 2000 },
-      { name: 'ZZ', value: 500 },
-      { name: 'ABC', value: 1200 },
-      { name: 'CBA', value: 1500 },
-    ],
-  },
-  {
-    name: 'Asia',
-    children: [
-      { name: 'China', value: 12500 },
-      { name: 'Iran', value: 22500 },
-      { name: 'Myanmar', value: 12500 },
-    ],
-  },
 ]
 
 // Slot [0] — flat layout — colors assigned per parent group (6 groups)

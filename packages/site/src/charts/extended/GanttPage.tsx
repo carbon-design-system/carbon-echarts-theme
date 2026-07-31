@@ -1,3 +1,4 @@
+import type { EChartsOption } from 'echarts'
 import React from 'react'
 import { ChartPage } from '../../components/ChartPage'
 import { SideBySide } from '../../components/SideBySide'
@@ -14,12 +15,15 @@ const tasks = [
 ]
 
 // Floating bar pattern: transparent base bar (start value) + visible bar (duration)
-const ganttOption = {
+const ganttOption: EChartsOption = {
   tooltip: {
     trigger: 'axis' as const,
     axisPointer: { type: 'shadow' as const },
-    formatter: (params: { name: string; value: number[] }[]) => {
-      const task = params[1] ?? params[0]
+    formatter: (params: unknown) => {
+      if (!Array.isArray(params)) return ''
+      const task =
+        (params as { name: string; value: number[] }[])[1] ??
+        (params as { name: string; value: number[] }[])[0]
       if (!task) return ''
       return `${task.name}<br/>Day ${task.value[0]} → Day ${task.value[0] + task.value[1]}`
     },

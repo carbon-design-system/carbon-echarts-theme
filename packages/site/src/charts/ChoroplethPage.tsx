@@ -4,8 +4,8 @@ import ChoroplethMdx from '../content/choropleth.mdx'
 
 const stub = (
   <div className="chart-page__v2-banner">
-    <strong>No viable ECharts equivalent.</strong> ECharts map does not match Carbon Charts' D3-geo
-    projection. Use{' '}
+    <strong>No viable ECharts equivalent.</strong> ECharts map does not match Carbon Charts&apos;
+    D3-geo projection. Use{' '}
     <a href="https://charts.carbondesignsystem.com/choropleth" target="_blank" rel="noreferrer">
       Carbon Charts ChoroplethChart
     </a>{' '}

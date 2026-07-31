@@ -1,4 +1,4 @@
-import type { EChartsOption, SeriesOption } from 'echarts'
+import type { EChartsOption, SeriesOption, SliderDataZoomComponentOption } from 'echarts'
 import { groupByGroup, pickColors } from './_transform'
 import type { ChartTabularData, ChartTabularDatum } from './_transform'
 
@@ -408,7 +408,7 @@ export function createBoundedAreaOptions(
         if (!visible.length) return ''
         const header = timeSeries
           ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(
-              new Date(visible[0].value[0] as number),
+              new Date((visible[0].value as unknown[])[0] as number),
             )
           : String(visible[0].value)
         return (
@@ -474,7 +474,7 @@ export function createBoundedAreaOptions(
                 lineStyle: { color: colors[0], opacity: 0.8, width: 1 },
                 areaStyle: { color: colors[0], opacity: 0.4 },
               },
-            },
+            } as SliderDataZoomComponentOption,
           ],
         }
       : {}),
