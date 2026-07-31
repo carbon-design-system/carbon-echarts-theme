@@ -52,6 +52,7 @@ import { FunnelPage } from './charts/extended/FunnelPage'
 import { ParallelPage } from './charts/extended/ParallelPage'
 import { ThemeRiverPage } from './charts/extended/ThemeRiverPage'
 import { CandlestickPage } from './charts/extended/CandlestickPage'
+import { GanttPage } from './charts/extended/GanttPage'
 
 export function App() {
   return (
@@ -107,6 +108,7 @@ export function App() {
         <Route path="/extended/parallel" element={<ParallelPage />} />
         <Route path="/extended/theme-river" element={<ThemeRiverPage />} />
         <Route path="/extended/candlestick" element={<CandlestickPage />} />
+        <Route path="/extended/gantt" element={<GanttPage />} />
 
         {/* 404 fallback */}
         <Route

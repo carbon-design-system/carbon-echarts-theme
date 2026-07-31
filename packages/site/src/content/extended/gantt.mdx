@@ -1,0 +1,34 @@
+---
+title: Gantt chart
+---
+
+## Usage
+
+Gantt charts display a project schedule by mapping tasks against a time axis. Each bar represents a task, starting at its begin date and ending at its completion date, making duration and overlap immediately visible.
+
+**When to use:**
+
+- Communicating a project plan or sprint schedule
+- Showing task dependencies and overlapping workstreams
+- Tracking actual vs planned progress over time
+
+**When not to use:**
+
+- Unordered categorical comparisons (use a bar chart)
+- More than ~20 tasks without scroll/zoom interaction
+- When precise timestamp resolution (hours, minutes) is critical — consider a timeline table instead
+
+## ECharts implementation notes
+
+This chart type has no Carbon Charts equivalent. ECharts does not ship a dedicated `gantt` series, but the standard pattern is a **horizontal stacked floating bar**:
+
+1. An invisible base bar encodes the task start value (offset).
+2. A visible bar stacked on top encodes the task duration.
+
+Both bars share `stack: 'gantt'`. Setting the base bar's `itemStyle.color` to `'transparent'` hides it while keeping the layout offset intact.
+
+All Carbon theme tokens apply directly — axis colors, typography, tooltip styling, and the categorical palette for multi-resource Gantt variants.
+
+### Time-axis variant
+
+For real calendar dates, switch `xAxis.type` from `'value'` to `'time'` and encode start/end as ISO 8601 strings or Unix timestamps. The Carbon theme's axis label formatting applies automatically.

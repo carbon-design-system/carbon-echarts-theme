@@ -74,6 +74,7 @@ const NAV: NavGroup[] = [
     items: [
       { label: 'Candlestick', path: '/extended/candlestick' },
       { label: 'Funnel', path: '/extended/funnel' },
+      { label: 'Gantt', path: '/extended/gantt' },
       { label: 'Graph', path: '/extended/graph' },
       { label: 'Parallel', path: '/extended/parallel' },
       { label: 'Sunburst', path: '/extended/sunburst' },
