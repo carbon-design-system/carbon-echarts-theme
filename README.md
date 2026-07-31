@@ -5,6 +5,8 @@ An official [Apache ECharts](https://echarts.apache.org) theme that ports the **
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![pnpm](https://img.shields.io/badge/maintained%20with-pnpm-cc00ff.svg)](https://pnpm.io)
 
+**[→ echarts-theme.carbondesignsystem.com](https://echarts-theme.carbondesignsystem.com)**
+
 ---
 
 ## Packages
@@ -63,7 +65,7 @@ All design tokens are derived from `@carbon/themes` at build time and inlined in
 ## Project Goals
 
 - **Theme parity** — every Carbon Charts v11 visual decision (color, typography, spacing, animation) faithfully reproduced in ECharts.
-- **Showcase site** — a side-by-side comparison of every Carbon Charts variant alongside its ECharts equivalent, deployed at `charts.carbondesignsystem.com/echarts`.
+- **Showcase site** — a side-by-side comparison of every Carbon Charts variant alongside its ECharts equivalent, deployed at [echarts-theme.carbondesignsystem.com](https://echarts-theme.carbondesignsystem.com).
 - **Migration paths** — written guides and automated codemods for teams moving from Carbon Charts to ECharts, or from another ECharts theme to this one.
 
 ---
