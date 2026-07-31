@@ -92,6 +92,10 @@ export function createLineOptions(
 
   const colors = pickColors(groups.length, colorScheme)
 
+  // If xDomain is a category filter (string[]), determine which category indices to keep
+  const xCategoryFilter =
+    !timeSeries && Array.isArray(xDomain) ? new Set(xDomain as string[]) : null
+
   const series: SeriesOption[] = groups.map((g, i) => {
     const isFirst = i === 0
     const markLine =
@@ -107,7 +111,11 @@ export function createLineOptions(
 
     // For time-series x-axis, ECharts needs [date, value] pairs.
     // groupByGroup stores the category label in `name`; re-pair it with the numeric value.
-    const seriesData = timeSeries ? g.data.map((d) => [d.name, d.value as number]) : g.data
+    // When xDomain is a category filter, keep only the matching data points.
+    const rawData = xCategoryFilter
+      ? g.data.filter((d) => xCategoryFilter.has(d.name))
+      : g.data
+    const seriesData = timeSeries ? rawData.map((d) => [d.name, d.value as number]) : rawData
 
     return {
       type: 'line' as const,

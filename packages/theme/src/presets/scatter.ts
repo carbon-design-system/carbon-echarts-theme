@@ -57,13 +57,22 @@ export function createScatterOptions(
 
   // Group by series name
   const seriesMap = new Map<string, Array<[string | number, number]>>()
+  let isDiscrete = false
   for (const d of data) {
     if (!seriesMap.has(d.group)) seriesMap.set(d.group, [])
-    const xVal = timeSeries
-      ? d.date instanceof Date
-        ? d.date.getTime()
-        : String(d.date ?? '')
-      : String(d.key ?? '')
+    let xVal: string | number
+    if (timeSeries) {
+      xVal = d.date instanceof Date ? d.date.getTime() : String(d.date ?? '')
+    } else {
+      const raw = d.key ?? ''
+      const asNum = Number(raw)
+      if (typeof raw === 'string' && isNaN(asNum)) {
+        isDiscrete = true
+        xVal = String(raw)
+      } else {
+        xVal = asNum
+      }
+    }
     // Skip null/undefined values — they don't produce visible points
     if (d.value == null) continue
     seriesMap.get(d.group)!.push([xVal, d.value as number])
@@ -71,6 +80,11 @@ export function createScatterOptions(
 
   const entries = [...seriesMap.entries()]
   const colors = pickColors(entries.length, colorScheme)
+
+  // Collect ordered category labels for discrete mode
+  const categoryLabels: string[] = isDiscrete
+    ? [...new Set(data.map((d) => String(d.key ?? '')))]
+    : []
 
   const series = entries.map(([name, pts], i) => ({
     type: 'scatter' as const,
@@ -84,12 +98,18 @@ export function createScatterOptions(
     ? [{ type: 'value' as const }, { type: 'value' as const, splitLine: { show: false } }]
     : { type: 'value' as const }
 
+  const xAxis = timeSeries
+    ? { type: 'time' as const }
+    : isDiscrete
+      ? { type: 'category' as const, data: categoryLabels, boundaryGap: false, splitLine: { show: true } }
+      : { type: 'value' as const }
+
   return {
     ...(title ? { title: { text: title } } : {}),
     tooltip: { trigger: 'item' },
     legend: { type: 'scroll', bottom: 0 },
     grid: GRID,
-    xAxis: timeSeries ? { type: 'time' } : { type: 'value' },
+    xAxis,
     yAxis,
     series,
   }
@@ -114,7 +134,7 @@ export function createBubbleOptions(
     timeSeries = false,
     title,
     sizeField = 'size',
-    maxSize = 60,
+    maxSize = 30,
     colorScheme = 'light',
     dualDiscrete,
   } = opts
@@ -152,7 +172,7 @@ export function createBubbleOptions(
       type: 'scatter' as const,
       name,
       data: pts,
-      itemStyle: { color: ddColors[i] },
+      itemStyle: { color: ddColors[i], opacity: 0.5 },
       symbolSize: (val: [string, string, number]) =>
         Math.max(4, Math.round(Math.sqrt(val[2]) * scale)),
     }))
@@ -170,18 +190,32 @@ export function createBubbleOptions(
 
   // ── Standard mode (linear / time series / discrete) ────────────────────────
   const seriesMap = new Map<string, Array<[string | number, number, number]>>()
+  let isDiscrete = false
   for (const d of data) {
     if (!seriesMap.has(d.group)) seriesMap.set(d.group, [])
-    const xVal = timeSeries
-      ? d.date instanceof Date
-        ? d.date.getTime()
-        : String(d.date ?? '')
-      : String(d.key ?? '')
+    let xVal: string | number
+    if (timeSeries) {
+      xVal = d.date instanceof Date ? d.date.getTime() : String(d.date ?? '')
+    } else {
+      const raw = d.key ?? ''
+      const asNum = Number(raw)
+      if (typeof raw === 'string' && isNaN(asNum)) {
+        isDiscrete = true
+        xVal = String(raw)
+      } else {
+        xVal = asNum
+      }
+    }
     // Skip null/undefined values
     if (d.value == null) continue
     const sz = typeof d[sizeField] === 'number' ? (d[sizeField] as number) : (d.value as number)
     seriesMap.get(d.group)!.push([xVal, d.value as number, sz])
   }
+
+  // Collect ordered category labels for discrete mode
+  const categoryLabels: string[] = isDiscrete
+    ? [...new Set(data.map((d) => String(d.key ?? '')))]
+    : []
 
   // Compute max raw size for normalising symbolSize
   let maxRaw = 0
@@ -197,7 +231,7 @@ export function createBubbleOptions(
     type: 'scatter' as const,
     name,
     data: pts,
-    itemStyle: { color: bubbleColors[i] },
+    itemStyle: { color: bubbleColors[i], opacity: 0.5 },
     symbolSize: (val: [string | number, number, number]) =>
       Math.max(4, Math.round(Math.sqrt(val[2]) * scale)),
   }))
@@ -207,7 +241,11 @@ export function createBubbleOptions(
     tooltip: { trigger: 'item' },
     legend: { type: 'scroll', bottom: 0 },
     grid: GRID,
-    xAxis: timeSeries ? { type: 'time' } : { type: 'value' },
+    xAxis: timeSeries
+      ? { type: 'time' }
+      : isDiscrete
+        ? { type: 'category', data: categoryLabels, boundaryGap: true, splitLine: { show: true } }
+        : { type: 'value' },
     yAxis: { type: 'value' },
     series,
   }

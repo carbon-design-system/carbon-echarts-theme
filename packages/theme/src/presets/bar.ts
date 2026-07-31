@@ -45,6 +45,12 @@ export interface BarPresetOptions {
    * unlisted groups fall back to `pickColors()` palette order.
    */
   colors?: Record<string, string>
+  /**
+   * Truncate category axis labels to this pixel width.
+   * Maps to Carbon Charts `axes.left.truncation` (horizontal bars).
+   * Applies `axisLabel: { overflow: 'truncate', width }` on the category axis.
+   */
+  truncateLabels?: number
 }
 
 /**
@@ -200,10 +206,22 @@ export function createBarOptions(
               type: 'value',
               ...(opts.yDomain ? { min: opts.yDomain[0], max: opts.yDomain[1] } : {}),
             },
-            yAxis: { type: 'category', data: categories },
+            yAxis: {
+              type: 'category',
+              data: categories,
+              ...(opts.truncateLabels
+                ? { axisLabel: { overflow: 'truncate' as const, width: opts.truncateLabels } }
+                : {}),
+            },
           }
         : {
-            xAxis: { type: 'category', data: categories },
+            xAxis: {
+              type: 'category',
+              data: categories,
+              ...(opts.truncateLabels
+                ? { axisLabel: { overflow: 'truncate' as const, width: opts.truncateLabels } }
+                : {}),
+            },
             yAxis: {
               type: 'value',
               ...(opts.yDomain ? { min: opts.yDomain[0], max: opts.yDomain[1] } : {}),
@@ -269,7 +287,13 @@ export function createBarOptions(
     type: 'value' as const,
     ...(opts.yDomain ? { min: opts.yDomain[0], max: opts.yDomain[1] } : {}),
   }
-  const categoryAxis = { type: 'category' as const, data: categories }
+  const categoryAxis = {
+    type: 'category' as const,
+    data: categories,
+    ...(opts.truncateLabels
+      ? { axisLabel: { overflow: 'truncate' as const, width: opts.truncateLabels } }
+      : {}),
+  }
 
   return {
     ...(title ? { title: { text: title } } : {}),

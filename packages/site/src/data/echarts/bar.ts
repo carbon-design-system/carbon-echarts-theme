@@ -122,4 +122,6 @@ export const barCustomColors: EChartsOption = createBarOptions(simpleBarData, {
 })
 
 /** [13] Truncated labels — horizontal bar with long hex-hash group names */
-export const barLongLabel: EChartsOption = createHorizontalBarOptions(longLabelData)
+export const barLongLabel: EChartsOption = createHorizontalBarOptions(longLabelData, {
+  truncateLabels: 120,
+})

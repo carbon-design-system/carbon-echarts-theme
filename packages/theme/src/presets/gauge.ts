@@ -20,10 +20,20 @@ export interface GaugePresetOptions {
   fontFamily?: string
   /** Color for the center value label (defaults to theme textStyle color) */
   color?: string
-  /** Status color for the arc: 'danger' (red60), 'warning' (orange40), or 'success' (green60) */
+  /**
+   * Status for the delta indicator: 'danger' (red), 'warning' (orange), or 'success' (green).
+   * In Carbon Charts the arc color is always the first categorical color; status only
+   * affects the delta indicator color/icon — matching Carbon Charts GaugeChart behavior.
+   */
   status?: 'danger' | 'warning' | 'success'
   /** Custom color override for the progress arc */
   customColor?: string
+  /**
+   * Delta value (e.g. -13.37) shown beneath the main value label — matches the
+   * Carbon Charts gauge `delta` data row (`{ group: 'delta', value: … }`).
+   * When provided a small colored triangle icon precedes the number.
+   */
+  delta?: number
 }
 
 /**
@@ -43,21 +53,42 @@ export function createGaugeOptions(
   const value = (data[0]?.value as number) ?? 0
   const label = data[0]?.group ?? ''
 
-  // Determine arc color: customColor > status > default (first color from pickColors)
-  let arcColor: string
-  if (opts.customColor) {
-    arcColor = opts.customColor
-  } else if (opts.status) {
-    // Map status to alert color index: danger=0, warning=1, success=3
-    const statusIndex = opts.status === 'danger' ? 0 : opts.status === 'warning' ? 1 : 3
-    arcColor = alertColors[statusIndex]
-  } else {
-    arcColor = pickColors(1)[0]
-  }
+  // Arc color: customColor > first categorical color.
+  // Carbon Charts always uses the first categorical color for the arc; `status`
+  // only affects the delta indicator (color + triangle icon), NOT the arc fill.
+  const arcColor = opts.customColor ?? pickColors(1)[0]
+
+  // Delta indicator color: maps status → alert color
+  // (danger=red60, warning=orange40, success=green60)
+  const deltaColor =
+    opts.status === 'danger'
+      ? alertColors[0]
+      : opts.status === 'warning'
+        ? alertColors[1]
+        : opts.status === 'success'
+          ? alertColors[3]
+          : (opts.color ?? 'inherit')
 
   // Semi: 180° arc (Carbon Charts default), Full: 270° arc
   const startAngle = type === 'full' ? 225 : 180
   const endAngle = type === 'full' ? -45 : 0
+
+  // Delta sub-label rendered below the main value using a rich-text formatter.
+  // Triangle icons: ▼ (down / danger) or ▲ (up / success).
+  const hasDelta = opts.delta !== undefined
+  const deltaValue = opts.delta ?? 0
+  const deltaTriangle = deltaValue < 0 ? '▼' : '▲'
+  const deltaText = hasDelta
+    ? `{triangle|${deltaTriangle}}{delta| ${Math.abs(deltaValue).toFixed(2)}${unit}}`
+    : '{value}'
+
+  // The main value label sits in the gauge `detail`; the delta uses a graphic
+  // element rendered via a second zero-value series to keep positioning simple.
+  const mainOffsetY = type === 'full' ? '35%' : '-20%'
+  const deltaOffsetY = type === 'full' ? '60%' : '10%'
+
+  const fontFamily = opts.fontFamily ? { fontFamily: opts.fontFamily } : {}
+  const textColor = opts.color ? { color: opts.color } : {}
 
   return {
     ...(title ? { title: { text: title } } : {}),
@@ -89,19 +120,62 @@ export function createGaugeOptions(
           formatter: `{value}${unit}`,
           fontSize: 42,
           fontWeight: 300,
-          ...(opts.fontFamily ? { fontFamily: opts.fontFamily } : {}),
-          ...(opts.color ? { color: opts.color } : {}),
-          // offsetCenter is a fraction of the radius — scales at any chart size.
-          // The semi gauge runs 180°→0°: its two open ends both sit on the
-          // horizontal line through the centre point (offsetCenter Y = 0%).
-          // '-15%' places the label just above that line so the text baseline
-          // is flush with the inner edge of the arc stroke at any chart size.
-          offsetCenter: [0, type === 'full' ? '40%' : '-15%'],
+          ...fontFamily,
+          ...textColor,
+          // When there's a delta, shift the main value up slightly so both
+          // labels are vertically centred within the arc opening.
+          offsetCenter: [0, hasDelta ? mainOffsetY : (type === 'full' ? '40%' : '-15%')],
           valueAnimation: true,
         },
         data: [{ value, name: label }],
         title: { show: false },
       },
+      // Delta indicator series — a phantom 0-value gauge used only for its
+      // `detail` rich-text label so we can position the delta below the value.
+      ...(hasDelta
+        ? [
+            {
+              type: 'gauge' as const,
+              startAngle,
+              endAngle,
+              center: ['50%', type === 'full' ? '55%' : '65%'],
+              radius: type === 'full' ? '75%' : '85%',
+              min,
+              max,
+              // Make the phantom series completely invisible.
+              progress: { show: false },
+              axisLine: { show: false },
+              pointer: { show: false },
+              axisTick: { show: false },
+              splitLine: { show: false },
+              axisLabel: { show: false },
+              anchor: { show: false },
+              detail: {
+                offsetCenter: [0, deltaOffsetY],
+                formatter: deltaText,
+                fontSize: 14,
+                fontWeight: 400,
+                ...fontFamily,
+                rich: {
+                  triangle: {
+                    color: deltaColor,
+                    fontSize: 12,
+                    ...fontFamily,
+                  },
+                  delta: {
+                    color: deltaColor,
+                    fontSize: 14,
+                    fontWeight: 400,
+                    ...fontFamily,
+                  },
+                },
+              },
+              data: [{ value: 0 }],
+              title: { show: false },
+              zlevel: 1,
+            },
+          ]
+        : []),
     ],
   }
 }

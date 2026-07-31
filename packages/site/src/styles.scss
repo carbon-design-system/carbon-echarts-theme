@@ -306,16 +306,15 @@ body {
   background-color: $background;
 }
 
-/* Carbon Charts inline holder — matches ECharts panel height */
+/* Carbon Charts inline holder — lets the chart use its own configured height */
 .carbon-chart-holder {
-  height: 320px;
   width: 100%;
   background-color: $background;
-  overflow: hidden;
+  padding: 0 1rem 1rem;
+  box-sizing: border-box;
 
-  // The @carbon/charts SVG fills its holder via CSS height
+  // The @carbon/charts wrapper div must fill its allocated width
   > div {
-    height: 100%;
     width: 100%;
   }
 }
@@ -470,6 +469,9 @@ body {
 // Wrapper that holds the ReactECharts div and the floating toolbar
 .side-by-side__chart-wrap {
   position: relative;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: $background;
 }
 
 // Toolbar floats in the upper-right of the chart canvas — always visible

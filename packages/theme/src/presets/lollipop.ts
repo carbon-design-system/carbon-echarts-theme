@@ -34,7 +34,12 @@ export function createLollipopOptions(
     {
       type: 'scatter' as const,
       name: g.name,
-      data: g.data.map((d, i) => (horizontal ? [d.value as number, i] : [i, d.value as number])),
+      data: g.data
+        .filter((d) => d.value !== null)
+        .map((d) => {
+          const catIdx = categories.indexOf(d.name)
+          return horizontal ? [d.value as number, catIdx] : [catIdx, d.value as number]
+        }),
       symbolSize: 10,
       z: 3,
     },

@@ -20,6 +20,7 @@ export function gaugeDanger(textColor: string): EChartsOption {
     unit: '%',
     type: 'semi',
     status: 'danger',
+    delta: -13.37,
     fontFamily: IBM_PLEX_FONT_FAMILY,
     color: textColor,
   })
@@ -30,6 +31,7 @@ export function gaugeWarningFull(textColor: string): EChartsOption {
     unit: '%',
     type: 'full',
     status: 'warning',
+    delta: -13.37,
     fontFamily: IBM_PLEX_FONT_FAMILY,
     color: textColor,
   })

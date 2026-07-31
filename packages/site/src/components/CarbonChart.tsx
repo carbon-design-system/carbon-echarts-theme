@@ -65,10 +65,7 @@ export function CarbonChart({ chartClass, example }: CarbonChartProps) {
 
     instanceRef.current = new Cls(holder, {
       data: example.data,
-      options: {
-        ...example.options,
-        height: '320px',
-      },
+      options: example.options,
     })
 
     return () => {

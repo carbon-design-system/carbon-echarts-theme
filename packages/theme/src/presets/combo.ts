@@ -160,6 +160,7 @@ export function createComboOptions(
         type: 'line' as const,
         name: g.name,
         data: seriesData,
+        smooth: true,
         itemStyle: { color },
         lineStyle: { color },
         ...(isArea ? { areaStyle: {} } : {}),
