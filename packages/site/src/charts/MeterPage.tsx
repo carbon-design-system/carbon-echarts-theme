@@ -3,7 +3,14 @@ import { ChartPage } from '../components/ChartPage'
 import { SideBySide } from '../components/SideBySide'
 import MeterMdx from '../content/meter.mdx'
 import { chartTypes, examples } from '../data/carboncharts/meter'
-import { getMeterOption, getMeterPeakOption } from '../data/echarts/gauge'
+import {
+  getMeterWithStatusOption,
+  getMeterStatusCustomColorOption,
+  getMeterNoStatusOption,
+  getMeterProportionalOption,
+  getMeterProportionalStatusOption,
+  getMeterProportionalTruncatedOption,
+} from '../data/echarts/gauge'
 import { tokens } from '@carbon/echarts-theme'
 import { useTheme } from '../components/ThemeContext'
 
@@ -29,16 +36,99 @@ const titles = [
 export function MeterPage() {
   const { theme } = useTheme()
   const t = tokens[theme]
-  const meterOption = getMeterOption(t.textPrimary)
-  const meterPeakOption = getMeterPeakOption(t.textPrimary)
 
   const echartsOptions = [
-    meterOption,     // [0]
-    meterOption,     // [1]
-    meterOption,     // [2]
-    meterOption,     // [3]
-    meterPeakOption, // [4]
-    meterOption,     // [5]
+    getMeterWithStatusOption(t.textPrimary), // [0] status zones + peak 80
+    getMeterStatusCustomColorOption(t.textPrimary), // [1] status zones + peak 70 + barColor
+    getMeterNoStatusOption(t.textPrimary), // [2] peak 70 only
+    getMeterProportionalOption(t.textPrimary), // [3] proportional
+    getMeterProportionalStatusOption(t.textPrimary), // [4] proportional + peak 1800 + status zones
+    getMeterProportionalTruncatedOption(t.textPrimary), // [5] proportional (same as [3])
+  ]
+
+  const codeSamples = [
+    `import { createMeterOptions } from '@carbon/echarts-theme/presets'
+
+const option = createMeterOptions(
+  [{ group: 'Dataset 1', value: 56 }],
+  {
+    total: 100,
+    statusRanges: [
+      { range: [0, 50],   status: 'success' },
+      { range: [50, 60],  status: 'warning' },
+      { range: [60, 100], status: 'danger'  },
+    ],
+    peak: 80,
+  },
+)`,
+
+    `import { createMeterOptions } from '@carbon/echarts-theme/presets'
+
+const option = createMeterOptions(
+  [{ group: 'Dataset 1', value: 56 }],
+  {
+    total: 100,
+    statusRanges: [
+      { range: [0, 40],   status: 'success' },
+      { range: [40, 60],  status: 'warning' },
+      { range: [60, 100], status: 'danger'  },
+    ],
+    peak: 70,
+    barColor: '#925699',
+  },
+)`,
+
+    `import { createMeterOptions } from '@carbon/echarts-theme/presets'
+
+const option = createMeterOptions(
+  [{ group: 'Dataset 1', value: 56 }],
+  { total: 100, peak: 70 },
+)`,
+
+    `import { createMeterOptions } from '@carbon/echarts-theme/presets'
+
+const option = createMeterOptions(
+  [
+    { group: 'emails',        value: 202 },
+    { group: 'photos',        value: 654 },
+    { group: 'text messages', value: 723 },
+    { group: 'other',         value: 120 },
+  ],
+  { proportional: true },
+)`,
+
+    `import { createMeterOptions } from '@carbon/echarts-theme/presets'
+
+const option = createMeterOptions(
+  [
+    { group: 'emails',        value: 202 },
+    { group: 'photos',        value: 654 },
+    { group: 'text messages', value: 723 },
+    { group: 'other',         value: 120 },
+  ],
+  {
+    proportional: true,
+    peak: 1800,
+    statusRanges: [
+      { range: [0, 800],     status: 'success' },
+      { range: [800, 1800],  status: 'warning' },
+      { range: [1800, 2000], status: 'danger'  },
+    ],
+  },
+)`,
+
+    `import { createMeterOptions } from '@carbon/echarts-theme/presets'
+
+// Same as proportional meter — unit/truncation is a Carbon Charts feature
+const option = createMeterOptions(
+  [
+    { group: 'emails',        value: 202 },
+    { group: 'photos',        value: 654 },
+    { group: 'text messages', value: 723 },
+    { group: 'other',         value: 120 },
+  ],
+  { proportional: true },
+)`,
   ]
 
   return (
@@ -50,9 +140,10 @@ export function MeterPage() {
         <SideBySide
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
-          echartsOption={echartsOptions[i] ?? meterOption}
+          echartsOption={echartsOptions[i]}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
+          echartsCode={codeSamples[i]}
         />
       ))}
     />

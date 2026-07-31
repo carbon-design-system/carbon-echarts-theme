@@ -95,7 +95,7 @@ export function createTreeOptionsFromTabular(
     const parent = d.group
     const child = String(d.key ?? '')
     if (!childMap.has(parent)) childMap.set(parent, [])
-    childMap.get(parent)!.push({ name: child, value: d.value })
+    childMap.get(parent)!.push({ name: child, value: d.value as number })
     allChildren.add(child)
   }
 

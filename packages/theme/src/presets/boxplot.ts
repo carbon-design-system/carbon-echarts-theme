@@ -8,6 +8,8 @@ const GRID = { top: 48, bottom: 56, left: 48, right: 24, containLabel: true } as
 export interface BoxplotPresetOptions {
   /** Chart title text */
   title?: string
+  /** Render as horizontal boxplot (default: false) */
+  horizontal?: boolean
 }
 
 type BoxplotStats = [number, number, number, number, number] // min, Q1, median, Q3, max
@@ -33,13 +35,13 @@ export function createBoxplotOptions(
   data: ChartTabularData,
   opts: BoxplotPresetOptions = {},
 ): EChartsOption {
-  const { title } = opts
+  const { title, horizontal = false } = opts
 
   // Collect all values per group
   const groupMap = new Map<string, number[]>()
   for (const d of data) {
     if (!groupMap.has(d.group)) groupMap.set(d.group, [])
-    groupMap.get(d.group)!.push(d.value)
+    groupMap.get(d.group)!.push(d.value as number)
   }
 
   const categories = [...groupMap.keys()]
@@ -49,8 +51,15 @@ export function createBoxplotOptions(
     ...(title ? { title: { text: title } } : {}),
     tooltip: { trigger: 'item' },
     grid: GRID,
-    xAxis: { type: 'category', data: categories },
-    yAxis: { type: 'value' },
+    ...(horizontal
+      ? {
+          xAxis: { type: 'value' },
+          yAxis: { type: 'category', data: categories },
+        }
+      : {
+          xAxis: { type: 'category', data: categories },
+          yAxis: { type: 'value' },
+        }),
     series: [
       {
         type: 'boxplot',

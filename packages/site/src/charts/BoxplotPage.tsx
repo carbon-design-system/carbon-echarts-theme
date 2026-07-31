@@ -11,12 +11,30 @@ const testExamples = examples.filter((ex) => ex.tags?.includes('test'))
 
 const echartsOptions = [
   boxplotHorizontal, // [0] Horizontal box plot
-  boxplotVertical,   // [1] Vertical box plot
+  boxplotVertical, // [1] Vertical box plot
 ]
 
-const titles = [
-  'Horizontal box plot',
-  'Vertical box plot',
+const titles = ['Horizontal box plot', 'Vertical box plot']
+
+const codeSamples = [
+  `import { createBoxplotOptions } from '@carbon/echarts-theme/presets'
+
+const data = [
+  { group: 'Q1', key: 'Dataset 1', value: 34 },
+  { group: 'Q2', key: 'Dataset 1', value: 56 },
+  // ... Q1–Q4 with min/q1/median/q3/max derived automatically
+]
+
+const option = createBoxplotOptions(data, { horizontal: true })`,
+
+  `import { createBoxplotOptions } from '@carbon/echarts-theme/presets'
+
+const data = [
+  { group: 'Q1', key: 'Dataset 1', value: 34 },
+  // ...
+]
+
+const option = createBoxplotOptions(data)`,
 ]
 
 export function BoxplotPage() {
@@ -32,6 +50,7 @@ export function BoxplotPage() {
           echartsOption={echartsOptions[i] ?? boxplotVertical}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
+          echartsCode={codeSamples[i]}
         />
       ))}
     />

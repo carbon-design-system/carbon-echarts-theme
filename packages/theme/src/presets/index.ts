@@ -22,7 +22,7 @@ export type { BarPresetOptions } from './bar'
 
 // Line
 export { createLineOptions, createStepLineOptions, createTimeSeriesLineOptions } from './line'
-export type { LinePresetOptions, LineStep } from './line'
+export type { LinePresetOptions, LineStep, ThresholdDef } from './line'
 
 // Area
 export { createAreaOptions, createStackedAreaOptions } from './area'
@@ -42,15 +42,19 @@ export type { HeatmapPresetOptions } from './heatmap'
 
 // Gauge + Meter
 export { createGaugeOptions, createMeterOptions } from './gauge'
-export type { GaugePresetOptions, MeterPresetOptions } from './gauge'
+export type { GaugePresetOptions, MeterPresetOptions, MeterStatusRange } from './gauge'
 
 // Histogram
 export { createHistogramOptions } from './histogram'
 export type { HistogramPresetOptions } from './histogram'
 
 // Treemap + Radar
-export { createTreemapOptions, createRadarOptions } from './treemap'
-export type { TreemapPresetOptions, RadarPresetOptions } from './treemap'
+export {
+  createTreemapOptions,
+  createTreemapOptionsFromHierarchy,
+  createRadarOptions,
+} from './treemap'
+export type { TreemapPresetOptions, TreemapHierarchyNode, RadarPresetOptions } from './treemap'
 
 // Boxplot
 export { createBoxplotOptions } from './boxplot'
@@ -71,6 +75,14 @@ export type { AlluvialPresetOptions, AlluvialDatum } from './alluvial'
 // Tree (org chart / dendrogram)
 export { createTreeOptions, createTreeOptionsFromTabular } from './tree'
 export type { TreePresetOptions, TreeNode } from './tree'
+
+// Network Diagram
+export { createNetworkOptions } from './network'
+export type { NetworkPresetOptions, NetworkNode, NetworkLink } from './network'
+
+// Word Cloud
+export { createWordCloudOptions } from './wordcloud'
+export type { WordCloudPresetOptions, WordCloudDatum } from './wordcloud'
 
 // ── Shared data transform (re-exported for consumers building custom presets) ──
 export { groupByGroup, pickColors } from './_transform'

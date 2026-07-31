@@ -1,0 +1,22 @@
+---
+title: Network Diagram
+---
+
+## Usage
+
+Network diagrams visualize relationships between entities as nodes and edges. Use them to show system topology, service dependencies, or any structure where connections between items are the primary insight.
+
+**When to use:**
+
+- Service dependency or architecture diagrams
+- Social network or influence mapping
+- Any graph where node relationships matter more than hierarchy
+
+**When not to use:**
+
+- Dense graphs with hundreds of nodes (use a matrix instead)
+- When hierarchy is the primary structure (use a tree chart)
+
+## ECharts implementation notes
+
+ECharts `graph` series supports `force`, `circular`, and `none` layouts. Node size is derived from `value` when present. Categories drive the Carbon palette color assignment. Carbon Charts uses a custom D3-based network component; this preset applies all Carbon theme tokens to the ECharts equivalent.

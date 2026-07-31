@@ -23,6 +23,8 @@ Bullet charts are a compact alternative to gauges for showing a primary measure 
 - Actual value bar: first categorical color.
 - Target marker: `$text-primary` token.
 
-## ECharts implementation notes
+## ECharts status
 
-> **Examples coming in v2.** Bullet charts require custom layered `bar` series with transparent base bars to encode the range bands. The implementation approach is documented in [§2.8 of the implementation plan](/IMPLEMENTATION.md). The Overview tab is complete; live examples will ship in `@carbon/echarts-theme@0.2.0`.
+No direct ECharts equivalent. Use [Carbon Charts BulletChart](https://charts.carbondesignsystem.com/bullet) for this visualization.
+
+**Optional workaround:** implement via `bar` + `markLine` (target marker) + `markArea` (range bands).

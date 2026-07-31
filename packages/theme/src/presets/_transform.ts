@@ -32,9 +32,11 @@ import { lightCategorical, darkCategorical } from '../palettes'
 /** Single row of Carbon Charts flat tabular data */
 export interface ChartTabularDatum {
   group: string
-  key?: string
+  /** Category axis label — string for discrete data, number for continuous (e.g. employees count) */
+  key?: string | number
   date?: string | Date
-  value: number
+  /** Scalar value, [base, end] tuple (floating bar / floating area), or null (missing data) */
+  value: number | number[] | null
   [extra: string]: unknown
 }
 
@@ -42,7 +44,7 @@ export type ChartTabularData = ChartTabularDatum[]
 
 /** Single ECharts series entry produced by the transform */
 export interface GroupedSeriesDatum {
-  value: number | null
+  value: number | number[] | null
   name: string
 }
 
@@ -78,7 +80,11 @@ export function groupByGroup(
     const cat = raw instanceof Date ? raw.toISOString() : String(raw ?? '')
     categorySet.add(cat)
     if (!map.has(d.group)) map.set(d.group, new Map())
-    map.get(d.group)!.set(cat, d.value)
+    // Only store scalar values in the category map; tuple values (floating bar)
+    // are handled directly in the floating-bar preset path, not via groupByGroup.
+    if (!Array.isArray(d.value)) {
+      map.get(d.group)!.set(cat, d.value as number)
+    }
   }
 
   const categories = [...categorySet]

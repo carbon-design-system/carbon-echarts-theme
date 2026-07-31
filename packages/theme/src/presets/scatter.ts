@@ -23,6 +23,16 @@ export interface BubblePresetOptions extends ScatterPresetOptions {
   sizeField?: string
   /** Maximum rendered bubble diameter in pixels (default: 60) */
   maxSize?: number
+  /**
+   * Dual discrete axes mode: x = xField (string), y = yField (string), size = sizeField.
+   * When set, both axes are category type and the series groups plot [x, y, size] triples.
+   */
+  dualDiscrete?: {
+    /** Field name for the x-axis category (default: 'key') */
+    xField?: string
+    /** Field name for the y-axis category (default: 'product') */
+    yField?: string
+  }
 }
 
 // ── Scatter preset ────────────────────────────────────────────────────────────
@@ -48,7 +58,9 @@ export function createScatterOptions(
         ? d.date.getTime()
         : String(d.date ?? '')
       : String(d.key ?? '')
-    seriesMap.get(d.group)!.push([xVal, d.value])
+    // Skip null/undefined values — they don't produce visible points
+    if (d.value == null) continue
+    seriesMap.get(d.group)!.push([xVal, d.value as number])
   }
 
   const entries = [...seriesMap.entries()]
@@ -79,6 +91,9 @@ export function createScatterOptions(
  *
  * Carbon Charts `BubbleChart` equivalent.
  * The third dimension (bubble size) is read from `datum[sizeField]`.
+ *
+ * When `opts.dualDiscrete` is set, both axes become category axes and
+ * the data encodes `[xField, yField, sizeField]` triples.
  */
 export function createBubbleOptions(
   data: ChartTabularData,
@@ -90,8 +105,59 @@ export function createBubbleOptions(
     sizeField = 'size',
     maxSize = 60,
     colorScheme = 'light',
+    dualDiscrete,
   } = opts
 
+  // ── Dual discrete mode ─────────────────────────────────────────────────────
+  if (dualDiscrete) {
+    const xField = dualDiscrete.xField ?? 'key'
+    const yField = dualDiscrete.yField ?? 'product'
+
+    const xCategories = new Set<string>()
+    const yCategories = new Set<string>()
+    const seriesMap = new Map<string, Array<[string, string, number]>>()
+
+    for (const d of data) {
+      const xVal = String(d[xField] ?? '')
+      const yVal = String(d[yField] ?? '')
+      const sz = typeof d[sizeField] === 'number' ? (d[sizeField] as number) : 0
+      xCategories.add(xVal)
+      yCategories.add(yVal)
+      if (!seriesMap.has(d.group)) seriesMap.set(d.group, [])
+      seriesMap.get(d.group)!.push([xVal, yVal, sz])
+    }
+
+    // Compute max raw size for normalising symbolSize
+    let maxRaw = 0
+    for (const pts of seriesMap.values()) {
+      for (const [, , sz] of pts) if (sz > maxRaw) maxRaw = sz
+    }
+    const scale = maxRaw > 0 ? maxSize / Math.sqrt(maxRaw) : 1
+
+    const ddEntries = [...seriesMap.entries()]
+    const ddColors = pickColors(ddEntries.length, colorScheme)
+
+    const series = ddEntries.map(([name, pts], i) => ({
+      type: 'scatter' as const,
+      name,
+      data: pts,
+      itemStyle: { color: ddColors[i] },
+      symbolSize: (val: [string, string, number]) =>
+        Math.max(4, Math.round(Math.sqrt(val[2]) * scale)),
+    }))
+
+    return {
+      ...(title ? { title: { text: title } } : {}),
+      tooltip: { trigger: 'item' },
+      legend: { type: 'scroll', bottom: 0 },
+      grid: GRID,
+      xAxis: { type: 'category', data: [...xCategories] },
+      yAxis: { type: 'category', data: [...yCategories] },
+      series,
+    }
+  }
+
+  // ── Standard mode (linear / time series / discrete) ────────────────────────
   const seriesMap = new Map<string, Array<[string | number, number, number]>>()
   for (const d of data) {
     if (!seriesMap.has(d.group)) seriesMap.set(d.group, [])
@@ -100,8 +166,10 @@ export function createBubbleOptions(
         ? d.date.getTime()
         : String(d.date ?? '')
       : String(d.key ?? '')
-    const sz = typeof d[sizeField] === 'number' ? (d[sizeField] as number) : d.value
-    seriesMap.get(d.group)!.push([xVal, d.value, sz])
+    // Skip null/undefined values
+    if (d.value == null) continue
+    const sz = typeof d[sizeField] === 'number' ? (d[sizeField] as number) : (d.value as number)
+    seriesMap.get(d.group)!.push([xVal, d.value as number, sz])
   }
 
   // Compute max raw size for normalising symbolSize

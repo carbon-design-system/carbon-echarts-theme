@@ -9,10 +9,10 @@ An official [Apache ECharts](https://echarts.apache.org) theme that ports the **
 
 ## Packages
 
-| Package | Description |
-| --- | --- |
-| [`packages/theme`](packages/theme) | `@carbon/echarts-theme` — core theme objects, published to npm |
-| [`packages/site`](packages/site) | Showcase site and development harness (Vite + React) |
+| Package                                  | Description                                                            |
+| ---------------------------------------- | ---------------------------------------------------------------------- |
+| [`packages/theme`](packages/theme)       | `@carbon/echarts-theme` — core theme objects, published to npm         |
+| [`packages/site`](packages/site)         | Showcase site and development harness (Vite + React)                   |
 | [`packages/codemods`](packages/codemods) | `@carbon/echarts-codemod` — migration transforms, published separately |
 
 ---
@@ -36,11 +36,11 @@ registerCarbonThemes(echarts)
 
 ECharts is a **peer dependency** — it is never bundled or wrapped. The output is a plain JavaScript object you can pass directly to any ECharts adapter:
 
-| Framework | Adapter |
-| --- | --- |
-| React | `echarts-for-react` |
-| Angular | `ngx-echarts` |
-| Vue | `vue-echarts` |
+| Framework        | Adapter                 |
+| ---------------- | ----------------------- |
+| React            | `echarts-for-react`     |
+| Angular          | `ngx-echarts`           |
+| Vue              | `vue-echarts`           |
 | Svelte / vanilla | `echarts.init(domNode)` |
 
 ---
@@ -49,12 +49,12 @@ ECharts is a **peer dependency** — it is never bundled or wrapped. The output 
 
 Four themes track the four Carbon color modes:
 
-| Theme name | Carbon mode |
-| --- | --- |
-| `carbon-white` | White |
-| `carbon-g10` | Gray 10 |
-| `carbon-g90` | Gray 90 |
-| `carbon-g100` | Gray 100 |
+| Theme name     | Carbon mode |
+| -------------- | ----------- |
+| `carbon-white` | White       |
+| `carbon-g10`   | Gray 10     |
+| `carbon-g90`   | Gray 90     |
+| `carbon-g100`  | Gray 100    |
 
 All design tokens are derived from `@carbon/themes` at build time and inlined into the bundle — there is **zero runtime dependency** on Carbon.
 
@@ -71,15 +71,19 @@ All design tokens are derived from `@carbon/themes` at build time and inlined in
 ## Roadmap
 
 ### Phase 1 — Theme Core ✅
+
 Scaffold the monorepo, derive token maps from `@carbon/themes`, encode all four IBM data-vis palette types (categorical, sequential, diverging, alert), generate and publish `@carbon/echarts-theme@0.1.0`.
 
 ### Phase 2 — Chart Presets + Site
+
 `createXxxOptions(data, opts)` helper per chart type — returning a spec-accurate ECharts option object. Every new preset lands alongside an MDX design-guidance page and live examples on the showcase site. Priority order: Bar, Line, Area, Donut, Scatter, Heatmap, Gauge.
 
 ### Phase 3 — Site Polish & Documentation
+
 Complete MDX design-direction content for all chart types, pixel-diff toggle, Playwright visual regression baselines per chart × theme, production deploy.
 
 ### Phase 4 — Migration Guides & Codemods
+
 `docs/migration-carbon-charts-to-echarts.md`, `docs/migration-echarts-to-carbon.md`, and `@carbon/echarts-codemod` with two automated transforms:
 
 ```sh

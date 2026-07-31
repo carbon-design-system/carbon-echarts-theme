@@ -30,6 +30,7 @@ import {
   createComboOptions,
   createLollipopOptions,
   createSparklineOptions,
+  createWordCloudOptions,
 } from '../presets/index'
 import type { ChartTabularData } from '../presets/_transform'
 
@@ -432,6 +433,21 @@ describe('createHeatmapOptions', () => {
     expect(vm.min).toBe(2)
     expect(vm.max).toBe(8)
   })
+
+  it('colorRange — sets two-stop inRange color', () => {
+    const opt = createHeatmapOptions(heatData, { colorRange: ['#ffffff', '#491d8b'] })
+    const vm = opt.visualMap as { inRange?: { color: string[] } }
+    expect(vm.inRange?.color).toEqual(['#ffffff', '#491d8b'])
+  })
+
+  it('colorRange — takes precedence over colors', () => {
+    const opt = createHeatmapOptions(heatData, {
+      colors: ['#ff0000', '#00ff00', '#0000ff'],
+      colorRange: ['#ffffff', '#491d8b'],
+    })
+    const vm = opt.visualMap as { inRange?: { color: string[] } }
+    expect(vm.inRange?.color).toEqual(['#ffffff', '#491d8b'])
+  })
 })
 
 // ── Gauge + Meter ─────────────────────────────────────────────────────────────
@@ -590,6 +606,16 @@ describe('createBoxplotOptions', () => {
     const opt = createBoxplotOptions(bpData)
     const s = opt.series as Array<{ data: number[][] }>
     expect(s[0]?.data[0]?.length).toBe(5)
+  })
+
+  it('horizontal — yAxis type is category', () => {
+    const opt = createBoxplotOptions(bpData, { horizontal: true })
+    expect((opt.yAxis as { type: string }).type).toBe('category')
+  })
+
+  it('horizontal — xAxis type is value', () => {
+    const opt = createBoxplotOptions(bpData, { horizontal: true })
+    expect((opt.xAxis as { type: string }).type).toBe('value')
   })
 })
 
@@ -756,5 +782,70 @@ describe('createTreeOptionsFromTabular', () => {
     const opt = createTreeOptionsFromTabular(tabular)
     const s = opt.series as Array<{ data: Array<{ name: string }> }>
     expect(s[0]?.data[0]?.name).toBe('Root')
+  })
+})
+
+// ── Word Cloud ────────────────────────────────────────────────────────────────
+
+describe('createWordCloudOptions', () => {
+  const wordData = [
+    { name: 'JavaScript', value: 1000 },
+    { name: 'TypeScript', value: 850 },
+    { name: 'Python', value: 800 },
+  ]
+
+  it('produces a wordCloud series', () => {
+    const opt = createWordCloudOptions(wordData)
+    const s = opt.series as Array<{ type: string }>
+    expect(s[0]?.type).toBe('wordCloud')
+  })
+
+  it('passes all data items through', () => {
+    const opt = createWordCloudOptions(wordData)
+    const s = opt.series as Array<{ data: unknown[] }>
+    expect(s[0]?.data.length).toBe(3)
+  })
+
+  it('applies default sizeRange [12, 60]', () => {
+    const opt = createWordCloudOptions(wordData)
+    const s = opt.series as Array<{ sizeRange: number[] }>
+    expect(s[0]?.sizeRange).toEqual([12, 60])
+  })
+
+  it('respects custom minFontSize / maxFontSize', () => {
+    const opt = createWordCloudOptions(wordData, { minFontSize: 8, maxFontSize: 80 })
+    const s = opt.series as Array<{ sizeRange: number[] }>
+    expect(s[0]?.sizeRange).toEqual([8, 80])
+  })
+
+  it('applies default shape circle', () => {
+    const opt = createWordCloudOptions(wordData)
+    const s = opt.series as Array<{ shape: string }>
+    expect(s[0]?.shape).toBe('circle')
+  })
+
+  it('respects custom shape', () => {
+    const opt = createWordCloudOptions(wordData, { shape: 'diamond' })
+    const s = opt.series as Array<{ shape: string }>
+    expect(s[0]?.shape).toBe('diamond')
+  })
+
+  it('assigns a textStyle color to every word', () => {
+    const opt = createWordCloudOptions(wordData)
+    const s = opt.series as Array<{ data: Array<{ textStyle: { color: string } }> }>
+    for (const item of s[0]!.data) {
+      expect(typeof item.textStyle.color).toBe('string')
+      expect(item.textStyle.color.length).toBeGreaterThan(0)
+    }
+  })
+
+  it('includes a title when provided', () => {
+    const opt = createWordCloudOptions(wordData, { title: 'Tech Terms' })
+    expect((opt.title as { text: string }).text).toBe('Tech Terms')
+  })
+
+  it('omits title when not provided', () => {
+    const opt = createWordCloudOptions(wordData)
+    expect(opt.title).toBeUndefined()
   })
 })

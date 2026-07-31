@@ -1,5 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { ChartTabularData } from './_transform'
+import { pickColors } from './_transform'
 
 // ── Alluvial (Sankey) preset ──────────────────────────────────────────────────
 
@@ -18,8 +19,29 @@ export interface AlluvialPresetOptions {
   nodeAlign?: 'justify' | 'left' | 'right'
   /** Node width in pixels (default: 20) */
   nodeWidth?: number
-  /** Minimum gap between nodes in pixels (default: 8) */
+  /** Minimum gap between nodes in pixels (default: 8).
+   *  Also accepted as `nodePadding` for Carbon Charts parity. */
   nodeGap?: number
+  /** Carbon Charts parity alias for `nodeGap` */
+  nodePadding?: number
+  /**
+   * Gradient links: sets `lineStyle.color: 'gradient'` so each link
+   * blends from its source node colour to its target node colour.
+   * Requires ECharts ≥ 5.
+   */
+  gradient?: boolean
+  /**
+   * Per-node colour overrides.  Keys are node names; values are hex colours.
+   * Applied as `itemStyle.color` on each matching node.
+   */
+  colors?: Record<string, string>
+  /**
+   * Monochrome mode: all nodes receive the same single-colour from the
+   * Carbon Charts 1-colour palette (purple-70 light / purple-30 dark).
+   */
+  monochrome?: boolean
+  /** Color scheme used when deriving palette colors (default: 'light') */
+  colorScheme?: 'light' | 'dark'
 }
 
 /**
@@ -51,7 +73,20 @@ export function createAlluvialOptions(
   data: AlluvialDatum[],
   opts: AlluvialPresetOptions = {},
 ): EChartsOption {
-  const { title, orient = 'horizontal', nodeAlign = 'justify', nodeWidth = 20, nodeGap = 8 } = opts
+  const {
+    title,
+    orient = 'horizontal',
+    nodeAlign = 'justify',
+    nodeWidth = 20,
+    // nodePadding is the Carbon Charts name; nodeGap is the ECharts name.
+    // Accept either, with nodeGap taking precedence.
+    nodePadding,
+    nodeGap = nodePadding ?? 8,
+    gradient = false,
+    colors = {},
+    monochrome = false,
+    colorScheme = 'light',
+  } = opts
 
   // Collect unique node names in insertion order
   const nodeSet = new Set<string>()
@@ -59,7 +94,33 @@ export function createAlluvialOptions(
     nodeSet.add(d.source)
     nodeSet.add(d.target)
   }
-  const nodes = [...nodeSet].map((name) => ({ name }))
+  const nodeNames = [...nodeSet]
+
+  // Resolve node colours
+  let nodeColorMap: Record<string, string>
+  if (monochrome) {
+    const monoColor = pickColors(1, colorScheme)[0]!
+    nodeColorMap = Object.fromEntries(nodeNames.map((n) => [n, monoColor]))
+  } else if (Object.keys(colors).length > 0) {
+    // Only override nodes that have an explicit entry; leave others uncoloured
+    nodeColorMap = colors
+  } else {
+    // Auto-assign palette colours per source node; target-only nodes get no
+    // explicit colour so ECharts assigns them automatically.
+    const paletteColors = pickColors(nodeNames.length, colorScheme)
+    nodeColorMap = Object.fromEntries(nodeNames.map((n, i) => [n, paletteColors[i]!]))
+  }
+
+  const nodes = nodeNames.map((name) => {
+    const color = nodeColorMap[name]
+    return color ? { name, itemStyle: { color } } : { name }
+  })
+
+  // Link style: gradient blends from source to target colour
+  const lineStyle: Record<string, unknown> = { opacity: 0.3, curveness: 0.5 }
+  if (gradient) {
+    lineStyle.color = 'gradient'
+  }
 
   return {
     ...(title ? { title: { text: title } } : {}),
@@ -77,7 +138,7 @@ export function createAlluvialOptions(
         data: nodes,
         links: data.map((d) => ({ source: d.source, target: d.target, value: d.value })),
         label: { fontSize: 12 },
-        lineStyle: { opacity: 0.3, curveness: 0.5 },
+        lineStyle,
         emphasis: {
           focus: 'adjacency',
           lineStyle: { opacity: 0.6 },
@@ -100,7 +161,7 @@ export function createAlluvialOptionsFromTabular(
   const links: AlluvialDatum[] = data.map((d) => ({
     source: String(d.key ?? ''),
     target: d.group,
-    value: d.value,
+    value: d.value as number,
   }))
   return createAlluvialOptions(links, opts)
 }

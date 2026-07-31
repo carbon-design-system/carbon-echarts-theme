@@ -10,13 +10,34 @@ import { lollipopDiscrete, lollipopHorizontal } from '../data/echarts/lollipop'
 const testExamples = examples.filter((ex) => ex.tags?.includes('test'))
 
 const echartsOptions = [
-  lollipopDiscrete,  // [0]
+  lollipopDiscrete, // [0]
   lollipopHorizontal, // [1]
 ]
 
-const titles = [
-  'Lollipop (discrete)',
-  'Lollipop (horizontal)',
+const titles = ['Lollipop (discrete)', 'Lollipop (horizontal)']
+
+const codeSamples = [
+  `import { createLollipopOptions } from '@carbon/echarts-theme/presets'
+
+const data = [
+  { group: 'Qty', value: 65000 },
+  { group: 'More', value: 29123 },
+  { group: 'Sold', value: 35213 },
+  { group: 'Restocking', value: 51213 },
+]
+
+const option = createLollipopOptions(data)`,
+
+  `import { createLollipopOptions } from '@carbon/echarts-theme/presets'
+
+const data = [
+  { group: 'Qty', value: 65000 },
+  { group: 'More', value: 29123 },
+  { group: 'Sold', value: 35213 },
+  { group: 'Restocking', value: 51213 },
+]
+
+const option = createLollipopOptions(data, { horizontal: true })`,
 ]
 
 export function LollipopPage() {
@@ -32,6 +53,7 @@ export function LollipopPage() {
           echartsOption={echartsOptions[i] ?? lollipopDiscrete}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
+          echartsCode={codeSamples[i]}
         />
       ))}
     />

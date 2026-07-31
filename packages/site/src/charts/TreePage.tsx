@@ -3,20 +3,41 @@ import { ChartPage } from '../components/ChartPage'
 import { SideBySide } from '../components/SideBySide'
 import TreeMdx from '../content/tree.mdx'
 import { chartTypes, examples } from '../data/carboncharts/tree'
-import { tree, treeTB } from '../data/echarts/tree'
+import { tree, treeHorizontal } from '../data/echarts/tree'
 
 // Filter to test-tagged examples only
-// Carbon test order: [0] Tree, [1] Dendrogram
+// Carbon test order: [0] Dendrogram (LR), [1] Tree (LR)
 const testExamples = examples.filter((ex) => ex.tags?.includes('test'))
 
 const echartsOptions = [
-  tree,    // [0] Tree (left-right orientation)
-  treeTB,  // [1] Dendrogram (top-bottom orientation)
+  tree, // [0] Dendrogram — LR layout, depth 2
+  treeHorizontal, // [1] Tree — TB layout, depth 2
 ]
 
-const titles = [
-  'Tree',
-  'Dendrogram',
+const titles = ['Tree (dendrogram)', 'Tree (top-bottom)']
+
+const codeSamples = [
+  `import { createTreeOptionsFromTabular } from '@carbon/echarts-theme/presets'
+
+// Flare hierarchy — same dataset as Carbon Charts tree examples
+const data = [
+  { name: 'flare', children: [
+    { name: 'analytics', children: [
+      { name: 'cluster', children: [/* ... */] },
+    ]},
+  ]},
+]
+
+const option = createTreeOptionsFromTabular(data, { initialDepth: 2 })`,
+
+  `import { createTreeOptionsFromTabular } from '@carbon/echarts-theme/presets'
+
+const data = [/* same flare hierarchy */]
+
+const option = createTreeOptionsFromTabular(data, {
+  initialDepth: 2,
+  orient: 'TB',  // top-to-bottom layout
+})`,
 ]
 
 export function TreePage() {
@@ -32,6 +53,7 @@ export function TreePage() {
           echartsOption={echartsOptions[i] ?? tree}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
+          echartsCode={codeSamples[i]}
         />
       ))}
     />

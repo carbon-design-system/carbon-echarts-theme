@@ -33,7 +33,7 @@ export function createLollipopOptions(
     {
       type: 'scatter' as const,
       name: g.name,
-      data: g.data.map((d, i) => (horizontal ? [d.value, i] : [i, d.value])),
+      data: g.data.map((d, i) => (horizontal ? [d.value as number, i] : [i, d.value as number])),
       symbolSize: 10,
       z: 3,
     },
@@ -41,7 +41,7 @@ export function createLollipopOptions(
     {
       type: 'bar' as const,
       name: g.name,
-      data: g.data.map((d) => d.value),
+      data: g.data.map((d) => d.value as number),
       barWidth: 2,
       showBackground: false,
       itemStyle: { borderRadius: 0 },
@@ -90,7 +90,7 @@ export function createSparklineOptions(
   const { area = false } = opts
 
   const { groups, categories } = groupByGroup(data, 'key')
-  const values = groups[0]?.data.map((d) => d.value) ?? []
+  const values = groups[0]?.data.map((d) => d.value as number) ?? []
 
   return {
     grid: { top: 0, bottom: 0, left: 0, right: 0 },

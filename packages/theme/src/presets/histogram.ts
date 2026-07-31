@@ -1,5 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { ChartTabularData } from './_transform'
+import { pickColors } from './_transform'
 
 const GRID = { top: 48, bottom: 56, left: 48, right: 24, containLabel: true } as const
 
@@ -34,7 +35,7 @@ export function createHistogramOptions(
 
   if (binWidth !== undefined && binWidth > 0) {
     // Auto-bucket raw values
-    const rawValues = data.map((d) => d.value)
+    const rawValues = data.map((d) => d.value as number)
     const min = Math.floor(Math.min(...rawValues) / binWidth) * binWidth
     const max = Math.ceil(Math.max(...rawValues) / binWidth) * binWidth
     const buckets = new Map<number, number>()
@@ -48,8 +49,10 @@ export function createHistogramOptions(
   } else {
     // Pre-binned: key → label, value → count
     categories = data.map((d) => String(d.key ?? d.group))
-    counts = data.map((d) => d.value)
+    counts = data.map((d) => d.value as number)
   }
+
+  const barColor = pickColors(1)[0]
 
   return {
     ...(title ? { title: { text: title } } : {}),
@@ -62,6 +65,7 @@ export function createHistogramOptions(
         type: 'bar',
         data: counts,
         barCategoryGap: '1%', // near-zero gap → histogram look
+        itemStyle: { color: barColor },
       },
     ],
   }

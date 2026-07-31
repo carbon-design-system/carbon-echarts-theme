@@ -7,7 +7,7 @@ import '@carbon/charts/styles.css'
 
 type ChartConstructor = new (
   holder: HTMLDivElement,
-  config: { data: ChartTabularData; options: ChartOptions }
+  config: { data: ChartTabularData; options: ChartOptions },
 ) => Chart
 
 /**
@@ -77,8 +77,8 @@ export function CarbonChart({ chartClass, example }: CarbonChartProps) {
       // If destroy() didn't already remove the holder, clean it up ourselves.
       holder.parentNode?.removeChild(holder)
     }
-  // Re-mount when class name or data identity changes
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Re-mount when class name or data identity changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartClass, example.data, example.options])
 
   return <div ref={wrapperRef} className="carbon-chart-holder" />
