@@ -9,6 +9,11 @@ const GRID = { top: 48, bottom: 56, left: 48, right: 24, containLabel: true } as
 export interface ScatterPresetOptions {
   /** Use date field as x-axis (time-series mode) */
   timeSeries?: boolean
+  /**
+   * Dual-axis: series names in this array go on the secondary (right) Y axis.
+   * A second yAxis entry is added automatically.
+   */
+  secondaryGroups?: string[]
   /** Chart title text */
   title?: string
   /** Color scheme for palette selection ('light' or 'dark'). Default: 'light' */
@@ -47,7 +52,8 @@ export function createScatterOptions(
   data: ChartTabularData,
   opts: ScatterPresetOptions = {},
 ): EChartsOption {
-  const { timeSeries = false, title, colorScheme = 'light' } = opts
+  const { timeSeries = false, secondaryGroups = [], title, colorScheme = 'light' } = opts
+  const hasDualAxis = secondaryGroups.length > 0
 
   // Group by series name
   const seriesMap = new Map<string, Array<[string | number, number]>>()
@@ -71,7 +77,12 @@ export function createScatterOptions(
     name,
     data: pts,
     itemStyle: { color: colors[i] },
+    ...(hasDualAxis && secondaryGroups.includes(name) ? { yAxisIndex: 1 } : {}),
   }))
+
+  const yAxis = hasDualAxis
+    ? [{ type: 'value' as const }, { type: 'value' as const, splitLine: { show: false } }]
+    : { type: 'value' as const }
 
   return {
     ...(title ? { title: { text: title } } : {}),
@@ -79,7 +90,7 @@ export function createScatterOptions(
     legend: { type: 'scroll', bottom: 0 },
     grid: GRID,
     xAxis: timeSeries ? { type: 'time' } : { type: 'value' },
-    yAxis: { type: 'value' },
+    yAxis,
     series,
   }
 }

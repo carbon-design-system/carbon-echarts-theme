@@ -16,6 +16,7 @@ import {
   createTimeSeriesLineOptions,
   createAreaOptions,
   createStackedAreaOptions,
+  createBoundedAreaOptions,
   createDonutOptions,
   createPieOptions,
   createScatterOptions,
@@ -291,6 +292,40 @@ describe('createLineOptions', () => {
     const opt = createLineOptions(singleGroupData, { logScale: true })
     expect((opt.yAxis as { type: string }).type).toBe('log')
   })
+
+  it('yDomain — yAxis min/max are set', () => {
+    const opt = createLineOptions(groupedBarData, { yDomain: [10000, 50000] })
+    const yAxis = opt.yAxis as { min: number; max: number }
+    expect(yAxis.min).toBe(10000)
+    expect(yAxis.max).toBe(50000)
+  })
+
+  it('xDomain — category axis data is replaced with domain subset', () => {
+    const opt = createLineOptions(groupedBarData, { xDomain: ['Jan', 'Mar'] })
+    const xAxis = opt.xAxis as { type: string; data: string[] }
+    expect(xAxis.type).toBe('category')
+    expect(xAxis.data).toEqual(['Jan', 'Mar'])
+  })
+
+  it('legendPosition "left" — legend has orient vertical and left: 0', () => {
+    const opt = createLineOptions(groupedBarData, { legendPosition: 'left' })
+    const legend = opt.legend as { orient?: string; left?: number }
+    expect(legend.orient).toBe('vertical')
+    expect(legend.left).toBe(0)
+  })
+
+  it('legendPosition "top" — legend has top: 0', () => {
+    const opt = createLineOptions(groupedBarData, { legendPosition: 'top' })
+    const legend = opt.legend as { top?: number; bottom?: number }
+    expect(legend.top).toBe(0)
+    expect(legend.bottom).toBeUndefined()
+  })
+
+  it('default legend — bottom: 0', () => {
+    const opt = createLineOptions(groupedBarData)
+    const legend = opt.legend as { bottom?: number }
+    expect(legend.bottom).toBe(0)
+  })
 })
 
 // ── Area ──────────────────────────────────────────────────────────────────────
@@ -302,10 +337,173 @@ describe('createAreaOptions', () => {
     expect(series.every((s) => s.areaStyle !== undefined)).toBe(true)
   })
 
+  it('areaStyle opacity is 0.4 (lighter fill)', () => {
+    const opt = createAreaOptions(groupedBarData)
+    const series = opt.series as Array<{ areaStyle?: { opacity?: number } }>
+    expect(series.every((s) => s.areaStyle?.opacity === 0.4)).toBe(true)
+  })
+
+  it('showSymbol is false on all series', () => {
+    const opt = createAreaOptions(groupedBarData)
+    const series = opt.series as Array<{ showSymbol?: boolean }>
+    expect(series.every((s) => s.showSymbol === false)).toBe(true)
+  })
+
   it('stacked — all series carry stack: "total"', () => {
     const opt = createStackedAreaOptions(groupedBarData)
     const series = opt.series as Array<{ stack?: string }>
     expect(series.every((s) => s.stack === 'total')).toBe(true)
+  })
+
+  it('time axis has axisLabel formatter when timeSeries: true', () => {
+    const opt = createAreaOptions(groupedBarData, { timeSeries: false })
+    // non-time axis — no formatter needed
+    const xAxis = opt.xAxis as { type: string; axisLabel?: unknown }
+    expect(xAxis.type).toBe('category')
+
+    const tsOpt = createAreaOptions(
+      [{ group: 'A', date: '2023-01-01', value: 1 }],
+      { timeSeries: true },
+    )
+    const tsXAxis = tsOpt.xAxis as { type: string; axisLabel?: { formatter?: unknown } }
+    expect(tsXAxis.type).toBe('time')
+    expect(typeof tsXAxis.axisLabel?.formatter).toBe('function')
+  })
+
+  it('yAxisLabel adds name to yAxis', () => {
+    const opt = createAreaOptions(groupedBarData, { yAxisLabel: 'Conversion rate' })
+    const yAxis = opt.yAxis as { name?: string }
+    expect(yAxis.name).toBe('Conversion rate')
+  })
+
+  it('yAxisLabel absent — yAxis has no name', () => {
+    const opt = createAreaOptions(groupedBarData)
+    const yAxis = opt.yAxis as { name?: string }
+    expect(yAxis.name).toBeUndefined()
+  })
+
+  it('xAxisTitle adds name to category xAxis', () => {
+    const opt = createAreaOptions(groupedBarData, { xAxisTitle: '2023 Annual Sales Figures' })
+    const xAxis = opt.xAxis as { name?: string; nameLocation?: string }
+    expect(xAxis.name).toBe('2023 Annual Sales Figures')
+    expect(xAxis.nameLocation).toBe('middle')
+  })
+
+  it('xAxisTitle adds name to time xAxis', () => {
+    const opt = createAreaOptions(
+      [{ group: 'A', date: '2023-01-01', value: 1 }],
+      { timeSeries: true, xAxisTitle: '2023 Annual Sales Figures' },
+    )
+    const xAxis = opt.xAxis as { name?: string; nameLocation?: string }
+    expect(xAxis.name).toBe('2023 Annual Sales Figures')
+    expect(xAxis.nameLocation).toBe('middle')
+  })
+
+  it('legend icon is roundRect (filled square matching Carbon Charts)', () => {
+    const opt = createAreaOptions(groupedBarData)
+    const legend = opt.legend as { icon?: string }
+    expect(legend.icon).toBe('roundRect')
+  })
+
+  it('areaStyle includes explicit color matching itemStyle', () => {
+    const opt = createAreaOptions(groupedBarData)
+    const series = opt.series as Array<{ areaStyle?: { color?: string }; itemStyle?: { color?: string } }>
+    series.forEach((s) => {
+      expect(s.areaStyle?.color).toBe(s.itemStyle?.color)
+    })
+  })
+})
+
+// ── Bounded area ──────────────────────────────────────────────────────────────
+
+describe('createBoundedAreaOptions', () => {
+  const boundedData: ChartTabularData = [
+    { group: 'Dataset 1', date: '2023-01-01', value: 47263, min: 40000, max: 50000 },
+    { group: 'Dataset 1', date: '2023-01-05', value: 14178, min: 10000, max: 20000 },
+    { group: 'Dataset 1', date: '2023-01-13', value: 45281, min: 42000, max: 50000 },
+  ]
+
+  it('produces 5 series per group (floor, delta, lower_line, upper_line, value)', () => {
+    const opt = createBoundedAreaOptions(boundedData, { timeSeries: true })
+    const series = opt.series as unknown[]
+    // 1 group × 5 series = 5
+    expect(series).toHaveLength(5)
+  })
+
+  it('floor series has opacity-0 areaStyle (invisible, establishes stack baseline)', () => {
+    const opt = createBoundedAreaOptions(boundedData, { timeSeries: true })
+    const series = opt.series as Array<{ name: string; areaStyle?: { opacity?: number } }>
+    const floor = series.find((s) => s.name === 'Dataset 1__floor')
+    expect(floor?.areaStyle?.opacity).toBe(0)
+  })
+
+  it('delta series has coloured areaStyle with opacity 0.3', () => {
+    const opt = createBoundedAreaOptions(boundedData, { timeSeries: true })
+    const series = opt.series as Array<{ name: string; areaStyle?: { opacity?: number } }>
+    const delta = series.find((s) => s.name === 'Dataset 1__delta')
+    expect(delta?.areaStyle?.opacity).toBe(0.3)
+  })
+
+  it('floor and delta share the same stack key', () => {
+    const opt = createBoundedAreaOptions(boundedData, { timeSeries: true })
+    const series = opt.series as Array<{ name: string; stack?: string }>
+    const floor = series.find((s) => s.name === 'Dataset 1__floor')
+    const delta = series.find((s) => s.name === 'Dataset 1__delta')
+    expect(floor?.stack).toBe('Dataset 1__band')
+    expect(delta?.stack).toBe('Dataset 1__band')
+  })
+
+  it('lower_line and upper_line have dashed lineStyle and no areaStyle', () => {
+    const opt = createBoundedAreaOptions(boundedData, { timeSeries: true })
+    const series = opt.series as Array<{ name: string; lineStyle?: { type?: string }; areaStyle?: unknown }>
+    const lowerLine = series.find((s) => s.name === 'Dataset 1__lower_line')
+    const upperLine = series.find((s) => s.name === 'Dataset 1__upper_line')
+    expect(lowerLine?.lineStyle?.type).toBe('dashed')
+    expect(upperLine?.lineStyle?.type).toBe('dashed')
+    expect(lowerLine?.areaStyle).toBeUndefined()
+    expect(upperLine?.areaStyle).toBeUndefined()
+  })
+
+  it('value series name matches the group name', () => {
+    const opt = createBoundedAreaOptions(boundedData, { timeSeries: true })
+    const series = opt.series as Array<{ name: string }>
+    expect(series.find((s) => s.name === 'Dataset 1')).toBeDefined()
+  })
+
+  it('markArea added to value series when highlights provided', () => {
+    const opt = createBoundedAreaOptions(boundedData, {
+      timeSeries: true,
+      highlights: [{ start: '2023-01-03', end: '2023-01-08' }],
+    })
+    const series = opt.series as Array<{ name: string; markArea?: { data?: unknown[] } }>
+    const valueSeries = series.find((s) => s.name === 'Dataset 1')
+    expect(valueSeries?.markArea?.data).toHaveLength(1)
+  })
+
+  it('no markArea on value series when no highlights', () => {
+    const opt = createBoundedAreaOptions(boundedData, { timeSeries: true })
+    const series = opt.series as Array<{ name: string; markArea?: unknown }>
+    const valueSeries = series.find((s) => s.name === 'Dataset 1')
+    expect(valueSeries?.markArea).toBeUndefined()
+  })
+
+  it('legend data contains only group names (not floor/band internal series)', () => {
+    const opt = createBoundedAreaOptions(boundedData, { timeSeries: true })
+    const legend = opt.legend as { data?: Array<{ name: string }> }
+    expect(legend.data).toEqual([{ name: 'Dataset 1' }])
+  })
+
+
+  it('showLegend:false hides the legend', () => {
+    const opt = createBoundedAreaOptions(boundedData, { timeSeries: true, showLegend: false })
+    const legend = opt.legend as { show?: boolean }
+    expect(legend.show).toBe(false)
+  })
+
+  it('uses time axis type when timeSeries: true', () => {
+    const opt = createBoundedAreaOptions(boundedData, { timeSeries: true })
+    const xAxis = opt.xAxis as { type: string }
+    expect(xAxis.type).toBe('time')
   })
 })
 
@@ -352,7 +550,10 @@ describe('createDonutOptions', () => {
     const s = series[0]
     const ghostSeries = series[1] as { label: { formatter: () => string; position: string } }
     expect(opt.color).toEqual(pickColors(pieData.length, 'light'))
-    expect(s?.label.formatter({ percent: 46.2 })).toBe('46.2%')
+    expect(typeof s?.label.formatter).toBe('function')
+    expect((s?.label.formatter as ({ percent }: { percent?: number }) => string)({ percent: 46.2 })).toBe(
+      '46.2%',
+    )
     expect(s?.label.position).toBe('outer')
     // Ghost series renders the total in the donut center
     expect(typeof ghostSeries?.label.formatter).toBe('function')
@@ -395,6 +596,23 @@ describe('createScatterOptions', () => {
   it('has 2 series for 2 groups', () => {
     const opt = createScatterOptions(groupedBarData)
     expect((opt.series as unknown[]).length).toBe(2)
+  })
+
+  it('dual-axis — yAxis is an array when secondaryGroups set', () => {
+    const opt = createScatterOptions(groupedBarData, { secondaryGroups: ['Beta'] })
+    expect(Array.isArray(opt.yAxis)).toBe(true)
+  })
+
+  it('dual-axis — secondary series has yAxisIndex: 1', () => {
+    const opt = createScatterOptions(groupedBarData, { secondaryGroups: ['Beta'] })
+    const series = opt.series as Array<{ name: string; yAxisIndex?: number }>
+    const beta = series.find((s) => s.name === 'Beta')
+    expect(beta?.yAxisIndex).toBe(1)
+  })
+
+  it('no secondaryGroups — yAxis is a plain object', () => {
+    const opt = createScatterOptions(groupedBarData)
+    expect(Array.isArray(opt.yAxis)).toBe(false)
   })
 })
 

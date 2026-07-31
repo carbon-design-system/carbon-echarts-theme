@@ -111,12 +111,9 @@ const data = [{ group: 'Dataset 1', date: '2023-01-01', value: 10000 }, /* ... *
 // dataZoom adds a scrollbar — matches Carbon Charts zoomBar
 const option = createAreaOptions(data, { timeSeries: true, dataZoom: true })`,
 
-  `import { createAreaOptions } from '@carbon/echarts-theme/presets'
-
-const data = [/* ... */]
-
-const option = createAreaOptions(data, { timeSeries: true })
-// Note: Carbon Charts data.loading:true skeleton — ECharts renders live chart`,
+  `// Carbon Charts: data: { loading: true }
+// ECharts: call chart.showLoading() on the instance
+chart.showLoading()`,
 ]
 
 export function AreaPage() {

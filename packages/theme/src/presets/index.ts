@@ -25,8 +25,8 @@ export { createLineOptions, createStepLineOptions, createTimeSeriesLineOptions }
 export type { LinePresetOptions, LineStep, ThresholdDef } from './line'
 
 // Area
-export { createAreaOptions, createStackedAreaOptions } from './area'
-export type { AreaPresetOptions } from './area'
+export { createAreaOptions, createStackedAreaOptions, createBoundedAreaOptions } from './area'
+export type { AreaPresetOptions, BoundedAreaPresetOptions, HighlightRegion } from './area'
 
 // Donut + Pie
 export { createDonutOptions, createPieOptions } from './donut'

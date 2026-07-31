@@ -245,8 +245,11 @@ const frenchLocaleData = [
 
 // ── ECharts option exports (one per test slot) ────────────────────────────────
 
-/** [0] Custom domain line */
-export const lineDiscrete: EChartsOption = createLineOptions(lineData)
+/** [0] Custom domain line — xDomain restricts visible categories; yDomain sets axis range */
+export const lineDiscrete: EChartsOption = createLineOptions(lineData, {
+  xDomain: ['Qty', 'More', 'Misc'],
+  yDomain: [10000, 50000],
+})
 
 /** [1] Rotated ticks — xAxis.axisLabel.rotate: -45 */
 export const lineRotatedTicks: EChartsOption = createLineOptions(rotatedTicksData, {
@@ -276,8 +279,10 @@ export const lineCustomColors: EChartsOption = createLineOptions(lineData)
  */
 export const lineSelectedGroups: EChartsOption = createLineOptions(lineSelectedGroupsData)
 
-/** [6] Legend orientation */
-export const lineLegendOrientation: EChartsOption = createLineOptions(lineData)
+/** [6] Legend orientation — vertical legend on the left (matches Carbon LegendPositions.LEFT + VERTICAL) */
+export const lineLegendOrientation: EChartsOption = createLineOptions(lineData, {
+  legendPosition: 'left',
+})
 
 /** [7] Time series with thresholds — Y thresholds at 55000 and 10000 */
 export const lineThresholds: EChartsOption = createLineOptions(timeSeriesData, {

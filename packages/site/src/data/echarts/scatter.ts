@@ -93,4 +93,7 @@ export const scatterTimeSeries: EChartsOption = createScatterOptions(timeSeriesD
   timeSeries: true,
 })
 export const scatterDiscrete: EChartsOption = createScatterOptions(discreteData)
-export const scatterDualAxes: EChartsOption = createScatterOptions(dualAxesData)
+/** [3] Dual axes — Products series on secondary (right) Y axis */
+export const scatterDualAxes: EChartsOption = createScatterOptions(dualAxesData, {
+  secondaryGroups: ['Products'],
+})

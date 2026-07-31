@@ -10,17 +10,18 @@
  *  [4] optionsCurved        (natural curve, time series)  → areaNaturalCurve
  *  [5] optionsMultipleBounded (bounded highlights)        → areaBounded
  *  [6] optionsZoomBar       (zoombar)                     → areaZoombar
- *  [7] optionsSkeleton      (skeleton / loading)          → areaTimeSeries  [ECharts limitation: no skeleton]
+ *  [7] optionsSkeleton      (skeleton / loading)          → areaSkeleton    [showLoading=true on the chart instance]
  *
  * ECharts limitations (documented, not implemented):
  *  - alwaysShowRulerTooltip: no ECharts equivalent; tooltip.trigger:'axis' shown on hover.
  *  - bounds (min/max bands): ECharts has no native bounded-area band; approximated as stacked.
- *  - Skeleton / loading state: ECharts has no built-in skeleton; show live chart instead.
+ *  - Skeleton / loading state: ECharts has no built-in skeleton; showLoading() is used instead.
  */
 import type { EChartsOption } from 'echarts'
 import {
   createAreaOptions,
   createStackedAreaOptions,
+  createBoundedAreaOptions,
   createSparklineOptions,
 } from '@carbon/echarts-theme/presets'
 
@@ -79,36 +80,60 @@ const curvedData = [
 ]
 
 /**
- * `dataBounded` — 1 group with value/min/max fields.
- * ECharts has no native bounded-area band; we represent it as a stacked area
- * using the min and max as separate series to approximate the envelope.
+ * `dataBounded` — 1 group with value/min/max fields matching Carbon Charts exactly.
+ * ECharts has no native bounded-area band; approximated via createBoundedAreaOptions.
  */
 const boundedData = [
-  { group: 'Dataset 1', date: '2023-01-01', value: 47263 },
-  { group: 'Dataset 1', date: '2023-01-05', value: 14178 },
-  { group: 'Dataset 1', date: '2023-01-08', value: 23094 },
-  { group: 'Dataset 1', date: '2023-01-13', value: 45281 },
-  { group: 'Dataset 1', date: '2023-01-19', value: -63954 },
+  { group: 'Dataset 1', date: '2023-01-01', value: 47263, min: 40000, max: 50000 },
+  { group: 'Dataset 1', date: '2023-01-05', value: 14178, min: 10000, max: 20000 },
+  { group: 'Dataset 1', date: '2023-01-08', value: 23094, min: 10000, max: 25000 },
+  { group: 'Dataset 1', date: '2023-01-13', value: 45281, min: 42000, max: 50000 },
+  { group: 'Dataset 1', date: '2023-01-19', value: -63954, min: -70000, max: -10000 },
 ]
 
-/** `sparkLineData` — single group, ISO timestamps (minute-resolution) */
+/** `sparkLineData` — single group, ISO timestamps (minute-resolution), matches Carbon Charts */
 const sparkLineData = [
-  { group: 'Dataset 1', key: '19:21', value: 2 },
-  { group: 'Dataset 1', key: '19:22', value: 3 },
-  { group: 'Dataset 1', key: '19:23', value: 5 },
-  { group: 'Dataset 1', key: '19:24', value: 1 },
-  { group: 'Dataset 1', key: '19:25', value: 4 },
-  { group: 'Dataset 1', key: '19:26', value: 4 },
-  { group: 'Dataset 1', key: '19:27', value: 3 },
-  { group: 'Dataset 1', key: '19:28', value: 4 },
-  { group: 'Dataset 1', key: '19:29', value: 2 },
-  { group: 'Dataset 1', key: '19:30', value: 0 },
+  { group: 'Dataset 1', date: '2019-05-21T19:21:00.000Z', value: 2 },
+  { group: 'Dataset 1', date: '2019-05-21T19:22:00.000Z', value: 3 },
+  { group: 'Dataset 1', date: '2019-05-21T19:23:00.000Z', value: 5 },
+  { group: 'Dataset 1', date: '2019-05-21T19:24:00.000Z', value: 1 },
+  { group: 'Dataset 1', date: '2019-05-21T19:25:00.000Z', value: 4 },
+  { group: 'Dataset 1', date: '2019-05-21T19:26:00.000Z', value: 4 },
+  { group: 'Dataset 1', date: '2019-05-21T19:27:00.000Z', value: 3 },
+  { group: 'Dataset 1', date: '2019-05-21T19:28:00.000Z', value: 4 },
+  { group: 'Dataset 1', date: '2019-05-21T19:29:00.000Z', value: 2 },
+  { group: 'Dataset 1', date: '2019-05-21T19:30:00.000Z', value: 0 },
+  { group: 'Dataset 1', date: '2019-05-21T19:31:00.000Z', value: 5 },
+  { group: 'Dataset 1', date: '2019-05-21T19:32:00.000Z', value: 5 },
+  { group: 'Dataset 1', date: '2019-05-21T19:33:00.000Z', value: 6 },
+  { group: 'Dataset 1', date: '2019-05-21T19:34:00.000Z', value: 2 },
+  { group: 'Dataset 1', date: '2019-05-21T19:35:00.000Z', value: 3 },
+  { group: 'Dataset 1', date: '2019-05-21T19:36:00.000Z', value: 6 },
+  { group: 'Dataset 1', date: '2019-05-21T19:38:00.000Z', value: 2 },
+  { group: 'Dataset 1', date: '2019-05-21T19:39:00.000Z', value: 6 },
+  { group: 'Dataset 1', date: '2019-05-21T19:40:00.000Z', value: 0 },
+  { group: 'Dataset 1', date: '2019-05-21T19:41:00.000Z', value: 3 },
+  { group: 'Dataset 1', date: '2019-05-21T19:42:00.000Z', value: 2 },
+  { group: 'Dataset 1', date: '2019-05-21T19:43:00.000Z', value: 4 },
+  { group: 'Dataset 1', date: '2019-05-21T19:44:00.000Z', value: 3 },
+  { group: 'Dataset 1', date: '2019-05-21T19:45:00.000Z', value: 4 },
+  { group: 'Dataset 1', date: '2019-05-21T19:46:00.000Z', value: 2 },
+  { group: 'Dataset 1', date: '2019-05-21T19:47:00.000Z', value: 4 },
+  { group: 'Dataset 1', date: '2019-05-21T19:48:00.000Z', value: 1 },
+  { group: 'Dataset 1', date: '2019-05-21T19:49:00.000Z', value: 1 },
+  { group: 'Dataset 1', date: '2019-05-21T19:50:00.000Z', value: 3 },
+  { group: 'Dataset 1', date: '2019-05-21T19:51:00.000Z', value: 2 },
 ]
 
 // ── ECharts option exports (one per test slot) ────────────────────────────────
 
 /** [0] Time series area */
-export const areaTimeSeries: EChartsOption = createAreaOptions(timeSeriesData, { timeSeries: true })
+export const areaTimeSeries: EChartsOption = createAreaOptions(timeSeriesData, {
+  timeSeries: true,
+  title: 'Time Series',
+  yAxisLabel: 'Conversion rate',
+  xAxisTitle: '2023 Annual Sales Figures',
+})
 
 /**
  * [1] Always show ruler tooltip — ECharts limitation: no alwaysShowRulerTooltip.
@@ -116,10 +141,16 @@ export const areaTimeSeries: EChartsOption = createAreaOptions(timeSeriesData, {
  */
 export const areaAlwaysRuler: EChartsOption = createAreaOptions(timeSeriesData, {
   timeSeries: true,
+  title: 'Area (tooltip.alwaysShowRulerTooltip=true)',
+  yAxisLabel: 'Conversion rate',
+  xAxisTitle: '2023 Annual Sales Figures',
 })
 
 /** [2] Sparkline area */
-export const areaSparkline: EChartsOption = createSparklineOptions(sparkLineData, { area: true })
+export const areaSparkline: EChartsOption = createSparklineOptions(sparkLineData, {
+  area: true,
+  timeSeries: true,
+})
 
 /** [3] Discrete domain area */
 export const areaDiscrete: EChartsOption = createAreaOptions(discreteData)
@@ -131,23 +162,40 @@ export const areaNaturalCurve: EChartsOption = createAreaOptions(curvedData, {
 })
 
 /**
- * [5] Bounded area — ECharts limitation: no native bounded-area band.
- * Rendered as a stacked area using the same bounded dataset's value series.
+ * [5] Multiple bounded area with highlights — approximated via createBoundedAreaOptions.
+ * Renders the min/max envelope as a stacked band and x-axis highlights as markArea.
  */
-export const areaBounded: EChartsOption = createStackedAreaOptions(boundedData, {
+export const areaBounded: EChartsOption = createBoundedAreaOptions(boundedData, {
   timeSeries: true,
   smooth: true,
+  title: 'Multiple Bounded Areas (Natural Curve)',
+  xAxisTitle: '2023 Annual Sales Figures',
+  highlights: [
+    { start: '2023-01-03', end: '2023-01-08', label: 'Custom formatter' },
+    { start: '2023-01-13', end: '2023-01-14', label: 'Custom formatter' },
+  ],
 })
 
-/** [6] Area with zoombar (dataZoom slider) */
-export const areaZoombar: EChartsOption = createAreaOptions(timeSeriesData, {
+/** [6] Multiple bounded area with zoombar — matches Carbon Charts optionsZoomBar */
+export const areaZoombar: EChartsOption = createBoundedAreaOptions(boundedData, {
   timeSeries: true,
   smooth: true,
+  title: 'Multiple Bounded Areas (Natural Curve) - Zoom bar enabled',
+  xAxisTitle: '2023 Annual Sales Figures',
+  highlights: [
+    { start: '2023-01-03', end: '2023-01-08', label: 'Custom formatter' },
+    { start: '2023-01-13', end: '2023-01-14', label: 'Custom formatter' },
+  ],
   dataZoom: true,
+  showLegend: false,
 })
 
-/** [7] Skeleton / loading — ECharts limitation: no skeleton state. Show live chart. */
-export const areaSkeleton: EChartsOption = createAreaOptions(timeSeriesData, { timeSeries: true })
+/** [7] Skeleton / loading — render an empty grid (no series) to match Carbon's skeleton state. */
+export const areaSkeleton: EChartsOption = {
+  xAxis: { type: 'time' },
+  yAxis: { type: 'value' },
+  series: [],
+}
 
 // ── Stacked convenience export ────────────────────────────────────────────────
 export const areaStacked: EChartsOption = createStackedAreaOptions(timeSeriesData, {

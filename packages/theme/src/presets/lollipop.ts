@@ -1,5 +1,6 @@
 import type { EChartsOption } from 'echarts'
-import { groupByGroup } from './_transform'
+import { graphic } from 'echarts/core'
+import { groupByGroup, pickColors } from './_transform'
 import type { ChartTabularData } from './_transform'
 
 const GRID = { top: 48, bottom: 72, left: 48, right: 24, containLabel: true } as const
@@ -75,6 +76,10 @@ export function createLollipopOptions(
 export interface SparklinePresetOptions {
   /** Show filled area under the line (default: false) */
   area?: boolean
+  /** Use date field as x-axis (time-series mode, matches Carbon Charts sparkline) */
+  timeSeries?: boolean
+  /** Color scheme for palette selection ('light' or 'dark'). Default: 'light' */
+  colorScheme?: 'light' | 'dark'
 }
 
 /**
@@ -82,27 +87,44 @@ export interface SparklinePresetOptions {
  *
  * Carbon Charts `SparklineChart` equivalent.
  * Strips all axes, grid, legend, and tooltip decorations.
+ * When `area: true`, applies a vertical gradient from white to the series color,
+ * matching Carbon Charts' `color.gradient.enabled: true` behaviour.
  */
 export function createSparklineOptions(
   data: ChartTabularData,
   opts: SparklinePresetOptions = {},
 ): EChartsOption {
-  const { area = false } = opts
+  const { area = false, timeSeries = false, colorScheme = 'light' } = opts
 
-  const { groups, categories } = groupByGroup(data, 'key')
-  const values = groups[0]?.data.map((d) => d.value as number) ?? []
+  const xField = timeSeries ? 'date' : 'key'
+  const { groups, categories } = groupByGroup(data, xField)
+  const seriesColor = pickColors(1, colorScheme)[0]!
+
+  // Time-series mode: ECharts needs [date, value] pairs
+  const seriesData = timeSeries
+    ? (groups[0]?.data.map((d) => [d.name, d.value as number]) ?? [])
+    : (groups[0]?.data.map((d) => d.value as number) ?? [])
+
+  // Vertical gradient: opaque series color at top → transparent white at bottom
+  const gradientColor = new graphic.LinearGradient(0, 0, 0, 1, [
+    { offset: 0, color: seriesColor },
+    { offset: 1, color: 'rgba(255,255,255,0)' },
+  ])
 
   return {
     grid: { top: 0, bottom: 0, left: 0, right: 0 },
-    xAxis: { type: 'category', data: categories, show: false },
+    xAxis: timeSeries
+      ? { type: 'time', show: false }
+      : { type: 'category', data: categories, show: false },
     yAxis: { type: 'value', show: false },
     series: [
       {
         type: 'line',
-        data: values,
+        data: seriesData,
         symbol: 'none',
-        lineStyle: { width: 1.5 },
-        ...(area ? { areaStyle: { opacity: 0.3 } } : {}),
+        lineStyle: { width: 1.5, color: seriesColor },
+        itemStyle: { color: seriesColor },
+        ...(area ? { areaStyle: { color: gradientColor } } : {}),
       },
     ],
     animation: false,

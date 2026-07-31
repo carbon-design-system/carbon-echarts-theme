@@ -39,6 +39,21 @@ export interface LinePresetOptions {
    * Each entry becomes a silent horizontal reference line.
    */
   thresholds?: ThresholdDef[]
+  /**
+   * Restrict visible X-axis domain.
+   * For category axes: array of category strings to show (subset).
+   * For time/value axes: [min, max] numeric/string pair passed to xAxis.min/max.
+   */
+  xDomain?: [number | string, number | string] | string[]
+  /**
+   * Restrict visible Y-axis domain: [min, max] passed to yAxis.min/max.
+   */
+  yDomain?: [number, number]
+  /**
+   * Legend position. Maps to ECharts legend left/top/right/bottom anchor.
+   * Default: 'bottom' (matches Carbon Charts default).
+   */
+  legendPosition?: 'top' | 'bottom' | 'left' | 'right'
   /** Chart title text */
   title?: string
   /** Color scheme for palette selection ('light' or 'dark'). Default: 'light' */
@@ -63,6 +78,9 @@ export function createLineOptions(
     secondaryGroups = [],
     axisLabelRotate,
     thresholds = [],
+    xDomain,
+    yDomain,
+    legendPosition,
     title,
     colorScheme = 'light',
   } = opts
@@ -96,6 +114,7 @@ export function createLineOptions(
       name: g.name,
       data: seriesData,
       smooth,
+      connectNulls: true,
       itemStyle: { color: colors[i] },
       lineStyle: { color: colors[i] },
       ...(step !== undefined ? { step: step === true ? 'start' : step } : {}),
@@ -104,21 +123,40 @@ export function createLineOptions(
     }
   })
 
-  const yAxisBase = { type: logScale ? ('log' as const) : ('value' as const) }
+  const yAxisBase = {
+    type: logScale ? ('log' as const) : ('value' as const),
+    ...(yDomain ? { min: yDomain[0], max: yDomain[1] } : {}),
+  }
   const yAxis = hasDualAxis
     ? [yAxisBase, { type: 'value' as const, splitLine: { show: false } }]
     : yAxisBase
 
   const xAxisLabel = axisLabelRotate !== undefined ? { axisLabel: { rotate: axisLabelRotate } } : {}
 
+  // xDomain: for category axis restrict visible categories; for time/value set min/max
+  const xDomainExtra =
+    xDomain !== undefined
+      ? timeSeries
+        ? { min: xDomain[0], max: xDomain[1] }
+        : { data: xDomain as string[] }
+      : {}
+
+  // legend position: carbon default is bottom; map to echarts legend placement
+  const legendOpt =
+    legendPosition === 'left' || legendPosition === 'right'
+      ? { type: 'scroll' as const, orient: 'vertical' as const, [legendPosition]: 0, top: 'middle' }
+      : legendPosition === 'top'
+        ? { type: 'scroll' as const, top: 0 }
+        : { type: 'scroll' as const, bottom: 0 }
+
   return {
     ...(title ? { title: { text: title } } : {}),
     tooltip: { trigger: 'axis' },
-    legend: { type: 'scroll', bottom: 0 },
+    legend: legendOpt,
     grid: GRID,
     xAxis: timeSeries
-      ? { type: 'time', ...xAxisLabel }
-      : { type: 'category', data: categories, ...xAxisLabel },
+      ? { type: 'time', ...xAxisLabel, ...xDomainExtra }
+      : { type: 'category', data: categories, ...xAxisLabel, ...xDomainExtra },
     yAxis,
     series,
   }
