@@ -73,7 +73,7 @@ jobs:
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - run: pnpm test --coverage
+      - run: pnpm --filter @carbon/echarts-theme test:coverage
       - uses: codecov/codecov-action@1f60566a86da84c4b4b64c17662a90de97fbb8d7 # v5.4.2
         with:
           files: ./packages/theme/coverage/lcov.info
