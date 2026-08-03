@@ -1,4 +1,6 @@
 import React from 'react'
+import { MDXProvider } from '@mdx-js/react'
+import { UnorderedList, ListItem } from '@carbon/react'
 
 interface ChartPageProps {
   title: string
@@ -26,7 +28,9 @@ export function ChartPage({
       </div>
 
       <div className="chart-page__body">
-        <div className="chart-page__overview">{overview}</div>
+        <div className="chart-page__overview">
+          <MDXProvider components={{ ul: UnorderedList, li: ListItem }}>{overview}</MDXProvider>
+        </div>
 
         <div className="chart-page__examples">
           {v2Only ? (

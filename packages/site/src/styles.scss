@@ -23,6 +23,9 @@
 // Carbon Dropdown component styles
 @use '@carbon/styles/scss/components/dropdown';
 
+// Carbon List component styles (UnorderedList / ListItem)
+@use '@carbon/styles/scss/components/list';
+
 // Emit --cds-* custom properties for the White theme on :root, and each of
 // the other three themes scoped to their data-carbon-theme attribute selectors.
 // This replaces the CDN themes.css dependency and makes the site fully
@@ -164,6 +167,22 @@ body {
   margin-bottom: $spacing-08;
   padding-bottom: $spacing-07;
   border-bottom: 1px solid $border-subtle-01;
+}
+
+.chart-page__overview h2 {
+  @include type.type-style('heading-04');
+  margin: $spacing-07 0 $spacing-03;
+  color: $text-primary;
+}
+
+.chart-page__overview h3 {
+  @include type.type-style('heading-03');
+  margin: $spacing-06 0 $spacing-03;
+  color: $text-primary;
+}
+
+.chart-page__overview .cds--list--unordered {
+  margin-block: $spacing-03 $spacing-05;
 }
 
 .chart-page__overview p {
