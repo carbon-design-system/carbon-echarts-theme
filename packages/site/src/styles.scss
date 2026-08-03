@@ -7,6 +7,22 @@
 @use '@carbon/colors' as colors;
 @use '@carbon/styles/scss/spacing' as *;
 
+// Carbon global reset — normalises UA defaults (ul padding, box-sizing, etc.)
+@use '@carbon/styles/scss/reset';
+
+// Carbon layout tokens — emits --cds-layout-size-height-* custom properties
+// required by list-box/dropdown item height and padding calculations
+@use '@carbon/styles/scss/layout';
+
+// Carbon UI Shell component styles (Header, SideNav, Content)
+@use '@carbon/styles/scss/components/ui-shell';
+
+// Carbon Toggle component styles
+@use '@carbon/styles/scss/components/toggle';
+
+// Carbon Dropdown component styles
+@use '@carbon/styles/scss/components/dropdown';
+
 // Emit --cds-* custom properties for the White theme on :root, and each of
 // the other three themes scoped to their data-carbon-theme attribute selectors.
 // This replaces the CDN themes.css dependency and makes the site fully
@@ -48,50 +64,9 @@ body {
   background-color: $background;
 }
 
-/* ── Site layout ─────────────────────────────────────────────────────────── */
-.site-layout {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
-.site-body {
-  display: flex;
-  flex: 1;
-  min-height: 0;
-}
-
-/* ── Header ──────────────────────────────────────────────────────────────── */
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background-color: $background-inverse;
-  color: $text-inverse;
-  border-bottom: 1px solid $border-subtle-00;
-  height: $spacing-09; // 48px
-  display: flex;
-  align-items: center;
-}
-
-.site-header__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 0 $spacing-05;
-  gap: $spacing-05;
-}
-
-.site-header__wordmark {
-  @include type.type-style('productive-heading-01');
-  color: $text-inverse;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
+/* ── Version badge in the header wordmark ────────────────────────────────── */
 .site-header__version {
-  // No exact Carbon type token for 11px — intentionally smaller than label-01
+  // Intentionally smaller than label-01 (11px vs 12px) for compact display
   font-size: 11px;
   font-weight: 400;
   color: $text-on-color-disabled;
@@ -99,100 +74,56 @@ body {
   letter-spacing: 0;
 }
 
-.site-header__actions {
+/* ── Carbon Dropdown in header ───────────────────────────────────────────── */
+.site-header__theme-select {
   display: flex;
   align-items: center;
-  gap: $spacing-05;
-}
+  padding-inline: $spacing-05;
+  border-inline-end: 1px solid $border-subtle-00;
+  height: 100%;
 
-.site-header__github {
-  @include type.type-style('body-01');
-  color: $text-on-color-disabled;
-  text-decoration: none;
-
-  &:hover {
-    color: $text-inverse;
+  // Keep label and button on one line and invert colours for the dark header
+  .cds--dropdown__wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $spacing-03;
   }
-}
 
-/* ── Left nav ────────────────────────────────────────────────────────────── */
-.site-nav {
-  width: 256px;
-  flex-shrink: 0;
-  background-color: $layer-01;
-  border-right: 1px solid $border-subtle-01;
-  overflow-y: auto;
-  padding-bottom: $spacing-07;
-}
-
-.site-nav__group {
-  border-bottom: 1px solid $border-subtle-01;
-}
-
-.site-nav__group-heading {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: $spacing-04 $spacing-05;
-  @include type.type-style('label-01');
-  font-weight: 600;
-  text-transform: uppercase;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: $text-secondary;
-  text-align: left;
-}
-
-.site-nav__chevron {
-  // No token for decorative chevron glyph size — intentionally small
-  font-size: 10px;
-}
-
-.site-nav__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.site-nav__link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: $spacing-03 $spacing-05 $spacing-03 $spacing-06;
-  @include type.type-style('body-01');
-  color: $text-primary;
-  text-decoration: none;
-
-  &:hover {
-    background-color: $layer-hover-01;
+  .cds--label {
+    @include type.type-style('label-01');
+    color: $text-on-color;
+    white-space: nowrap;
+    margin-bottom: 0;
   }
-}
 
-.site-nav__link--active {
-  background-color: $layer-selected-01;
-  font-weight: 600;
-  border-left: 3px solid $interactive;
-  padding-left: calc(#{$spacing-06} - 3px);
-}
-
-.site-nav__badge {
-  // No token for 10px — intentionally smaller than label-01 for compact badges
-  font-size: 10px;
-  font-weight: 600;
-  background-color: colors.$purple-70;
-  color: colors.$white-0;
-  border-radius: 2px;
-  padding: 1px $spacing-02;
-  letter-spacing: 0;
+  .cds--dropdown {
+    min-width: 7.5rem;
+    background-color: $layer-01;
+    border-block-end-color: $border-strong-01;
+  }
 }
 
 /* ── Main content area ───────────────────────────────────────────────────── */
 .site-content {
-  flex: 1;
-  min-width: 0;
-  overflow-y: auto;
+  // Carbon Content sets margin-inline-start: 3rem (icon rail) by default.
+  // With a persistent 256px SideNav we need the full sidenav width.
+  margin-inline-start: 256px !important;
+}
+
+// When viewport is narrower than lg breakpoint, sidebar becomes overlay
+@media (max-width: 1055px) {
+  .site-content {
+    margin-inline-start: 0 !important;
+  }
+}
+
+// On mobile (below Carbon md breakpoint) the SideNav becomes an overlay,
+// so the content occupies the full width.
+@media (max-width: 671px) {
+  .site-content {
+    margin-inline-start: 0 !important;
+  }
 }
 
 /* ── Chart page ──────────────────────────────────────────────────────────── */
@@ -252,25 +183,25 @@ body {
   @include type.type-style('body-01');
 }
 
-/* ── Side-by-side ────────────────────────────────────────────────────────── */
-.side-by-side {
+/* ── Compare ─────────────────────────────────────────────────────────────── */
+.compare {
   margin-bottom: $spacing-09;
 }
 
-.side-by-side__header {
+.compare__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: $spacing-05;
 }
 
-.side-by-side__title {
+.compare__title {
   @include type.type-style('heading-02');
   margin: 0;
   color: $text-primary;
 }
 
-.side-by-side__extended-banner {
+.compare__extended-banner {
   @include type.type-style('body-01');
   color: $text-secondary;
   background-color: $layer-01;
@@ -279,22 +210,16 @@ body {
   margin-bottom: $spacing-05;
 }
 
-.side-by-side__panels {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: $spacing-06;
-}
-
-.side-by-side__panels--single {
-  grid-template-columns: 1fr;
-}
-
-.side-by-side__panel {
+.compare__panel {
   border: 1px solid $border-subtle-01;
   border-radius: 2px;
 }
 
-.side-by-side__panel-label {
+.compare__panel--carbon {
+  margin-top: $spacing-05;
+}
+
+.compare__panel-label {
   @include type.type-style('label-01');
   font-weight: 600;
   text-transform: uppercase;
@@ -302,11 +227,6 @@ body {
   padding: $spacing-03 $spacing-05;
   background-color: $layer-01;
   border-bottom: 1px solid $border-subtle-01;
-}
-
-.side-by-side__chart {
-  padding: $spacing-05;
-  background-color: $background;
 }
 
 /* Carbon Charts inline holder — lets the chart use its own configured height */
@@ -322,21 +242,29 @@ body {
   }
 }
 
-/* ── Inline example code block (below each SideBySide) ──────────────────── */
-.side-by-side__code {
+/* Compare toggle row */
+.compare__toggle {
+  display: flex;
+  align-items: center;
+  gap: $spacing-03;
+  margin-top: $spacing-05;
+}
+
+/* ── Inline example code block ───────────────────────────────────────────── */
+.compare__code {
   margin-top: $spacing-05;
   border-radius: 2px;
   overflow: hidden;
 }
 
-.side-by-side__code-bar {
+.compare__code-bar {
   display: flex;
   align-items: center;
   // Code block toolbar is always dark regardless of site theme
   background-color: colors.$gray-80;
 }
 
-.side-by-side__code-label {
+.compare__code-label {
   padding: $spacing-03 $spacing-05;
   @include type.type-style('label-01');
   font-weight: 600;
@@ -344,7 +272,7 @@ body {
   letter-spacing: 0.16px;
 }
 
-.side-by-side__code-copy {
+.compare__code-copy {
   margin-left: auto;
   padding: $spacing-03 $spacing-05;
   @include type.type-style('label-01');
@@ -359,7 +287,7 @@ body {
   }
 }
 
-.side-by-side__code-content {
+.compare__code-content {
   // Code blocks are always dark
   background-color: colors.$gray-100;
   color: colors.$gray-10;
@@ -371,29 +299,6 @@ body {
   font-size: 13px;
   line-height: 1.7;
   white-space: pre;
-}
-
-/* ── Theme switcher ──────────────────────────────────────────────────────── */
-.theme-switcher {
-  display: flex;
-  gap: $spacing-01;
-}
-
-.theme-switcher__btn {
-  padding: $spacing-02 $spacing-04;
-  @include type.type-style('label-01');
-  // Switcher lives in the always-dark header
-  background-color: colors.$gray-80;
-  border: 1px solid colors.$gray-60;
-  color: colors.$gray-30;
-  cursor: pointer;
-  border-radius: 2px;
-}
-
-.theme-switcher__btn--active {
-  background-color: $interactive;
-  border-color: $interactive;
-  color: $text-on-color;
 }
 
 /* ── Generic content page ────────────────────────────────────────────────── */
@@ -470,7 +375,7 @@ body {
 /* ── Chart toolbar (overlaid inside chart) ───────────────────────────────── */
 
 // Wrapper that holds the ReactECharts div and the floating toolbar
-.side-by-side__chart-wrap {
+.compare__chart-wrap {
   position: relative;
   padding: $spacing-05;
   box-sizing: border-box;
@@ -632,7 +537,7 @@ body {
 }
 
 /* Fullscreen panel */
-.side-by-side__panel--fullscreen {
+.compare__panel--fullscreen {
   position: fixed;
   inset: 0;
   z-index: 900;
@@ -643,7 +548,29 @@ body {
   border: none;
 }
 
-.side-by-side__panel--fullscreen .side-by-side__chart-wrap {
+.compare__panel--fullscreen .compare__chart-wrap {
   flex: 1;
   min-height: 0;
+}
+
+/* ── Mobile responsive ───────────────────────────────────────────────────── */
+
+// Below Carbon's md breakpoint (672px) the side nav collapses to overlay.
+// Chart panels stack vertically on all screen sizes.
+@media (max-width: 671px) {
+  .chart-page__body {
+    padding: $spacing-05;
+  }
+
+  .chart-page__hero {
+    padding: $spacing-05;
+  }
+
+  .content-page {
+    padding: $spacing-05;
+  }
+
+  .content-page__hero {
+    padding: $spacing-05;
+  }
 }

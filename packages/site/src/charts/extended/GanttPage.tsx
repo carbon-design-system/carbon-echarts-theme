@@ -1,7 +1,7 @@
 import type { EChartsOption } from 'echarts'
 import React from 'react'
 import { ChartPage } from '../../components/ChartPage'
-import { SideBySide } from '../../components/SideBySide'
+import { Compare } from '../../components/Compare'
 import GanttMdx from '../../content/extended/gantt.mdx'
 
 // Tasks encoded as [taskName, startDay, endDay]
@@ -113,7 +113,7 @@ export function GanttPage() {
       description="Display project schedules and task durations along a time axis."
       overview={<GanttMdx />}
       examples={
-        <SideBySide
+        <Compare
           title="Gantt (project schedule)"
           echartsOption={ganttOption}
           extended

@@ -1,7 +1,7 @@
 import React from 'react'
 import 'echarts-wordcloud'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import WordcloudMdx from '../content/wordcloud.mdx'
 import { wordcloudBasic, wordcloudCircular, wordcloudDiamond } from '../data/echarts/wordcloud'
 
@@ -35,19 +35,19 @@ export function WordcloudPage() {
       overview={<WordcloudMdx />}
       examples={
         <>
-          <SideBySide
+          <Compare
             title="Word cloud — circle"
             echartsOption={wordcloudCircular}
             extended
             echartsCode={circleCode}
           />
-          <SideBySide
+          <Compare
             title="Word cloud — diamond"
             echartsOption={wordcloudDiamond}
             extended
             echartsCode={diamondCode}
           />
-          <SideBySide
+          <Compare
             title="Word cloud — basic"
             echartsOption={wordcloudBasic}
             extended

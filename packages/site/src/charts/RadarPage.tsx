@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import RadarMdx from '../content/radar.mdx'
 import { chartTypes, examples } from '../data/carboncharts/radar'
 import {
@@ -107,7 +107,7 @@ export function RadarPage() {
       description="Compare multiple variables across categories on a radial axis."
       overview={<RadarMdx />}
       examples={testExamples.map((ex, i) => (
-        <SideBySide
+        <Compare
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
           echartsOption={echartsOptions[i] ?? radar}

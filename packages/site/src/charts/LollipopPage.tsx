@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import LollipopMdx from '../content/lollipop.mdx'
 import { chartTypes, examples } from '../data/carboncharts/lollipop'
 import { lollipopDiscrete, lollipopHorizontal } from '../data/echarts/lollipop'
@@ -47,7 +47,7 @@ export function LollipopPage() {
       description="Lollipop charts reduce bar-chart clutter by encoding values as lines capped with a dot."
       overview={<LollipopMdx />}
       examples={testExamples.map((ex, i) => (
-        <SideBySide
+        <Compare
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
           echartsOption={echartsOptions[i] ?? lollipopDiscrete}

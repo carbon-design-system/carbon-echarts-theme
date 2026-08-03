@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../../components/ChartPage'
-import { SideBySide } from '../../components/SideBySide'
+import { Compare } from '../../components/Compare'
 import ThemeRiverMdx from '../../content/extended/theme-river.mdx'
 
 const themeRiverData: [string, number, string][] = [
@@ -33,7 +33,7 @@ export function ThemeRiverPage() {
       description="Show evolution of multiple categories over time as flowing stacked bands."
       overview={<ThemeRiverMdx />}
       examples={
-        <SideBySide
+        <Compare
           title="Theme River"
           echartsOption={themeRiverOption}
           extended

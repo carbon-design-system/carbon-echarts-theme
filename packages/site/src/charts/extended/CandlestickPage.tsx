@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../../components/ChartPage'
-import { SideBySide } from '../../components/SideBySide'
+import { Compare } from '../../components/Compare'
 import CandlestickMdx from '../../content/extended/candlestick.mdx'
 
 // OHLC data: [open, close, low, high]
@@ -31,7 +31,7 @@ export function CandlestickPage() {
       description="Display open, high, low, and close values of a financial instrument over time."
       overview={<CandlestickMdx />}
       examples={
-        <SideBySide
+        <Compare
           title="Candlestick (OHLC)"
           echartsOption={candlestickOption}
           extended

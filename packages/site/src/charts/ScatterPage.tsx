@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import ScatterMdx from '../content/scatter.mdx'
 import { chartTypes, examples } from '../data/carboncharts/scatter'
 import {
@@ -95,7 +95,7 @@ export function ScatterPage() {
       description="Explore correlation between two continuous variables."
       overview={<ScatterMdx />}
       examples={testExamples.map((ex, i) => (
-        <SideBySide
+        <Compare
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
           echartsOption={echartsOptions[i] ?? scatterLinear}

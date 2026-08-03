@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../../components/ChartPage'
-import { SideBySide } from '../../components/SideBySide'
+import { Compare } from '../../components/Compare'
 import FunnelMdx from '../../content/extended/funnel.mdx'
 
 const funnelOption = {
@@ -28,7 +28,7 @@ export function FunnelPage() {
       description="Show conversion rates through a sequential multi-step process."
       overview={<FunnelMdx />}
       examples={
-        <SideBySide
+        <Compare
           title="Funnel"
           echartsOption={funnelOption}
           extended

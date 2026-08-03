@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import ComboMdx from '../content/combo.mdx'
 import { chartTypes, examples } from '../data/carboncharts/combo'
 import {
@@ -263,7 +263,7 @@ export function ComboPage() {
       description="Combine bar and line series in the same chart area."
       overview={<ComboMdx />}
       examples={testExamples.map((ex, i) => (
-        <SideBySide
+        <Compare
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
           echartsOption={echartsOptions[i] ?? comboBarLine}

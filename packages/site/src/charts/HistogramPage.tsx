@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import HistogramMdx from '../content/histogram.mdx'
 import { chartTypes, examples } from '../data/carboncharts/histogram'
 import {
@@ -76,7 +76,7 @@ export function HistogramPage() {
       description="Display the frequency distribution of a continuous variable."
       overview={<HistogramMdx />}
       examples={testExamples.map((ex, i) => (
-        <SideBySide
+        <Compare
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
           echartsOption={echartsOptions[i] ?? histogram}

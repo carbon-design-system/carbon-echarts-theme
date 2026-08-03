@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../../components/ChartPage'
-import { SideBySide } from '../../components/SideBySide'
+import { Compare } from '../../components/Compare'
 import SunburstMdx from '../../content/extended/sunburst.mdx'
 
 const sunburstOption = {
@@ -46,7 +46,7 @@ export function SunburstPage() {
       description="Display hierarchical data as concentric rings."
       overview={<SunburstMdx />}
       examples={
-        <SideBySide
+        <Compare
           title="Sunburst"
           echartsOption={sunburstOption}
           extended

@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../../components/ChartPage'
-import { SideBySide } from '../../components/SideBySide'
+import { Compare } from '../../components/Compare'
 import ParallelMdx from '../../content/extended/parallel.mdx'
 
 const parallelOption = {
@@ -31,7 +31,7 @@ export function ParallelPage() {
       description="Explore multivariate data across multiple vertical axes."
       overview={<ParallelMdx />}
       examples={
-        <SideBySide
+        <Compare
           title="Parallel coordinates"
           echartsOption={parallelOption}
           extended

@@ -5,7 +5,7 @@ interface ChartPageProps {
   description?: string
   /** MDX overview content — rendered as an intro paragraph above examples */
   overview: React.ReactNode
-  /** One or more <SideBySide> instances */
+  /** One or more <Compare> instances */
   examples?: React.ReactNode
   /** v2 badge — shows "Examples coming in v2" banner instead of examples */
   v2Only?: boolean

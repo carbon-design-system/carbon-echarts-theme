@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import TreeMdx from '../content/tree.mdx'
 import { chartTypes, examples } from '../data/carboncharts/tree'
 import { tree, treeHorizontal } from '../data/echarts/tree'
@@ -47,7 +47,7 @@ export function TreePage() {
       description="Display hierarchical data as an expandable node-link diagram."
       overview={<TreeMdx />}
       examples={testExamples.map((ex, i) => (
-        <SideBySide
+        <Compare
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
           echartsOption={echartsOptions[i] ?? tree}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import TreemapMdx from '../content/treemap.mdx'
 import { chartTypes, examples } from '../data/carboncharts/treemap'
 import { treemap, treemapNested } from '../data/echarts/treemap'
@@ -56,7 +56,7 @@ export function TreemapPage() {
       description="Display hierarchical data as nested rectangles sized by value."
       overview={<TreemapMdx />}
       examples={testExamples.map((ex, i) => (
-        <SideBySide
+        <Compare
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
           echartsOption={echartsOptions[i] ?? treemap}

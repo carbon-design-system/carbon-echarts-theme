@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import HeatmapMdx from '../content/heatmap.mdx'
 import { chartTypes, examples } from '../data/carboncharts/heatmap'
 import {
@@ -123,7 +123,7 @@ export function HeatmapPage() {
       description="Encode values as color intensity across a two-dimensional grid."
       overview={<HeatmapMdx />}
       examples={testExamples.map((ex, i) => (
-        <SideBySide
+        <Compare
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
           echartsOption={echartsOptions[i] ?? heatmap}

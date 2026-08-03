@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import LineMdx from '../content/line.mdx'
 import { chartTypes, examples } from '../data/carboncharts/line'
 import {
@@ -264,7 +264,7 @@ export function LinePage() {
       description="Display trends or changes over time."
       overview={<LineMdx />}
       examples={testExamples.map((ex, i) => (
-        <SideBySide
+        <Compare
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
           echartsOption={echartsOptions[i] ?? lineDiscrete}

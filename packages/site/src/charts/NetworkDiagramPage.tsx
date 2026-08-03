@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import NetworkMdx from '../content/network.mdx'
 import { networkBasic, networkCircular } from '../data/echarts/network'
 
@@ -32,13 +32,13 @@ export function NetworkDiagramPage() {
       overview={<NetworkMdx />}
       examples={
         <>
-          <SideBySide
+          <Compare
             title="Force layout"
             echartsOption={networkBasic}
             extended
             echartsCode={networkForceCode}
           />
-          <SideBySide
+          <Compare
             title="Circular layout"
             echartsOption={networkCircular}
             extended

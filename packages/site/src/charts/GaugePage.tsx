@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import GaugeMdx from '../content/gauge.mdx'
 import { chartTypes, examples } from '../data/carboncharts/gauge'
 import { gaugeDanger, gaugeWarningFull, gaugeCustomColor } from '../data/echarts/gauge'
@@ -54,7 +54,7 @@ export function GaugePage() {
       description="Display a single KPI value on a circular arc scale."
       overview={<GaugeMdx />}
       examples={testExamples.map((ex, i) => (
-        <SideBySide
+        <Compare
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
           echartsOption={echartsOptions[i]}

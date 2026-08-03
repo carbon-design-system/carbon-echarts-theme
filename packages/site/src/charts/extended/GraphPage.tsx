@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../../components/ChartPage'
-import { SideBySide } from '../../components/SideBySide'
+import { Compare } from '../../components/Compare'
 import GraphMdx from '../../content/extended/graph.mdx'
 
 const graphOption = {
@@ -37,7 +37,7 @@ export function GraphPage() {
       description="Visualize relationships between entities as nodes and edges."
       overview={<GraphMdx />}
       examples={
-        <SideBySide
+        <Compare
           title="Force-directed graph"
           echartsOption={graphOption}
           extended

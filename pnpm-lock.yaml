@@ -52,6 +52,9 @@ importers:
 
   packages/site:
     dependencies:
+      '@carbon-labs/react-theme-settings':
+        specifier: 0.30.0
+        version: 0.30.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@carbon/charts':
         specifier: ^1.27.17
         version: 1.27.17
@@ -344,6 +347,24 @@ packages:
         integrity: sha512-ctxtJ/eA+t+6q2++vj5j7FYX3nRu311q1wfYH3xjlLOsczhlhxAg2FWNUXhpGvAw3BWo1xBcvOV6/YLc2r5FJw==,
       }
     hasBin: true
+
+  '@carbon-labs/react-theme-settings@0.30.0':
+    resolution:
+      {
+        integrity: sha512-6/E6KHKgnq5xIk2NcnjMDOUwARjYYfGNTBOKtUdmRuD5se9kSMkOqb/yZQx7sOc8hrl6R8LYeWqPS0JDFe1x8Q==,
+      }
+    peerDependencies:
+      react: ^16.8.6 || ^17.0.1 || ^18.2.0 || ^19.0.0
+      react-dom: ^16.8.6 || ^17.0.1 || ^18.2.0 || ^19.0.0
+
+  '@carbon-labs/utilities@0.28.0':
+    resolution:
+      {
+        integrity: sha512-66V0Z2f0cDQrfd6XWk41nPgwfuk59pYS9lo5wvJz3RZ/zyLmH0jRJ+/K5ZJpXbU5O1htpMlvGgmeI0A1Jnbh0A==,
+      }
+    peerDependencies:
+      react: ^16.8.6 || ^17.0.1 || ^18.2.0 || ^19.0.0
+      react-dom: ^16.8.6 || ^17.0.1 || ^18.2.0 || ^19.0.0
 
   '@carbon/charts-react@1.27.16':
     resolution:
@@ -7247,6 +7268,18 @@ snapshots:
   '@bramus/specificity@2.4.2':
     dependencies:
       css-tree: 3.2.1
+
+  '@carbon-labs/react-theme-settings@0.30.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+    dependencies:
+      '@carbon-labs/utilities': 0.28.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@ibm/telemetry-js': 1.11.0
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
+
+  '@carbon-labs/utilities@0.28.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+    dependencies:
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
 
   '@carbon/charts-react@1.27.16(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:

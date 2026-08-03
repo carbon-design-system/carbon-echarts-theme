@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import DonutMdx from '../content/donut.mdx'
 import { chartTypes, examples } from '../data/carboncharts/donut'
 import { donut, donutCentered, donutValueMapsTo } from '../data/echarts/donut'
@@ -64,7 +64,7 @@ export function DonutPage() {
       description="Show part-to-whole relationships with a center cutout."
       overview={<DonutMdx />}
       examples={testExamples.map((ex, i) => (
-        <SideBySide
+        <Compare
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
           echartsOption={echartsOptions[i] ?? donut}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import AlluvialMdx from '../content/alluvial.mdx'
 import { chartTypes, examples } from '../data/carboncharts/alluvial'
 import {
@@ -134,7 +134,7 @@ export function AlluvialPage() {
       description="Visualize flows and redistribution between nodes."
       overview={<AlluvialMdx />}
       examples={testExamples.map((ex, i) => (
-        <SideBySide
+        <Compare
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
           echartsOption={echartsOptions[i]!}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { ChartPage } from '../components/ChartPage'
-import { SideBySide } from '../components/SideBySide'
+import { Compare } from '../components/Compare'
 import BoxplotMdx from '../content/boxplot.mdx'
 import { chartTypes, examples } from '../data/carboncharts/boxplot'
 import { boxplotVertical, boxplotHorizontal } from '../data/echarts/boxplot'
@@ -44,7 +44,7 @@ export function BoxplotPage() {
       description="Display the statistical distribution of datasets across categories."
       overview={<BoxplotMdx />}
       examples={testExamples.map((ex, i) => (
-        <SideBySide
+        <Compare
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
           echartsOption={echartsOptions[i] ?? boxplotVertical}
