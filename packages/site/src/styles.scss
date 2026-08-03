@@ -109,6 +109,14 @@ body {
   // Carbon Content sets margin-inline-start: 3rem (icon rail) by default.
   // With a persistent 256px SideNav we need the full sidenav width.
   margin-inline-start: 256px !important;
+  // Prevent content from being hidden behind the fixed footer (~48px)
+  padding-bottom: 3rem;
+}
+
+// Stop the SideNav from being clipped by the fixed footer
+.cds--side-nav {
+  padding-bottom: 3rem;
+  height: calc(100% - 3rem);
 }
 
 // When viewport is narrower than lg breakpoint, sidebar becomes overlay

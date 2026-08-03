@@ -1,6 +1,7 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { SiteLayout } from './components/SiteLayout'
+import { IbmFooter } from './components/IbmFooter'
 
 // Getting started
 import { IntroductionPage } from './pages/IntroductionPage'
@@ -56,71 +57,76 @@ import { GanttPage } from './charts/extended/GanttPage'
 
 export function App() {
   return (
-    <SiteLayout>
-      <Routes>
-        {/* Getting started */}
-        <Route path="/" element={<IntroductionPage />} />
-        <Route path="/installation" element={<InstallationPage />} />
-        <Route path="/anatomy" element={<AnatomyPage />} />
+    <>
+      <SiteLayout>
+        <Routes>
+          {/* Getting started */}
+          <Route path="/" element={<IntroductionPage />} />
+          <Route path="/installation" element={<InstallationPage />} />
+          <Route path="/anatomy" element={<AnatomyPage />} />
 
-        {/* Configuration */}
-        <Route path="/data" element={<DataPage />} />
-        <Route path="/toolbar" element={<ToolbarPage />} />
-        <Route path="/zoombar" element={<ZoombarPage />} />
+          {/* Configuration */}
+          <Route path="/data" element={<DataPage />} />
+          <Route path="/toolbar" element={<ToolbarPage />} />
+          <Route path="/zoombar" element={<ZoombarPage />} />
 
-        {/* Design */}
-        <Route path="/themes" element={<ThemesPage />} />
-        <Route path="/axes" element={<AxesPage />} />
-        <Route path="/palettes" element={<PalettesPage />} />
-        <Route path="/dashboards" element={<DashboardsPage />} />
-        <Route path="/legends" element={<LegendsPage />} />
-        <Route path="/tooltips" element={<TooltipsPage />} />
+          {/* Design */}
+          <Route path="/themes" element={<ThemesPage />} />
+          <Route path="/axes" element={<AxesPage />} />
+          <Route path="/palettes" element={<PalettesPage />} />
+          <Route path="/dashboards" element={<DashboardsPage />} />
+          <Route path="/legends" element={<LegendsPage />} />
+          <Route path="/tooltips" element={<TooltipsPage />} />
 
-        {/* Chart types — alphabetical */}
-        <Route path="/alluvial" element={<AlluvialPage />} />
-        <Route path="/area" element={<AreaPage />} />
-        <Route path="/bar" element={<BarPage />} />
-        <Route path="/boxplot" element={<BoxplotPage />} />
-        <Route path="/bubble" element={<BubblePage />} />
-        <Route path="/bullet" element={<BulletPage />} />
-        <Route path="/choropleth" element={<ChoroplethPage />} />
-        <Route path="/circlepack" element={<CirclepackPage />} />
-        <Route path="/combo" element={<ComboPage />} />
-        <Route path="/donut" element={<DonutPage />} />
-        <Route path="/gauge" element={<GaugePage />} />
-        <Route path="/heatmap" element={<HeatmapPage />} />
-        <Route path="/histogram" element={<HistogramPage />} />
-        <Route path="/line" element={<LinePage />} />
-        <Route path="/lollipop" element={<LollipopPage />} />
-        <Route path="/meter" element={<MeterPage />} />
-        <Route path="/network-diagrams" element={<NetworkDiagramPage />} />
-        <Route path="/pie" element={<PiePage />} />
-        <Route path="/radar" element={<RadarPage />} />
-        <Route path="/scatter" element={<ScatterPage />} />
-        <Route path="/tree" element={<TreePage />} />
-        <Route path="/treemap" element={<TreemapPage />} />
-        <Route path="/wordcloud" element={<WordcloudPage />} />
+          {/* Chart types — alphabetical */}
+          <Route path="/alluvial" element={<AlluvialPage />} />
+          <Route path="/area" element={<AreaPage />} />
+          <Route path="/bar" element={<BarPage />} />
+          <Route path="/boxplot" element={<BoxplotPage />} />
+          <Route path="/bubble" element={<BubblePage />} />
+          <Route path="/bullet" element={<BulletPage />} />
+          <Route path="/choropleth" element={<ChoroplethPage />} />
+          <Route path="/circlepack" element={<CirclepackPage />} />
+          <Route path="/combo" element={<ComboPage />} />
+          <Route path="/donut" element={<DonutPage />} />
+          <Route path="/gauge" element={<GaugePage />} />
+          <Route path="/heatmap" element={<HeatmapPage />} />
+          <Route path="/histogram" element={<HistogramPage />} />
+          <Route path="/line" element={<LinePage />} />
+          <Route path="/lollipop" element={<LollipopPage />} />
+          <Route path="/meter" element={<MeterPage />} />
+          <Route path="/network-diagrams" element={<NetworkDiagramPage />} />
+          <Route path="/pie" element={<PiePage />} />
+          <Route path="/radar" element={<RadarPage />} />
+          <Route path="/scatter" element={<ScatterPage />} />
+          <Route path="/tree" element={<TreePage />} />
+          <Route path="/treemap" element={<TreemapPage />} />
+          <Route path="/wordcloud" element={<WordcloudPage />} />
 
-        {/* Extended */}
-        <Route path="/extended/sunburst" element={<SunburstPage />} />
-        <Route path="/extended/graph" element={<GraphPage />} />
-        <Route path="/extended/funnel" element={<FunnelPage />} />
-        <Route path="/extended/parallel" element={<ParallelPage />} />
-        <Route path="/extended/theme-river" element={<ThemeRiverPage />} />
-        <Route path="/extended/candlestick" element={<CandlestickPage />} />
-        <Route path="/extended/gantt" element={<GanttPage />} />
+          {/* Extended */}
+          <Route path="/extended/sunburst" element={<SunburstPage />} />
+          <Route path="/extended/graph" element={<GraphPage />} />
+          <Route path="/extended/funnel" element={<FunnelPage />} />
+          <Route path="/extended/parallel" element={<ParallelPage />} />
+          <Route path="/extended/theme-river" element={<ThemeRiverPage />} />
+          <Route path="/extended/candlestick" element={<CandlestickPage />} />
+          <Route path="/extended/gantt" element={<GanttPage />} />
 
-        {/* 404 fallback */}
-        <Route
-          path="*"
-          element={
-            <div className="content-page" style={{ padding: '2rem' }}>
-              <h1>Page not found</h1>
-              <p>The page you are looking for does not exist.</p>
-            </div>
-          }
-        />
-      </Routes>
-    </SiteLayout>
+          {/* 404 fallback */}
+          <Route
+            path="*"
+            element={
+              <div className="content-page" style={{ padding: '2rem' }}>
+                <h1>Page not found</h1>
+                <p>The page you are looking for does not exist.</p>
+              </div>
+            }
+          />
+        </Routes>
+      </SiteLayout>
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 9000 }}>
+        <IbmFooter />
+      </div>
+    </>
   )
 }
