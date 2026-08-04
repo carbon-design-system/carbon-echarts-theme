@@ -12,8 +12,8 @@ import {
 
 // Filter to test-tagged examples only
 // Carbon test order (4 test examples):
-//  [0] Histogram (linear)                       → age data, binWidth 10
-//  [1] Histogram (tooltip.alwaysShowRulerTooltip=true) → age data, binWidth 10
+//  [0] Histogram (linear)                       → age data, binWidth 5
+//  [1] Histogram (tooltip.alwaysShowRulerTooltip=true) → age data, binWidth 5
 //  [2] Histogram (defined bins number, linear)  → US$ data, binWidth 10
 //  [3] Histogram (defined bins)                 → age data, binWidth 20
 const testExamples = examples.filter((ex) => ex.tags?.includes('test'))
@@ -35,38 +35,53 @@ const titles = [
 const codeSamples = [
   `import { createHistogramOptions } from '@carbon/echarts-theme/presets'
 
-// Age dataset — each entry is a single numeric value
+// Age dataset — each entry is a single numeric observation value
 const data = [
-  { group: 'Dataset 1', value: 32 },
-  { group: 'Dataset 1', value: 32 },
-  // ... (multiple rows per bin)
+  { group: 'Dataset 1', value: 20 },
+  { group: 'Dataset 2', value: 21 },
+  // ...
 ]
 
-const option = createHistogramOptions(data, { binWidth: 10 })`,
+const option = createHistogramOptions(data, {
+  binWidth: 5,
+  xAxisLabel: 'Age',
+  yAxisLabel: 'No. of participants',
+})`,
 
   `import { createHistogramOptions } from '@carbon/echarts-theme/presets'
 
-const data = [{ group: 'Dataset 1', value: 32 }, /* ... */]
+const data = [{ group: 'Dataset 1', value: 20 }, /* ... */]
 
-const option = createHistogramOptions(data, { binWidth: 10 })
+const option = createHistogramOptions(data, {
+  binWidth: 5,
+  xAxisLabel: 'Age',
+  yAxisLabel: 'No. of participants',
+})
 // Note: Carbon Charts alwaysShowRulerTooltip — ECharts tooltip on hover only`,
 
   `import { createHistogramOptions } from '@carbon/echarts-theme/presets'
 
 // US$ millions dataset
 const data = [
-  { group: 'Dataset 1', value: 100 },
+  { group: 'Dataset 1', value: 200 },
   // ...
 ]
 
-const option = createHistogramOptions(data, { binWidth: 10 })`,
+const option = createHistogramOptions(data, {
+  binWidth: 10,
+  xAxisLabel: 'US $ (million)',
+  yAxisLabel: 'No. of transactions',
+})`,
 
   `import { createHistogramOptions } from '@carbon/echarts-theme/presets'
 
-const data = [{ group: 'Dataset 1', value: 32 }, /* ... */]
+const data = [{ group: 'Dataset 1', value: 20 }, /* ... */]
 
-// Wider bins — equivalent to Carbon Charts bins width parameter
-const option = createHistogramOptions(data, { binWidth: 20 })`,
+const option = createHistogramOptions(data, {
+  binWidth: 20,
+  xAxisLabel: 'Age',
+  yAxisLabel: 'No. of participants',
+})`,
 ]
 
 export function HistogramPage() {
