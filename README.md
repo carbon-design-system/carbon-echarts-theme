@@ -104,8 +104,6 @@ npx @carbon/echarts-codemod echarts-theme-swap ./src
 
 The site targets full parity with [charts.carbondesignsystem.com](https://charts.carbondesignsystem.com), with charts listed alphabetically. All 24 Carbon Charts types have an ECharts mapping; 7 additional ECharts-native types (Candlestick, Funnel, Gantt, Graph, Parallel, Sunburst, Theme River) are demonstrated under `/extended/*`.
 
-See [`PLAN.md`](PLAN.md) for the full chart-type mapping table and fidelity notes.
-
 ---
 
 ## Development
@@ -157,12 +155,19 @@ packages/
 
 ## Contributing
 
-This project uses [Changesets](https://github.com/changesets/changesets) for versioning.
+This project uses [Release Please](https://github.com/googleapis/release-please) for versioning and changelog generation. Releases are triggered automatically from the `main` branch based on [Conventional Commits](https://www.conventionalcommits.org).
+
+Commit messages follow the format `type(scope): subject`:
 
 ```sh
-# Create a changeset before opening a PR
-pnpm changeset
+feat(presets): add createRadarOptions helper    # minor bump
+fix(bar): correct colour assignment in bar.ts   # patch bump
+docs(readme): update contributing section       # no release
+chore(deps): update dev dependencies            # no release
 ```
+
+Valid types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`, `build`, `revert`.
+Scope is required and must be lowercase. Commitlint enforces the format on every commit via Husky.
 
 PRs trigger a preview build deployed to GitHub Pages for visual review.
 

@@ -17,7 +17,6 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "release": "changeset publish",
     "prepare": "husky"
   },
   "lint-staged": {
