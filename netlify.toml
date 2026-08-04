@@ -1,5 +1,5 @@
 [build]
-  command       = "pnpm install --frozen-lockfile && pnpm --filter @carbon/echarts-theme-site build"
+  command       = "pnpm install --frozen-lockfile && pnpm --filter @carbon/echarts-theme build && pnpm --filter @carbon/echarts-theme-site build"
   publish       = "packages/site/dist"
   base          = "."
 
@@ -10,4 +10,4 @@
 # Deploy preview for every pull request (Netlify enables this automatically,
 # but this block makes the context explicit)
 [context.deploy-preview]
-  command = "pnpm install --frozen-lockfile && pnpm --filter @carbon/echarts-theme-site build"
+  command = "pnpm install --frozen-lockfile && pnpm --filter @carbon/echarts-theme build && pnpm --filter @carbon/echarts-theme-site build"
