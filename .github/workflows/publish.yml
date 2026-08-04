@@ -2,8 +2,8 @@ name: Publish to npm
 
 on:
   push:
-    # Release Please tags packages as `packages/theme-v0.2.0`
-    tags: ['packages/theme-v*']
+    # Release Please tags packages as `theme-v0.2.0`
+    tags: ['theme-v*']
 
 jobs:
   publish:
