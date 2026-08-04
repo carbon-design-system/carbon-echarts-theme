@@ -60,7 +60,7 @@ const titles = [
   'Line (time series, rotated ticks)',
   'Line (time series, French locale) — ECharts uses browser locale',
   'Line (log axis)',
-  'Line (custom colors) — ECharts uses Carbon palette',
+  'Line (custom colors)',
   'Line (selected groups)',
   'Line (legend orientation)',
   'Line (time series, thresholds)',
@@ -73,7 +73,7 @@ const titles = [
 ]
 
 const codeSamples: string[] = [
-  // [0] Custom domain — plain line (ECharts has no custom domain API)
+  // [0] Custom domain — restrict visible x categories and y range
   `import { createLineOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -83,7 +83,12 @@ const data = [
   // ...
 ]
 
-const option = createLineOptions(data)`,
+const option = createLineOptions(data, {
+  xDomain: ['Qty', 'More', 'Misc'],
+  yDomain: [10000, 50000],
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+})`,
 
   // [1] Rotated ticks — time series with axisLabelRotate
   `import { createLineOptions } from '@carbon/echarts-theme/presets'
@@ -108,7 +113,11 @@ const data = [
 ]
 
 // Note: ECharts time axis uses browser locale; no per-chart locale API
-const option = createLineOptions(data, { timeSeries: true })`,
+const option = createLineOptions(data, {
+  timeSeries: true,
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+})`,
 
   // [3] Log axis
   `import { createLineOptions } from '@carbon/echarts-theme/presets'
@@ -122,7 +131,7 @@ const data = [
 
 const option = createLineOptions(data, { timeSeries: true, logScale: true })`,
 
-  // [4] Custom colors — ECharts limitation: palette only
+  // [4] Custom colors — per-series colorScale matching Carbon Charts color.scale
   `import { createLineOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -131,24 +140,35 @@ const data = [
   // ...
 ]
 
-// Note: ECharts colors come from the Carbon palette only; per-series custom
-// colors are not supported via createLineOptions
-const option = createLineOptions(data)`,
+const option = createLineOptions(data, {
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+  colorScale: {
+    'Dataset 1': '#925699',
+    'Dataset 2': '#525669',
+    'Dataset 3': '#725699',
+    'Dataset 4': '#ccc',
+  },
+})`,
 
-  // [5] Selected groups — Dataset 2 More = 56000; no pre-selection in ECharts
+  // [5] Selected groups — Dataset 1 + 3 visible on load; Dataset 2 + 4 hidden
   `import { createLineOptions } from '@carbon/echarts-theme/presets'
 
-// Dataset 2 'More' value differs (56000) from lineData (53200)
 const data = [
   { group: 'Dataset 1', key: 'Qty', value: 34200 },
   { group: 'Dataset 2', key: 'More', value: 56000 },
   // ...
 ]
 
-// Note: ECharts cannot pre-select/deselect series from options alone
-const option = createLineOptions(data)`,
+// selectedGroups controls which series are visible on initial render.
+// All series remain togglable via the legend.
+const option = createLineOptions(data, {
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+  selectedGroups: ['Dataset 1', 'Dataset 3'],
+})`,
 
-  // [6] Legend orientation — left vertical legend not yet implemented in ECharts preset
+  // [6] Legend orientation — vertical legend on the left
   `import { createLineOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -157,8 +177,11 @@ const data = [
   // ...
 ]
 
-// Note: left vertical legend orientation is not yet implemented in the preset
-const option = createLineOptions(data)`,
+const option = createLineOptions(data, {
+  legendPosition: 'left',
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+})`,
 
   // [7] Time series with thresholds
   `import { createLineOptions } from '@carbon/echarts-theme/presets'
@@ -173,6 +196,8 @@ const data = [
 const option = createLineOptions(data, {
   timeSeries: true,
   smooth: true,
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
   thresholds: [
     { value: 55000, label: 'Custom label' },
     { value: 10000 },
@@ -191,7 +216,10 @@ const data = [
   // ...
 ]
 
-const option = createLineOptions(data)`,
+const option = createLineOptions(data, {
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+})`,
 
   // [9] Line (discrete, standard)
   `import { createLineOptions } from '@carbon/echarts-theme/presets'
@@ -203,7 +231,10 @@ const data = [
   // ...
 ]
 
-const option = createLineOptions(data)`,
+const option = createLineOptions(data, {
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+})`,
 
   // [10] Always ruler tooltip — no always-ruler equivalent in ECharts
   `import { createLineOptions } from '@carbon/echarts-theme/presets'
@@ -215,7 +246,11 @@ const data = [
 ]
 
 // Note: Carbon Charts alwaysShowRulerTooltip — ECharts has no always-on tooltip
-const option = createLineOptions(data, { timeSeries: true, smooth: true })`,
+const option = createLineOptions(data, {
+  timeSeries: true,
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+})`,
 
   // [11] Time series
   `import { createTimeSeriesLineOptions } from '@carbon/echarts-theme/presets'
@@ -227,7 +262,11 @@ const data = [
   // ...
 ]
 
-const option = createTimeSeriesLineOptions(data, { smooth: true })`,
+const option = createTimeSeriesLineOptions(data, {
+  smooth: true,
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+})`,
 
   // [12] Time series dense — sub-daily ISO timestamps
   `import { createTimeSeriesLineOptions } from '@carbon/echarts-theme/presets'
@@ -239,7 +278,11 @@ const data = [
   // ...
 ]
 
-const option = createTimeSeriesLineOptions(data, { smooth: true })`,
+const option = createTimeSeriesLineOptions(data, {
+  smooth: true,
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+})`,
 
   // [13] Dual axis — Rainfall on secondary (right) Y axis
   `import { createTimeSeriesLineOptions } from '@carbon/echarts-theme/presets'
@@ -254,6 +297,8 @@ const data = [
 const option = createTimeSeriesLineOptions(data, {
   smooth: true,
   secondaryGroups: ['Rainfall'],
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
 })`,
 ]
 

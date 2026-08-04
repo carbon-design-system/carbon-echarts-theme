@@ -1,8 +1,11 @@
 import type { EChartsOption, SeriesOption } from 'echarts'
-import { groupByGroup, pickColors } from './_transform'
+import { groupByGroup, groupSparse, pickColors } from './_transform'
 import type { ChartTabularData } from './_transform'
 
-const GRID = { top: 48, bottom: 56, left: 48, right: 24, containLabel: true } as const
+const GRID = { top: 48, bottom: 56, left: 48, right: 24, containLabel: true }
+// Extra grid offset reserved for a vertical legend panel on the left or right.
+// Carbon Charts allocates ~120px for the legend column; we use the same value.
+const LEGEND_SIDE_WIDTH = 120
 
 // ── Line preset ───────────────────────────────────────────────────────────────
 
@@ -56,6 +59,22 @@ export interface LinePresetOptions {
   legendPosition?: 'top' | 'bottom' | 'left' | 'right'
   /** Chart title text */
   title?: string
+  /** X-axis title label (maps to Carbon Charts axes.bottom.title) */
+  xAxisTitle?: string
+  /** Y-axis title label (maps to Carbon Charts axes.left.title) */
+  yAxisTitle?: string
+  /**
+   * Per-series custom colors (maps to Carbon Charts color.scale).
+   * Keys are group names, values are CSS color strings.
+   * When provided, overrides the automatic palette for any matched series.
+   */
+  colorScale?: Record<string, string>
+  /**
+   * Series names that should be visible on initial render (maps to Carbon Charts
+   * data.selectedGroups). All other series start hidden but are togglable via
+   * the legend. When omitted all series are visible.
+   */
+  selectedGroups?: string[]
   /** Color scheme for palette selection ('light' or 'dark'). Default: 'light' */
   colorScheme?: 'light' | 'dark'
 }
@@ -82,15 +101,22 @@ export function createLineOptions(
     yDomain,
     legendPosition,
     title,
+    xAxisTitle,
+    yAxisTitle,
+    colorScale,
+    selectedGroups,
     colorScheme = 'light',
   } = opts
 
   const xField = timeSeries ? 'date' : 'key'
-  const { groups, categories } = groupByGroup(data, xField)
+  const { groups, categories } = timeSeries ? groupSparse(data) : groupByGroup(data, xField)
 
   const hasDualAxis = secondaryGroups.length > 0
 
-  const colors = pickColors(groups.length, colorScheme)
+  const paletteColors = pickColors(groups.length, colorScheme)
+  const colors = groups.map((g, i) =>
+    colorScale && colorScale[g.name] ? colorScale[g.name] : paletteColors[i],
+  )
 
   // If xDomain is a category filter (string[]), determine which category indices to keep
   const xCategoryFilter =
@@ -112,7 +138,20 @@ export function createLineOptions(
     // For time-series x-axis, ECharts needs [date, value] pairs.
     // groupByGroup stores the category label in `name`; re-pair it with the numeric value.
     // When xDomain is a category filter, keep only the matching data points.
-    const rawData = xCategoryFilter ? g.data.filter((d) => xCategoryFilter.has(d.name)) : g.data
+    // When yDomain is set, null out values outside [min, max] so ECharts clips them
+    // the same way Carbon Charts does (no line drawn through out-of-range points).
+    const filteredData = xCategoryFilter
+      ? g.data.filter((d) => xCategoryFilter.has(d.name))
+      : g.data
+    const rawData = yDomain
+      ? filteredData.map((d) => ({
+          ...d,
+          value:
+            typeof d.value === 'number' && (d.value < yDomain[0] || d.value > yDomain[1])
+              ? null
+              : d.value,
+        }))
+      : filteredData
     const seriesData = timeSeries ? rawData.map((d) => [d.name, d.value as number]) : rawData
 
     return {
@@ -120,7 +159,7 @@ export function createLineOptions(
       name: g.name,
       data: seriesData,
       smooth,
-      connectNulls: true,
+      connectNulls: false,
       itemStyle: { color: colors[i] },
       lineStyle: { color: colors[i] },
       ...(step !== undefined ? { step: step === true ? 'start' : step } : {}),
@@ -129,15 +168,31 @@ export function createLineOptions(
     }
   })
 
+  // Category axis labels: always show every tick (interval:0), rotate if requested,
+  // and truncate long labels to match Carbon Charts' overflow:'truncate' behaviour.
+  const xAxisLabel = {
+    axisLabel: {
+      interval: 0,
+      overflow: 'truncate' as const,
+      width: 80,
+      ...(axisLabelRotate !== undefined ? { rotate: axisLabelRotate } : {}),
+    },
+  }
+  const xAxisTitleOpt = xAxisTitle
+    ? { name: xAxisTitle, nameLocation: 'middle' as const, nameGap: 40 }
+    : {}
+  const yAxisTitleOpt = yAxisTitle
+    ? { name: yAxisTitle, nameLocation: 'middle' as const, nameRotate: 90, nameGap: 50 }
+    : {}
+
   const yAxisBase = {
     type: logScale ? ('log' as const) : ('value' as const),
     ...(yDomain ? { min: yDomain[0], max: yDomain[1] } : {}),
+    ...yAxisTitleOpt,
   }
   const yAxis = hasDualAxis
     ? [yAxisBase, { type: 'value' as const, splitLine: { show: false } }]
     : yAxisBase
-
-  const xAxisLabel = axisLabelRotate !== undefined ? { axisLabel: { rotate: axisLabelRotate } } : {}
 
   // xDomain: for category axis restrict visible categories; for time/value set min/max
   const xDomainExtra =
@@ -148,21 +203,35 @@ export function createLineOptions(
       : {}
 
   // legend position: carbon default is bottom; map to echarts legend placement
-  const legendOpt =
+  const legendBase =
     legendPosition === 'left' || legendPosition === 'right'
       ? { type: 'scroll' as const, orient: 'vertical' as const, [legendPosition]: 0, top: 'middle' }
       : legendPosition === 'top'
         ? { type: 'scroll' as const, top: 0 }
         : { type: 'scroll' as const, bottom: 0 }
 
+  // Pre-select only the listed groups — all others start hidden (matches Carbon
+  // Charts data.selectedGroups). When selectedGroups is omitted every series is shown.
+  const legendSelected = selectedGroups
+    ? Object.fromEntries(groups.map((g) => [g.name, selectedGroups.includes(g.name)]))
+    : undefined
+
+  const legendOpt = legendSelected ? { ...legendBase, selected: legendSelected } : legendBase
+
+  const grid = {
+    ...GRID,
+    ...(legendPosition === 'left' ? { left: GRID.left + LEGEND_SIDE_WIDTH } : {}),
+    ...(legendPosition === 'right' ? { right: GRID.right + LEGEND_SIDE_WIDTH } : {}),
+  }
+
   return {
     ...(title ? { title: { text: title } } : {}),
     tooltip: { trigger: 'axis' },
     legend: legendOpt,
-    grid: GRID,
+    grid,
     xAxis: timeSeries
-      ? { type: 'time', ...xAxisLabel, ...xDomainExtra }
-      : { type: 'category', data: categories, ...xAxisLabel, ...xDomainExtra },
+      ? { type: 'time', ...xAxisLabel, ...xAxisTitleOpt, ...xDomainExtra }
+      : { type: 'category', data: categories, ...xAxisLabel, ...xAxisTitleOpt, ...xDomainExtra },
     yAxis,
     series,
   }

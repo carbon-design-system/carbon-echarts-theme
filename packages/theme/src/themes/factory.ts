@@ -51,6 +51,12 @@ export function buildTheme(t: CarbonChartTokens, palettes: CarbonPalettes) {
 
     // ── Legend ───────────────────────────────────────────────────────
     legend: {
+      // Rounded-rect checkbox — matches Carbon Charts' colored checkbox legend icon.
+      // ECharts fills this path with the series color when active and inactiveColor
+      // when toggled off, giving the colored-checkbox → grey-outline behaviour.
+      icon: 'path://M2,0 L14,0 Q16,0 16,2 L16,14 Q16,16 14,16 L2,16 Q0,16 0,14 L0,2 Q0,0 2,0 Z',
+      itemWidth: 16,
+      itemHeight: 16,
       textStyle: {
         fontSize: 12,
         color: t.textSecondary,
@@ -58,7 +64,7 @@ export function buildTheme(t: CarbonChartTokens, palettes: CarbonPalettes) {
       pageTextStyle: {
         color: t.textSecondary,
       },
-      inactiveColor: t.textDisabled,
+      inactiveColor: t.borderSubtle01,
     },
 
     // ── Tooltip ──────────────────────────────────────────────────────

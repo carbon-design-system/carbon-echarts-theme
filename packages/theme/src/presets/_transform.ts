@@ -103,6 +103,33 @@ export function groupByGroup(
   return { groups, categories }
 }
 
+/**
+ * Group time-series data by group name without null-padding missing dates.
+ *
+ * Unlike `groupByGroup`, this produces sparse per-series arrays — each series
+ * only contains its own actual data points as `[date, value]`-ready entries.
+ * ECharts' time axis handles sparse series natively, so no null padding is needed
+ * and `connectNulls: false` won't produce isolated dots from padded holes.
+ *
+ * Explicit `null` values in the source data ARE preserved so that intentional
+ * gaps (e.g. `value: null`) still break the line.
+ */
+export function groupSparse(data: ChartTabularData): TransformResult {
+  const map = new Map<string, GroupedSeriesDatum[]>()
+
+  for (const d of data) {
+    if (!map.has(d.group)) map.set(d.group, [])
+    const raw = d.date ?? d.key
+    const name = raw instanceof Date ? raw.toISOString() : String(raw ?? '')
+    map
+      .get(d.group)!
+      .push({ name, value: Array.isArray(d.value) ? null : (d.value as number | null) })
+  }
+
+  const groups: GroupedSeries[] = [...map.entries()].map(([name, data]) => ({ name, data }))
+  return { groups, categories: [] }
+}
+
 // ── N-color palette selection ─────────────────────────────────────────────────
 
 /**

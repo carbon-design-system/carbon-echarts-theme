@@ -249,6 +249,8 @@ const frenchLocaleData = [
 export const lineDiscrete: EChartsOption = createLineOptions(lineData, {
   xDomain: ['Qty', 'More', 'Misc'],
   yDomain: [10000, 50000],
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
 })
 
 /** [1] Rotated ticks — xAxis.axisLabel.rotate: -45 */
@@ -261,33 +263,50 @@ export const lineRotatedTicks: EChartsOption = createLineOptions(rotatedTicksDat
  * [2] French locale — ECharts limitation: no per-chart locale API.
  * Rendered as a standard time-series line using the same data.
  */
-export const lineLocale: EChartsOption = createLineOptions(frenchLocaleData, { timeSeries: true })
+export const lineLocale: EChartsOption = createLineOptions(frenchLocaleData, {
+  timeSeries: true,
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+})
 
-/** [3] Log axis */
+/** [3] Log axis — no axis titles in the Carbon Charts original */
 export const lineLogAxis: EChartsOption = createLineOptions(logAxisData, {
   timeSeries: true,
   logScale: true,
 })
 
-/** [4] Custom colors — ECharts limitation: colors come from pickColors() palette only. */
-export const lineCustomColors: EChartsOption = createLineOptions(lineData)
+/** [4] Custom colors — per-series color scale matching Carbon Charts color.scale */
+export const lineCustomColors: EChartsOption = createLineOptions(lineData, {
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+  colorScale: {
+    'Dataset 1': '#925699',
+    'Dataset 2': '#525669',
+    'Dataset 3': '#725699',
+    'Dataset 4': '#ccc',
+  },
+})
 
-/**
- * [5] Selected groups — uses lineSelectedGroupsData (Dataset 2 More = 56000).
- * ECharts limitation: initial per-series visibility cannot be pre-configured from
- * options alone — all 4 series are rendered visible. Carbon pre-selects 1 + 3.
- */
-export const lineSelectedGroups: EChartsOption = createLineOptions(lineSelectedGroupsData)
+/** [5] Selected groups — Dataset 1 + 3 visible on load; Dataset 2 + 4 start hidden */
+export const lineSelectedGroups: EChartsOption = createLineOptions(lineSelectedGroupsData, {
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+  selectedGroups: ['Dataset 1', 'Dataset 3'],
+})
 
 /** [6] Legend orientation — vertical legend on the left (matches Carbon LegendPositions.LEFT + VERTICAL) */
 export const lineLegendOrientation: EChartsOption = createLineOptions(lineData, {
   legendPosition: 'left',
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
 })
 
 /** [7] Time series with thresholds — Y thresholds at 55000 and 10000 */
 export const lineThresholds: EChartsOption = createLineOptions(timeSeriesData, {
   timeSeries: true,
   smooth: true,
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
   thresholds: [{ value: 55000, label: 'Custom label' }, { value: 10000 }],
 })
 
@@ -296,10 +315,16 @@ export const lineThresholds: EChartsOption = createLineOptions(timeSeriesData, {
  * 'LongLabelShouldBeTruncated' group name. ECharts truncates long axis labels
  * automatically via axisLabel.overflow:'truncate'.
  */
-export const lineLongLabel: EChartsOption = createLineOptions(lineLongLabelData)
+export const lineLongLabel: EChartsOption = createLineOptions(lineLongLabelData, {
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+})
 
 /** [9] Line (discrete, standard) */
-export const lineStandard: EChartsOption = createLineOptions(lineData)
+export const lineStandard: EChartsOption = createLineOptions(lineData, {
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
+})
 
 /**
  * [10] Always show ruler tooltip — ECharts limitation: no alwaysShowRulerTooltip.
@@ -307,17 +332,22 @@ export const lineStandard: EChartsOption = createLineOptions(lineData)
  */
 export const lineAlwaysRuler: EChartsOption = createLineOptions(timeSeriesData, {
   timeSeries: true,
-  smooth: true,
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
 })
 
 /** [11] Time series */
 export const lineTimeSeries: EChartsOption = createTimeSeriesLineOptions(timeSeriesData, {
   smooth: true,
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
 })
 
 /** [12] Time series dense */
 export const lineTimeSeriesDense: EChartsOption = createTimeSeriesLineOptions(timeSeriesDenseData, {
   smooth: true,
+  xAxisTitle: '2023 Annual Sales Figures',
+  yAxisTitle: 'Conversion rate',
 })
 
 /** [13] Dual axis — Rainfall on secondary (right) Y axis */
