@@ -9,7 +9,7 @@ on:
         type: string
 
 jobs:
-  cut:
+  tag-release:
     runs-on: ubuntu-latest
     if: github.repository == 'carbon-design-system/carbon-echarts-theme'
     permissions:
@@ -32,6 +32,11 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
+      - name: Install git-cliff
+        uses: taiki-e/install-action@67729d5c413db75907f0ad1e39bb04b9c868ff60 # v2.85.7
+        with:
+          tool: git-cliff@2.9.1
+
       - name: Bump package version
         run: |
           cd packages/theme
@@ -40,18 +45,20 @@ jobs:
       - name: Update CHANGELOG.md
         run: |
           VERSION="${{ inputs.version }}"
-          DATE=$(date -u +%Y-%m-%d)
-          TAG_URL="https://github.com/${{ github.repository }}/releases/tag/v${VERSION}"
-          HEADER="## [${VERSION}](${TAG_URL}) (${DATE})"
+          PREV_TAG=$(git tag --sort=-version:refname | grep -v "^v${VERSION}$" | head -1)
+
+          # Generate the entry for this version from commits since the previous tag
+          if [ -n "$PREV_TAG" ]; then
+            ENTRY=$(git cliff "${PREV_TAG}..HEAD" --tag "v${VERSION}" --strip all)
+          else
+            ENTRY=$(git cliff --tag "v${VERSION}" --strip all)
+          fi
 
           if [ -f CHANGELOG.md ]; then
-            # Insert new entry after the first line (title)
-            sed -i "1a\\
-          \\
-          ${HEADER}
-          " CHANGELOG.md
+            # Prepend new entry below the title line
+            printf '%s\n' "$(head -1 CHANGELOG.md)" "" "$ENTRY" "$(tail -n +2 CHANGELOG.md)" > CHANGELOG.md
           else
-            printf "# Changelog\n\n${HEADER}\n" > CHANGELOG.md
+            printf '# Changelog\n\n%s\n' "$ENTRY" > CHANGELOG.md
           fi
 
       - name: Commit and push
