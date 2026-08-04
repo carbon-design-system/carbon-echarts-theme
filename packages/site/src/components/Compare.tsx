@@ -36,6 +36,14 @@ export function Compare({
   const [codeCopied, setCodeCopied] = React.useState(false)
   const [showCarbon, setShowCarbon] = React.useState(false)
 
+  // Mirror the Carbon Charts height when provided, so sparklines and other
+  // size-constrained charts render at the same height as their Carbon equivalent.
+  const carbonHeight =
+    carbonExample?.options && 'height' in carbonExample.options
+      ? (carbonExample.options as { height?: string }).height
+      : undefined
+  const chartHeight = fullscreen ? 'calc(100vh - 32px)' : (carbonHeight ?? '320px')
+
   const canCompare = !extended && !!carbonExample && !!chartClass
 
   // Close fullscreen on Escape
@@ -79,7 +87,7 @@ export function Compare({
             ref={echartsRef}
             option={echartsOption}
             theme={echartsTheme}
-            style={{ height: fullscreen ? 'calc(100vh - 32px)' : '320px', width: '100%' }}
+            style={{ height: chartHeight, width: '100%' }}
             opts={{ renderer: 'canvas' }}
             onChartReady={(instance: EChartsType) => setChartInstance(instance)}
           />
