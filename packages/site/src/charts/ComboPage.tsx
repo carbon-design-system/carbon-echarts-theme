@@ -15,53 +15,30 @@ import {
   comboStackedAreaLine,
   comboScatterLine,
   comboAreaLineTimeSeries,
+  comboEmpty,
+  comboLoading,
 } from '../data/echarts/combo'
 
-// Filter to test-tagged examples only
-// Carbon test order (11 test examples):
-//  [0]  comboSimpleOptions          → bar + line
-//  [1]  comboAlwaysRulerTooltipOptions → bar + line
-//  [2]  comboStackedOptions         → stacked bar + line
-//  [3]  comboGroupedOptions         → grouped bar + line
-//  [4]  comboSimpleFloatingOptions  → floating bar + line
-//  [5]  comboGroupedHorizontalOptions → grouped horizontal
-//  [6]  comboHorizontalOptions      → horizontal bar + line
-//  [7]  comboAreaLineOptions        → area + line
-//  [8]  comboStackedAreaLineOptions → stacked area + line
-//  [9]  comboLineScatterOptions     → line + scatter
-//  [10] comboAreaLineTimeSeriesOptions → area + line time series
-const testExamples = examples.filter((ex) => ex.tags?.includes('test'))
+const titles = examples.map((example) => example.options.title)
 
 const echartsOptions = [
-  comboBarLine, // [0] bar + line
-  comboBarLineRuler, // [1] tooltip variant (same visual)
-  comboStackedBarLine, // [2] stacked bar + line
-  comboGroupedLine, // [3] grouped bar + line
-  comboFloatingLine, // [4] floating bar + line
-  comboGroupedHorizontal, // [5] grouped horizontal bar + line
-  comboHorizontalLine, // [6] horizontal bar + line
-  comboAreaLine, // [7] area + line
-  comboStackedAreaLine, // [8] stacked area + line
-  comboScatterLine, // [9] bar + scatter + line
-  comboAreaLineTimeSeries, // [10] area + line time series
-]
-
-const titles = [
-  'Combo (bar + line)',
-  'Combo (always show ruler tooltip)',
-  'Combo (stacked bar + line)',
-  'Combo (grouped bar + line)',
-  'Combo (floating bar + line)',
-  'Combo (grouped horizontal)',
-  'Combo (horizontal bar + line)',
-  'Combo (area + line)',
-  'Combo (stacked area + line)',
-  'Combo (line + scatter)',
-  'Combo (area + line, time series)',
+  comboBarLine,
+  comboBarLineRuler,
+  comboStackedBarLine,
+  comboGroupedLine,
+  comboFloatingLine,
+  comboGroupedHorizontal,
+  comboHorizontalLine,
+  comboAreaLine,
+  comboStackedAreaLine,
+  comboStackedAreaLine,
+  comboScatterLine,
+  comboAreaLineTimeSeries,
+  comboEmpty,
+  comboLoading,
 ]
 
 const codeSamples: string[] = [
-  // [0] Bar + line (dual Y)
   `import { createComboOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -78,7 +55,6 @@ const option = createComboOptions(data, {
   secondaryGroups: ['Temperature'],
 })`,
 
-  // [1] Bar + line — tooltip variant (same data and options as [0])
   `import { createComboOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -87,14 +63,13 @@ const data = [
   // ...
 ]
 
-// Note: Carbon Charts alwaysShowRulerTooltip — ECharts: tooltip on hover only
+// Note: Carbon Charts alwaysShowRulerTooltip — ECharts shows the axis tooltip on hover.
 const option = createComboOptions(data, {
   xField: 'date',
   lineGroups: ['Temperature'],
   secondaryGroups: ['Temperature'],
 })`,
 
-  // [2] Stacked bar + line (dual Y)
   `import { createComboOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -111,7 +86,6 @@ const option = createComboOptions(data, {
   stacked: true,
 })`,
 
-  // [3] Grouped bar + line (dual Y, with negatives)
   `import { createComboOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -127,7 +101,6 @@ const option = createComboOptions(data, {
   secondaryGroups: ['Temperature'],
 })`,
 
-  // [4] Floating bar + line
   `import { createComboOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -145,7 +118,6 @@ const option = createComboOptions(data, {
   secondaryGroups: ['Temperature'],
 })`,
 
-  // [5] Grouped horizontal bar + line
   `import { createComboOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -162,7 +134,6 @@ const option = createComboOptions(data, {
   secondaryGroups: ['Temperature'],
 })`,
 
-  // [6] Horizontal bar + line
   `import { createComboOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -179,7 +150,6 @@ const option = createComboOptions(data, {
   secondaryGroups: ['Temperature'],
 })`,
 
-  // [7] Area + line (dual Y)
   `import { createComboOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -196,7 +166,6 @@ const option = createComboOptions(data, {
   secondaryGroups: ['Temperature'],
 })`,
 
-  // [8] Stacked area + line (time series, dual Y)
   `import { createComboOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -219,7 +188,29 @@ const option = createComboOptions(data, {
   secondaryGroups: ['Temperature'],
 })`,
 
-  // [9] Scatter + line (dual Y)
+  `import { createComboOptions } from '@carbon/echarts-theme/presets'
+
+const data = [
+  { group: 'Dataset 1 with a very long name', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 2 with a very long name', date: '2023-01-01', value: 20000 },
+  { group: 'Dataset 3 with a very long name', date: '2023-01-01', value: 30000 },
+  { group: 'Temperature', date: '2023-01-01', value: 77 },
+  // ...
+]
+
+// Carbon changes only legend presentation here; the ECharts preset input stays the same.
+const option = createComboOptions(data, {
+  timeSeries: true,
+  areaGroups: [
+    'Dataset 1 with a very long name',
+    'Dataset 2 with a very long name',
+    'Dataset 3 with a very long name',
+  ],
+  stacked: true,
+  lineGroups: ['Temperature'],
+  secondaryGroups: ['Temperature'],
+})`,
+
   `import { createComboOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -236,7 +227,6 @@ const option = createComboOptions(data, {
   secondaryGroups: ['Avg Temperature', 'Paris', 'Marseille'],
 })`,
 
-  // [10] Area + line (time series, dual Y)
   `import { createComboOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -254,6 +244,28 @@ const option = createComboOptions(data, {
   lineGroups: ['Temperature'],
   secondaryGroups: ['Temperature'],
 })`,
+
+  `import { createComboOptions } from '@carbon/echarts-theme/presets'
+
+const option = createComboOptions([], {
+  title: 'Combo Chart (empty)',
+})`,
+
+  `import { createComboOptions } from '@carbon/echarts-theme/presets'
+import { showSkeleton } from '@carbon/echarts-theme/skeleton'
+
+const option = createComboOptions([], {
+  title: 'Combo Chart (loading)',
+  loading: true,
+})
+
+const hide = showSkeleton(chartContainerEl, 'white')
+
+// call hide() once your data has loaded
+fetchData().then((data) => {
+  setData(data)
+  hide()
+})`,
 ]
 
 export function ComboPage() {
@@ -262,7 +274,7 @@ export function ComboPage() {
       title="Combo"
       description="Combine bar and line series in the same chart area."
       overview={<ComboMdx />}
-      examples={testExamples.map((ex, i) => (
+      examples={examples.map((ex, i) => (
         <Compare
           key={i}
           title={titles[i] ?? `Example ${i + 1}`}
@@ -270,6 +282,7 @@ export function ComboPage() {
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
           echartsCode={codeSamples[i]}
+          showLoading={i === 13}
         />
       ))}
     />

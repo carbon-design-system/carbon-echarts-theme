@@ -8,6 +8,12 @@ const GRID = { top: 48, bottom: 56, left: 48, right: 24, containLabel: true } as
 
 export interface ComboPresetOptions {
   /**
+   * Return an empty chart option for use with an external loading skeleton overlay.
+   * Equivalent to Carbon Charts `data: { loading: true }` when paired with
+   * `showSkeleton()` from `@carbon/echarts-theme/skeleton`.
+   */
+  loading?: boolean
+  /**
    * Series names that should render as line series.
    * All other groups default to bar (unless listed in areaGroups / scatterGroups).
    */
@@ -76,7 +82,20 @@ export function createComboOptions(
     timeSeries = false,
     colorScheme = 'light',
     title,
+    loading = false,
   } = opts
+
+  if (loading) {
+    return {
+      ...(title ? { title: { text: title } } : {}),
+      tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+      legend: { type: 'scroll', bottom: 0 },
+      grid: GRID,
+      xAxis: { type: 'category', data: [] },
+      yAxis: { type: 'value' },
+      series: [],
+    }
+  }
 
   const xField = opts.xField ?? (timeSeries ? 'date' : 'key')
 

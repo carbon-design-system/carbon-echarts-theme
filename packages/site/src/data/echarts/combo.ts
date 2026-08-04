@@ -290,3 +290,12 @@ export const comboAreaLineTimeSeries: EChartsOption = createComboOptions(areaLin
   lineGroups: ['Temperature'],
   secondaryGroups: ['Temperature'],
 })
+
+export const comboEmpty: EChartsOption = createComboOptions([], {
+  title: 'Combo Chart (empty)',
+})
+
+export const comboLoading: EChartsOption = createComboOptions([], {
+  title: 'Combo Chart (loading)',
+  loading: true,
+})

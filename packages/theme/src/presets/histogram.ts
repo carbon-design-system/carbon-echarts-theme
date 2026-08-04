@@ -25,9 +25,10 @@ export interface HistogramPresetOptions {
  * Build an ECharts option object for histogram charts.
  *
  * Carbon Charts `HistogramChart` equivalent.
- * Uses a gapless bar series (`barCategoryGap: '1%'`) to simulate histogram bins.
- * Accepts either pre-binned data (key = bin label, value = count) or raw
- * value data that is auto-bucketed when `binWidth` is provided.
+ * Uses a gapless bar series (`barCategoryGap: '0%'`) on a category axis
+ * whose labels represent bin start values. An extra label for the closing
+ * boundary is appended so the final tick matches Carbon Charts' x-axis.
+ * The axis tick is un-aligned from the label so ticks fall on bin boundaries.
  * Multi-group data is rendered as stacked bars, matching Carbon Charts behaviour.
  */
 export function createHistogramOptions(
@@ -50,6 +51,8 @@ export function createHistogramOptions(
   let categories: string[]
   // groupCounts[groupName][binIndex] = count
   const groupCounts: Record<string, number[]> = {}
+  // The closing boundary label (one past the last bin) for the x-axis
+  let closingBoundary: string | undefined
 
   if (binWidth !== undefined && binWidth > 0) {
     // Auto-bucket raw values per group
@@ -61,6 +64,9 @@ export function createHistogramOptions(
     for (let b = min; b < max; b += binWidth) binKeys.push(b)
 
     categories = binKeys.map((k) => String(k))
+    // Append the closing boundary as an extra label so the last tick matches
+    // Carbon Charts' x-axis which shows binStart…binEnd for every bin.
+    closingBoundary = String(max)
 
     // Initialise all groups with zero counts
     for (const g of groupOrder) {
@@ -83,21 +89,37 @@ export function createHistogramOptions(
 
   const colors = pickColors(groupOrder.length)
 
+  // Append a zero-count placeholder for the closing boundary tick so every
+  // real data bar aligns with the bin-start label and the last tick shows the
+  // bin end — matching Carbon Charts' histogram x-axis layout.
+  const xAxisCategories = closingBoundary ? [...categories, closingBoundary] : categories
+
   const series = groupOrder.map((g, i) => ({
     name: g,
     type: 'bar' as const,
     stack: 'total',
-    data: groupCounts[g],
-    barCategoryGap: '1%', // near-zero gap → histogram look
+    // Each series has one fewer data point than xAxisCategories (the closing
+    // boundary label has no bar). Push a null placeholder to keep alignment.
+    data: closingBoundary ? [...groupCounts[g], null] : groupCounts[g],
+    // barCategoryGap: '0%' removes all inter-category spacing so adjacent bins
+    // touch each other — the defining visual trait of a histogram.
+    barCategoryGap: '0%',
     itemStyle: { color: colors[i] },
   }))
 
   return {
     ...(title ? { title: { text: title } } : {}),
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-    legend: groupOrder.length > 1 ? { top: 'bottom' } : undefined,
+    legend: groupOrder.length > 1 ? { bottom: 0 } : undefined,
     grid: GRID,
-    xAxis: { type: 'category', data: categories },
+    xAxis: {
+      type: 'category',
+      data: xAxisCategories,
+      // alignWithLabel: false places tick marks at category boundaries rather
+      // than at category centers, so each tick aligns with a bin edge —
+      // matching Carbon Charts' continuous-scale histogram appearance.
+      axisTick: { alignWithLabel: false },
+    },
     yAxis: { type: 'value' },
     series,
   }
