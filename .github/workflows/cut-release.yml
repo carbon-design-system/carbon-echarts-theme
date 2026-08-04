@@ -1,0 +1,68 @@
+name: Cut release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g. 0.2.0)'
+        required: true
+        type: string
+
+jobs:
+  cut:
+    runs-on: ubuntu-latest
+    if: github.repository == 'carbon-design-system/carbon-echarts-theme'
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validate semver input
+        run: |
+          if ! echo "${{ inputs.version }}" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?$'; then
+            echo "::error::Invalid version '${{ inputs.version }}' — must be semver (e.g. 0.2.0 or 0.2.0-rc.1)"
+            exit 1
+          fi
+
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Bump package version
+        run: |
+          cd packages/theme
+          npm version "${{ inputs.version }}" --no-git-tag-version
+
+      - name: Update CHANGELOG.md
+        run: |
+          VERSION="${{ inputs.version }}"
+          DATE=$(date -u +%Y-%m-%d)
+          TAG_URL="https://github.com/${{ github.repository }}/releases/tag/v${VERSION}"
+          HEADER="## [${VERSION}](${TAG_URL}) (${DATE})"
+
+          if [ -f CHANGELOG.md ]; then
+            # Insert new entry after the first line (title)
+            sed -i "1a\\
+          \\
+          ${HEADER}
+          " CHANGELOG.md
+          else
+            printf "# Changelog\n\n${HEADER}\n" > CHANGELOG.md
+          fi
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add packages/theme/package.json CHANGELOG.md
+          git commit -m "chore(release): v${{ inputs.version }}"
+          git push origin main
+
+      - name: Create and push tag
+        run: |
+          git tag "v${{ inputs.version }}"
+          git push origin "v${{ inputs.version }}"
