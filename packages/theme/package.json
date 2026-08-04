@@ -29,6 +29,11 @@
       "import": "./dist/presets/index.js",
       "require": "./dist/presets/index.cjs"
     },
+    "./skeleton": {
+      "types": "./dist/skeleton.d.ts",
+      "import": "./dist/skeleton.js",
+      "require": "./dist/skeleton.cjs"
+    },
     "./themes/*": {
       "types": "./dist/themes/*.d.ts",
       "import": "./dist/themes/*.js",

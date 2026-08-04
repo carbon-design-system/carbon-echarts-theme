@@ -35,7 +35,7 @@ const echartsOptions = [
   areaNaturalCurve, // [4] Natural curve area
   areaBounded, // [5] Bounded highlights (ECharts limitation: approximated as stacked)
   areaZoombar, // [6] Area with zoombar
-  areaSkeleton, // [7] Skeleton (ECharts limitation: no skeleton state)
+  areaSkeleton, // [7] Skeleton / loading state (showLoading)
 ]
 
 const titles = [
@@ -46,7 +46,7 @@ const titles = [
   'Natural curve area',
   'Bounded area — ECharts: approximated as stacked',
   'Area with zoombar',
-  'Area (skeleton) — ECharts: no skeleton state',
+  'Area (skeleton)',
 ]
 
 const codeSamples = [
@@ -67,15 +67,15 @@ const data = [/* time series data */]
 const option = createAreaOptions(data, { timeSeries: true })
 // Note: Carbon Charts alwaysShowRulerTooltip — ECharts: tooltip on hover only`,
 
-  `import { createAreaOptions } from '@carbon/echarts-theme/presets'
+  `import { createSparklineOptions } from '@carbon/echarts-theme/presets'
 
 // Sparkline — minimal area chart with no axes
 const data = [
-  { group: 'Dataset 1', date: '2023-01-01T00:00:00.000Z', value: 10000 },
+  { group: 'Dataset 1', date: '2019-05-21T19:21:00.000Z', value: 2 },
   // ... 30 ISO-timestamp rows
 ]
 
-const option = createAreaOptions(data, { timeSeries: true, sparkline: true })`,
+const option = createSparklineOptions(data, { area: true, timeSeries: true })`,
 
   `import { createAreaOptions } from '@carbon/echarts-theme/presets'
 
@@ -94,15 +94,21 @@ const data = [{ group: 'Dataset 1', key: 'Qty', value: 10000 }, /* ... */]
 
 const option = createAreaOptions(data, { smooth: true })`,
 
-  `import { createStackedAreaOptions } from '@carbon/echarts-theme/presets'
+  `import { createBoundedAreaOptions } from '@carbon/echarts-theme/presets'
 
-// Bounded highlights — approximated as stacked area (ECharts limitation)
+// Bounded area with highlights — min/max envelope + markArea for x-axis bands
 const data = [
-  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-01', value: 47263, min: 40000, max: 50000 },
   // ...
 ]
 
-const option = createStackedAreaOptions(data, { timeSeries: true })`,
+const option = createBoundedAreaOptions(data, {
+  timeSeries: true,
+  smooth: true,
+  highlights: [
+    { start: '2023-01-03', end: '2023-01-08', label: 'Custom formatter' },
+  ],
+})`,
 
   `import { createAreaOptions } from '@carbon/echarts-theme/presets'
 
@@ -111,9 +117,16 @@ const data = [{ group: 'Dataset 1', date: '2023-01-01', value: 10000 }, /* ... *
 // dataZoom adds a scrollbar — matches Carbon Charts zoomBar
 const option = createAreaOptions(data, { timeSeries: true, dataZoom: true })`,
 
-  `// Carbon Charts: data: { loading: true }
-// ECharts: call chart.showLoading() on the instance
-chart.showLoading()`,
+  `import { showSkeleton } from '@carbon/echarts-theme/skeleton'
+
+// showSkeleton(el, theme?) overlays the shimmer grid and returns a cleanup fn
+const hide = showSkeleton(chartContainerEl, 'white')
+
+// call hide() once your data has loaded
+fetchData().then(data => {
+  setData(data)
+  hide()
+})`,
 ]
 
 export function AreaPage() {
@@ -130,6 +143,7 @@ export function AreaPage() {
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
           echartsCode={codeSamples[i]}
+          showLoading={i === 7}
         />
       ))}
     />

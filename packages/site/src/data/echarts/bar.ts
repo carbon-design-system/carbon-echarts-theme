@@ -108,6 +108,12 @@ export const barFloatingHorizontal: EChartsOption = createFloatingBarOptions(
   { horizontal: true },
 )
 
+/** [12] Japanese locale — date axis labels formatted in ja-JP */
+export const barJapaneseLocale: EChartsOption = createBarOptions(timeSeriesData, {
+  xField: 'date',
+  locale: 'ja-JP',
+})
+
 /** [7] Custom domain — Y axis clamped to [-100000, 100000] */
 export const barCustomDomain: EChartsOption = createBarOptions(simpleBarData, {
   yDomain: [-100000, 100000],

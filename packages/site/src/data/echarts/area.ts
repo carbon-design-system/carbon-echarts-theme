@@ -10,12 +10,12 @@
  *  [4] optionsCurved        (natural curve, time series)  → areaNaturalCurve
  *  [5] optionsMultipleBounded (bounded highlights)        → areaBounded
  *  [6] optionsZoomBar       (zoombar)                     → areaZoombar
- *  [7] optionsSkeleton      (skeleton / loading)          → areaSkeleton    [showLoading=true on the chart instance]
+ *  [7] optionsSkeleton      (skeleton / loading)          → areaSkeleton    [showSkeleton() from @carbon/echarts-theme/skeleton]
  *
  * ECharts limitations (documented, not implemented):
  *  - alwaysShowRulerTooltip: no ECharts equivalent; tooltip.trigger:'axis' shown on hover.
  *  - bounds (min/max bands): ECharts has no native bounded-area band; approximated as stacked.
- *  - Skeleton / loading state: ECharts has no built-in skeleton; showLoading() is used instead.
+ *  - Skeleton / loading state: ECharts has no built-in skeleton; use showSkeleton() from @carbon/echarts-theme/skeleton.
  */
 import type { EChartsOption } from 'echarts'
 import {
@@ -190,12 +190,13 @@ export const areaZoombar: EChartsOption = createBoundedAreaOptions(boundedData, 
   showLegend: false,
 })
 
-/** [7] Skeleton / loading — render an empty grid (no series) to match Carbon's skeleton state. */
-export const areaSkeleton: EChartsOption = {
-  xAxis: { type: 'time' },
-  yAxis: { type: 'value' },
-  series: [],
-}
+/**
+ * [7] Skeleton / loading state.
+ * The chart option is empty — the skeleton overlay is provided separately via
+ * showSkeleton() from '@carbon/echarts-theme/skeleton', which is the ECharts
+ * equivalent of Carbon Charts' `data: { loading: true }`.
+ */
+export const areaSkeleton: EChartsOption = {}
 
 // ── Stacked convenience export ────────────────────────────────────────────────
 export const areaStacked: EChartsOption = createStackedAreaOptions(timeSeriesData, {

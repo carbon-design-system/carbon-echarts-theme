@@ -5,6 +5,31 @@ import type { ChartTabularData } from './_transform'
 // ── Shared grid defaults (mirrors Carbon Charts spacing) ─────────────────────
 const GRID = { top: 48, bottom: 56, left: 48, right: 24, containLabel: true } as const
 
+// ── Label truncation helper ───────────────────────────────────────────────────
+
+/**
+ * Build a category axis label formatter that truncates long labels to fit
+ * within `maxChars` characters using Carbon Charts' start…end ellipsis style:
+ *   e.g. "58B01AA…C46B86E"
+ *
+ * ECharts `overflow: 'truncate'` + `width` is unreliable when `containLabel:
+ * true` is set on the grid (the label area expands to fit, so the overflow
+ * never triggers). A formatter that manually shortens the string is the only
+ * reliable approach.
+ *
+ * Carbon Charts uses ~7 px per character at the default axis label font size
+ * (12 px IBM Plex Sans), so the pixel value passed in `truncateLabels` is
+ * converted to a character budget by dividing by 7.
+ */
+function makeTruncateFormatter(maxPx: number): (value: string) => string {
+  const maxChars = Math.max(8, Math.round(maxPx / 7))
+  return (value: string) => {
+    if (value.length <= maxChars) return value
+    const half = Math.floor((maxChars - 1) / 2)
+    return `${value.slice(0, half)}...${value.slice(-half)}`
+  }
+}
+
 // ── Bar preset ────────────────────────────────────────────────────────────────
 
 export interface BarPresetOptions {
@@ -46,11 +71,20 @@ export interface BarPresetOptions {
    */
   colors?: Record<string, string>
   /**
-   * Truncate category axis labels to this pixel width.
+   * Truncate category axis labels to this maximum character count.
    * Maps to Carbon Charts `axes.left.truncation` (horizontal bars).
-   * Applies `axisLabel: { overflow: 'truncate', width }` on the category axis.
+   * Uses a formatter that keeps the first and last characters with `…` in the
+   * middle — matching Carbon Charts' truncation style. The numeric value is
+   * treated as a maximum character budget (not pixel width).
    */
   truncateLabels?: number
+  /**
+   * BCP 47 locale code for formatting date axis labels (e.g. `'ja-JP'`).
+   * Maps to Carbon Charts `locale.code`.
+   * When set together with `xField: 'date'`, the category axis labels are
+   * formatted using `Intl.DateTimeFormat` with the given locale.
+   */
+  locale?: string
 }
 
 /**
@@ -67,6 +101,23 @@ export function createBarOptions(
   opts: BarPresetOptions = {},
 ): EChartsOption {
   const { horizontal = false, stacked = false, floating = false, title, xField = 'key' } = opts
+
+  // Build a locale-aware date formatter for the category axis labels.
+  // Only active when a locale is specified and the xField is 'date'.
+  const localeFormatter =
+    opts.locale && xField === 'date'
+      ? (value: string) => {
+          // Parse ISO date strings (YYYY-MM-DD) as local midnight to avoid
+          // UTC-to-local timezone shifts that flip the date to the previous day.
+          const parts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value)
+          const d = parts
+            ? new Date(Number(parts[1]), Number(parts[2]) - 1, Number(parts[3]))
+            : new Date(value)
+          return isNaN(d.getTime())
+            ? value
+            : new Intl.DateTimeFormat(opts.locale, { month: 'long', day: 'numeric' }).format(d)
+        }
+      : undefined
 
   // If none of the rows have the requested xField, fall back to 'group' as the
   // category axis (matches Carbon Charts' simple bar behaviour where `group` is
@@ -171,16 +222,18 @@ export function createBarOptions(
   const isSingleSeries = groups.length === 1
 
   if (resolvedXField === 'group') {
-    // Simple bar: one series, one bar per category, each bar individually coloured.
+    // Simple bar: N series, one per category, each individually coloured.
     //
-    // The correct ECharts model is a SINGLE series with per-item itemStyle.color.
-    // Multi-series (one per group) causes ECharts to reserve N sub-slots per
-    // category, making each bar narrow and misaligned under its label.
+    // ECharts legend only surfaces entries for named series, so we use one series
+    // per group (matching Carbon Charts' model). To prevent ECharts from dividing
+    // each category band into N sub-slots, we set barGap: '-100%' on every series
+    // so the bars overlap at full width — only one bar exists per category
+    // position, so the overlap is harmless and each bar fills its slot correctly.
     //
-    // Bug 4 fix: set a default barWidth of '40%' for discrete simple bars so they
-    // match Carbon Charts' proportional bar widths rather than ECharts' narrow auto.
+    // Each series carries a single value at its own category index; all other
+    // positions are null. barCategoryGap is kept at the default (~'20%') so the
+    // bar width relative to the category band matches Carbon Charts.
     const colors = pickColors(groups.length, colorScheme)
-    const barWidth = opts.barWidth ?? '40%'
 
     // Apply colors override for simple discrete bars
     const resolvedColors = colors.map((c, gi) => {
@@ -194,9 +247,8 @@ export function createBarOptions(
       legend: {
         type: 'scroll' as const,
         bottom: 0,
-        data: groups.map((g, gi) => ({ name: g.name, itemStyle: { color: resolvedColors[gi] } })),
-        // Legend entries are cosmetic only — they display the colour swatch for
-        // each group but do not map to a series name, so selectedMode is false.
+        // selectedMode:false — legend is cosmetic only, matching Carbon Charts'
+        // simple bar where clicking a legend item does not hide the bar.
         selectedMode: false as const,
       },
       grid: GRID,
@@ -209,8 +261,15 @@ export function createBarOptions(
             yAxis: {
               type: 'category',
               data: categories,
-              ...(opts.truncateLabels
-                ? { axisLabel: { overflow: 'truncate' as const, width: opts.truncateLabels } }
+              ...(opts.truncateLabels || localeFormatter
+                ? {
+                    axisLabel: {
+                      ...(opts.truncateLabels && !localeFormatter
+                        ? { formatter: makeTruncateFormatter(opts.truncateLabels) }
+                        : {}),
+                      ...(localeFormatter ? { formatter: localeFormatter } : {}),
+                    },
+                  }
                 : {}),
             },
           }
@@ -218,8 +277,15 @@ export function createBarOptions(
             xAxis: {
               type: 'category',
               data: categories,
-              ...(opts.truncateLabels
-                ? { axisLabel: { overflow: 'truncate' as const, width: opts.truncateLabels } }
+              ...(opts.truncateLabels || localeFormatter
+                ? {
+                    axisLabel: {
+                      ...(opts.truncateLabels && !localeFormatter
+                        ? { formatter: makeTruncateFormatter(opts.truncateLabels) }
+                        : {}),
+                      ...(localeFormatter ? { formatter: localeFormatter } : {}),
+                    },
+                  }
                 : {}),
             },
             yAxis: {
@@ -227,17 +293,17 @@ export function createBarOptions(
               ...(opts.yDomain ? { min: opts.yDomain[0], max: opts.yDomain[1] } : {}),
             },
           }),
-      series: [
-        {
-          type: 'bar' as const,
-          name: 'value',
-          barWidth,
-          data: groups.map((g, gi) => ({
-            value: g.data.find((d) => d.name === g.name)?.value ?? null,
-            itemStyle: { color: resolvedColors[gi] },
-          })),
-        },
-      ],
+      series: groups.map((g, gi) => ({
+        type: 'bar' as const,
+        name: g.name,
+        barGap: '-100%' as const,
+        itemStyle: { color: resolvedColors[gi] },
+        // Each series contributes exactly one bar at its own category index;
+        // all other positions are null so they don't affect the layout.
+        data: categories.map((cat) =>
+          cat === g.name ? (g.data.find((d) => d.name === g.name)?.value ?? null) : null,
+        ),
+      })),
     }
   }
 
@@ -290,8 +356,15 @@ export function createBarOptions(
   const categoryAxis = {
     type: 'category' as const,
     data: categories,
-    ...(opts.truncateLabels
-      ? { axisLabel: { overflow: 'truncate' as const, width: opts.truncateLabels } }
+    ...(opts.truncateLabels || localeFormatter
+      ? {
+          axisLabel: {
+            ...(opts.truncateLabels && !localeFormatter
+              ? { formatter: makeTruncateFormatter(opts.truncateLabels) }
+              : {}),
+            ...(localeFormatter ? { formatter: localeFormatter } : {}),
+          },
+        }
       : {}),
   }
 

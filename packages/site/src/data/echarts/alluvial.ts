@@ -5,6 +5,17 @@
 import type { EChartsOption } from 'echarts'
 import { createAlluvialOptions } from '@carbon/echarts-theme/presets'
 import type { AlluvialDatum } from '@carbon/echarts-theme/presets'
+import {
+  red60,
+  yellow50,
+  green60,
+  magenta50,
+  teal40,
+  cyan50,
+  purple50,
+  teal50,
+  red50,
+} from '@carbon/colors'
 
 // ── Shared datasets ────────────────────────────────────────────────────────────
 
@@ -78,18 +89,20 @@ const alignedData: AlluvialDatum[] = [
 const customColorData: AlluvialDatum[] = monochromeData
 
 // ── Gradient color scale — matches Carbon Charts optionsGradient.color.scale ──
-// These are the per-node hex colours from the Carbon Charts reference.
+// All values are Carbon design tokens from @carbon/colors (imported at top of file).
+// Note: the Carbon Charts storybook used '#ee538b' for Page Header which is not
+// a valid Carbon token (off by one digit from magenta50 #ee5396); corrected here.
 const gradientColors: Record<string, string> = {
-  Cards: '#da1e28',
-  'About Modal': '#b28600',
-  'Create Flow': '#198038',
-  'Page Header': '#ee538b',
-  Notifications: '#08bdba',
-  'Data and AI, AI Apps': '#1192e8',
-  'Data and AI, Info Architecture': '#a56eff',
-  Security: '#009d9a',
-  Automation: '#fa4d56',
-  'Public Cloud': '#198038',
+  Cards: red60,
+  'About Modal': yellow50,
+  'Create Flow': green60,
+  'Page Header': magenta50,
+  Notifications: teal40,
+  'Data and AI, AI Apps': cyan50,
+  'Data and AI, Info Architecture': purple50,
+  Security: teal50,
+  Automation: red50,
+  'Public Cloud': green60,
 }
 
 // Custom colors for the A/B/C nodes
@@ -104,10 +117,12 @@ const customColors: Record<string, string> = {
 /** [0] Basic alluvial — auto-palette node colours */
 export const alluvialBasic: EChartsOption = createAlluvialOptions(basicData)
 
-/** [1] Gradient — links blend from source colour to target colour */
+/** [1] Gradient — links blend from source colour to target colour.
+ *  Colors match the Carbon Charts storybook's explicit color.scale overrides.
+ *  gradient: true alone is sufficient when auto-palette colors are acceptable. */
 export const alluvialGradient: EChartsOption = createAlluvialOptions(basicData, {
   gradient: true,
-  colors: gradientColors,
+  colors: gradientColors, // optional: overrides auto-palette with storybook-matching colors
 })
 
 /** [2] Multiple categories — Titanic survival dataset */

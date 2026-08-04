@@ -13,6 +13,7 @@ import {
   barFloatingHorizontal,
   barCustomDomain,
   barCustomColors,
+  barJapaneseLocale,
   barLongLabel,
 } from '../data/echarts/bar'
 
@@ -48,7 +49,7 @@ const echartsOptions = [
   barSimple, // [9] centered legend
   barSimple, // [10] custom legend order
   barSimple, // [11] additional legend items (ECharts limitation)
-  barTimeSeries, // [12] locale (ECharts limitation)
+  barJapaneseLocale, // [12] Japanese locale — ja-JP formatted date axis
   barLongLabel, // [13] truncated labels — long hex-hash group names
 ]
 
@@ -257,7 +258,7 @@ const data = [
 const option = createBarOptions(data)
 // Note: Carbon Charts supports legend.additionalItems — ECharts has no equivalent`,
 
-  // [12] Japanese locale — ECharts limitation: date locale is browser-controlled
+  // [12] Japanese locale — pass locale:'ja-JP' to format date axis labels
   `import { createBarOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
@@ -268,8 +269,9 @@ const data = [
   { group: 'Misc', date: '2023-01-07', value: 51213 },
 ]
 
-const option = createBarOptions(data, { xField: 'date' })
-// Note: Carbon Charts locale:'ja-JP' — ECharts time axis uses browser locale`,
+const option = createBarOptions(data, { xField: 'date', locale: 'ja-JP' })
+
+<ReactECharts option={option} theme="carbon-white" />`,
 
   // [13] truncated labels — long hex-hash group names
   `import { createHorizontalBarOptions } from '@carbon/echarts-theme/presets'

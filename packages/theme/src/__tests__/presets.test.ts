@@ -196,55 +196,53 @@ describe('createBarOptions', () => {
   })
 
   // ── Simple bar (no key field) — the resolvedXField === 'group' code path ──
-  // Single series, one bar per category, per-item itemStyle.color for colouring.
-  // Multi-series would reserve N sub-slots per category causing misalignment.
+  // N series (one per category), each named after its group, with barGap:'-100%'
+  // so bars overlap at full width without ECharts creating N sub-slots per band.
 
-  it('simple bar — produces exactly 1 series with N data items', () => {
+  it('simple bar — produces N series (one per group)', () => {
     const opt = createBarOptions(simpleBarData)
-    const series = opt.series as Array<{ data: unknown[] }>
-    expect(series).toHaveLength(1)
-    expect(series[0].data).toHaveLength(simpleBarData.length)
+    const series = opt.series as Array<{ name: string; data: unknown[] }>
+    expect(series).toHaveLength(simpleBarData.length)
   })
 
-  it('simple bar — per-item colours match pickColors(N, "light")', () => {
+  it('simple bar — each series is named after its group', () => {
     const opt = createBarOptions(simpleBarData)
-    const series = opt.series as Array<{ data: Array<{ itemStyle: { color: string } }> }>
-    const expected = pickColors(simpleBarData.length, 'light')
-    series[0].data.forEach((item, i) => {
-      expect(item.itemStyle.color).toBe(expected[i])
+    const series = opt.series as Array<{ name: string }>
+    series.forEach((s, i) => {
+      expect(s.name).toBe(simpleBarData[i].group)
     })
   })
 
-  it('simple bar — dark colorScheme uses pickColors(N, "dark") per-item colours', () => {
+  it('simple bar — each series has the group colour from pickColors(N, "light")', () => {
+    const opt = createBarOptions(simpleBarData)
+    const series = opt.series as Array<{ itemStyle: { color: string } }>
+    const expected = pickColors(simpleBarData.length, 'light')
+    series.forEach((s, i) => {
+      expect(s.itemStyle.color).toBe(expected[i])
+    })
+  })
+
+  it('simple bar — dark colorScheme uses pickColors(N, "dark") per-series colour', () => {
     const opt = createBarOptions(simpleBarData, { colorScheme: 'dark' })
-    const series = opt.series as Array<{ data: Array<{ itemStyle: { color: string } }> }>
+    const series = opt.series as Array<{ itemStyle: { color: string } }>
     const expected = pickColors(simpleBarData.length, 'dark')
-    series[0].data.forEach((item, i) => {
-      expect(item.itemStyle.color).toBe(expected[i])
+    series.forEach((s, i) => {
+      expect(s.itemStyle.color).toBe(expected[i])
     })
   })
 
-  it('simple bar — legend has N entries with correct names and colours', () => {
+  it('simple bar — legend has selectedMode:false and no explicit data (auto-discovers series names)', () => {
     const opt = createBarOptions(simpleBarData)
-    const legend = opt.legend as {
-      data: Array<{ name: string; itemStyle: { color: string } }>
-      selectedMode: unknown
-    }
-    const expected = pickColors(simpleBarData.length, 'light')
-    expect(legend.data).toHaveLength(simpleBarData.length)
+    const legend = opt.legend as { selectedMode: unknown; data?: unknown }
     expect(legend.selectedMode).toBe(false)
-    legend.data.forEach((entry, i) => {
-      expect(entry.name).toBe(simpleBarData[i].group)
-      expect(entry.itemStyle.color).toBe(expected[i])
-    })
+    expect(legend.data).toBeUndefined()
   })
 
-  it('horizontal simple bar — yAxis is category, 1 series with N items', () => {
+  it('horizontal simple bar — yAxis is category, N series', () => {
     const opt = createHorizontalBarOptions(simpleBarData)
     expect((opt.yAxis as { type: string }).type).toBe('category')
-    const series = opt.series as Array<{ data: unknown[] }>
-    expect(series).toHaveLength(1)
-    expect(series[0].data).toHaveLength(simpleBarData.length)
+    const series = opt.series as Array<{ name: string }>
+    expect(series).toHaveLength(simpleBarData.length)
   })
 
   it('simple bar — scales to any N without hardcoding (N=2 uses pickColors(2))', () => {
@@ -253,12 +251,29 @@ describe('createBarOptions', () => {
       { group: 'B', value: 20 },
     ]
     const opt = createBarOptions(twoBarData)
-    const series = opt.series as Array<{ data: Array<{ itemStyle: { color: string } }> }>
+    const series = opt.series as Array<{ name: string; itemStyle: { color: string } }>
     const expected = pickColors(2, 'light')
-    expect(series).toHaveLength(1)
-    series[0].data.forEach((item, i) => {
-      expect(item.itemStyle.color).toBe(expected[i])
+    expect(series).toHaveLength(2)
+    series.forEach((s, i) => {
+      expect(s.name).toBe(twoBarData[i].group)
+      expect(s.itemStyle.color).toBe(expected[i])
     })
+  })
+
+  it('truncateLabels — yAxis axisLabel formatter truncates long labels', () => {
+    const longLabelData: ChartTabularData = [
+      { group: '6591DA8668C339B1B39297C61091E320C35391AB7AFC15B469F96B8A2DD0C231', value: 65000 },
+      { group: 'Qty', value: 16932 },
+    ]
+    const opt = createHorizontalBarOptions(longLabelData, { truncateLabels: 120 })
+    const yAxis = opt.yAxis as { axisLabel?: { formatter?: (v: string) => string } }
+    expect(typeof yAxis.axisLabel?.formatter).toBe('function')
+    // Long label (64 chars) should be truncated; short label ('Qty') should be unchanged
+    const fmt = yAxis.axisLabel!.formatter!
+    expect(fmt('Qty')).toBe('Qty')
+    const truncated = fmt('6591DA8668C339B1B39297C61091E320C35391AB7AFC15B469F96B8A2DD0C231')
+    expect(truncated.length).toBeLessThan(64)
+    expect(truncated).toContain('...')
   })
 })
 
@@ -930,6 +945,64 @@ describe('createAlluvialOptions', () => {
     const opt = createAlluvialOptions(alluvialData, { orient: 'vertical' })
     const s = opt.series as Array<{ orient: string }>
     expect(s[0]?.orient).toBe('vertical')
+  })
+
+  it('default link opacity is 0.8 (Carbon Charts Ke.opacity.default)', () => {
+    const opt = createAlluvialOptions(alluvialData)
+    const s = opt.series as Array<{ lineStyle: { opacity: number } }>
+    expect(s[0]?.lineStyle.opacity).toBe(0.8)
+  })
+
+  it('hovered adjacent link opacity is 1.0 (Carbon Charts Ke.opacity.selected)', () => {
+    const opt = createAlluvialOptions(alluvialData)
+    const s = opt.series as Array<{ emphasis: { lineStyle: { opacity: number } } }>
+    expect(s[0]?.emphasis.lineStyle.opacity).toBe(1)
+  })
+
+  it('blur link opacity is 0.3 (Carbon Charts Ke.opacity.unfocus)', () => {
+    const opt = createAlluvialOptions(alluvialData)
+    const s = opt.series as Array<{ blur: { lineStyle: { opacity: number } } }>
+    expect(s[0]?.blur.lineStyle.opacity).toBe(0.3)
+  })
+
+  it('blur label opacity is 1 so labels remain visible during hover', () => {
+    const opt = createAlluvialOptions(alluvialData)
+    const s = opt.series as Array<{ blur: { label: { opacity: number } } }>
+    expect(s[0]?.blur.label.opacity).toBe(1)
+  })
+
+  it('label formatter appends total value in parentheses', () => {
+    // A total: 10+5=15, B total: 10+8=18, C total: 5, D total: 8
+    const opt = createAlluvialOptions(alluvialData)
+    const s = opt.series as Array<{ label: { formatter: (p: { name: string }) => string } }>
+    const fmt = s[0]?.label.formatter
+    expect(fmt?.({ name: 'A' })).toBe('A (15)')
+    expect(fmt?.({ name: 'B' })).toBe('B (18)')
+    expect(fmt?.({ name: 'C' })).toBe('C (5)')
+    expect(fmt?.({ name: 'D' })).toBe('D (8)')
+  })
+
+  it('label uses white text on black background', () => {
+    const opt = createAlluvialOptions(alluvialData)
+    const s = opt.series as Array<{ label: { color: string; backgroundColor: string } }>
+    expect(s[0]?.label.color).toBe('#ffffff')
+    expect(s[0]?.label.backgroundColor).toBe('#000000')
+  })
+
+  it('monochrome: all nodes share the first color of the N-color palette', () => {
+    // 3-source-node data: A/B/C → X/Y/Z
+    const monoData = [
+      { source: 'A', target: 'X', value: 1 },
+      { source: 'B', target: 'X', value: 1 },
+      { source: 'C', target: 'X', value: 1 },
+    ]
+    const opt = createAlluvialOptions(monoData, { monochrome: true })
+    const s = opt.series as Array<{ data: Array<{ name: string; itemStyle?: { color: string } }> }>
+    // 3 source nodes → 3-color light palette → first color = magenta50 (#ee5396)
+    const expectedColor = '#ee5396'
+    for (const node of s[0]!.data) {
+      expect(node.itemStyle?.color).toBe(expectedColor)
+    }
   })
 })
 

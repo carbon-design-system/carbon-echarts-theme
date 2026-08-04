@@ -210,6 +210,15 @@ body {
   @include type.type-style('body-01');
 }
 
+/* ── Chart page examples toolbar ────────────────────────────────────────── */
+.chart-page__examples-toolbar {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-06;
+  padding-bottom: $spacing-05;
+  border-bottom: 1px solid $border-subtle-01;
+}
+
 /* ── Compare ─────────────────────────────────────────────────────────────── */
 .compare {
   margin-bottom: $spacing-09;
@@ -407,6 +416,65 @@ body {
   padding: $spacing-05;
   box-sizing: border-box;
   background-color: $background;
+}
+
+// ── Skeleton shimmer overlay ──────────────────────────────────────────────────
+// Matches Carbon Charts' skeleton state (data: { loading: true }).
+// The grid is drawn with CSS repeating-linear-gradient; the shimmer sweep is
+// a separate ::after pseudo-element so only it animates (the grid stays static).
+@keyframes cc-skeleton-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.compare__skeleton {
+  position: absolute;
+  // Inset matches the $spacing-05 (1rem) padding on compare__chart-wrap
+  inset: $spacing-05;
+  overflow: hidden;
+  background-color: var(--cds-background, #ffffff);
+  // Grid lines: equally-spaced vertical (18 col) and horizontal (5 row) lines —
+  // matching Carbon Charts' drawXGrid / drawYGrid tick counts.
+  // The repeating gradient draws the left/top edges of each cell; the border
+  // closes the right and bottom edges of the outermost cells.
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      var(--cds-layer-accent-01, #e0e0e0) 0,
+      var(--cds-layer-accent-01, #e0e0e0) 1px,
+      transparent 1px,
+      transparent calc(100% / 18)
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--cds-layer-accent-01, #e0e0e0) 0,
+      var(--cds-layer-accent-01, #e0e0e0) 1px,
+      transparent 1px,
+      transparent calc(100% / 5)
+    );
+  border-right: 1px solid var(--cds-layer-accent-01, #e0e0e0);
+  border-bottom: 1px solid var(--cds-layer-accent-01, #e0e0e0);
+  pointer-events: none;
+  z-index: 1;
+
+  // Shimmer sweep as a separate translating layer — matches Carbon Charts'
+  // linearGradient animated via D3 transition (2 s duration, 1 s delay loop).
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(255, 255, 255, 0.6) 50%,
+      transparent 100%
+    );
+    animation: cc-skeleton-shimmer 2.5s infinite linear;
+  }
 }
 
 // Toolbar floats in the upper-right of the chart canvas — always visible

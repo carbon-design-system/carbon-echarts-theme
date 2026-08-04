@@ -3,6 +3,7 @@ import type { EChartsOption, EChartsType } from 'echarts'
 import ReactECharts from 'echarts-for-react'
 import { Toggle } from '@carbon/react'
 import { useTheme } from './ThemeContext'
+import { useCompareContext } from './CompareContext'
 import { ChartToolbar } from './ChartToolbar'
 import { CarbonChart } from './CarbonChart'
 import type { CarbonChartExample } from './CarbonChart'
@@ -19,6 +20,11 @@ export interface CompareProps {
   extended?: boolean
   /** ECharts code snippet shown in the code block beneath this example */
   echartsCode?: string
+  /**
+   * When true, renders a Carbon-matching skeleton shimmer grid over the chart.
+   * Equivalent to Carbon Charts `data: { loading: true }`.
+   */
+  showLoading?: boolean
 }
 
 export function Compare({
@@ -28,13 +34,17 @@ export function Compare({
   echartsOption,
   extended = false,
   echartsCode,
+  showLoading = false,
 }: CompareProps) {
   const { echartsTheme } = useTheme()
+  const { expandAll } = useCompareContext()
   const echartsRef = React.useRef<any>(null)
   const [chartInstance, setChartInstance] = React.useState<EChartsType | null>(null)
   const [fullscreen, setFullscreen] = React.useState(false)
   const [codeCopied, setCodeCopied] = React.useState(false)
   const [showCarbon, setShowCarbon] = React.useState(false)
+
+  const carbonVisible = expandAll || showCarbon
 
   // Mirror the Carbon Charts height when provided, so sparklines and other
   // size-constrained charts render at the same height as their Carbon equivalent.
@@ -91,6 +101,7 @@ export function Compare({
             opts={{ renderer: 'canvas' }}
             onChartReady={(instance: EChartsType) => setChartInstance(instance)}
           />
+          {showLoading && <div className="compare__skeleton" aria-hidden="true" />}
           <ChartToolbar
             chartInstance={chartInstance}
             title={title}
@@ -117,7 +128,7 @@ export function Compare({
       )}
 
       {/* Carbon Charts panel — revealed below when toggle is on */}
-      {canCompare && showCarbon && carbonExample && chartClass && (
+      {canCompare && carbonVisible && carbonExample && chartClass && (
         <div className="compare__panel compare__panel--carbon">
           <div className="compare__panel-label">Carbon Charts</div>
           <div className="carbon-chart-holder">

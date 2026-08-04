@@ -7,6 +7,7 @@ export interface CarbonChartTokens {
   background: string
   layer01: string
   layer02: string
+  layerAccent01: string
   // Text
   textPrimary: string
   textSecondary: string
@@ -24,6 +25,7 @@ export const tokens: Record<ThemeKey, CarbonChartTokens> = {
     background: white.background,
     layer01: white.layer01,
     layer02: white.layer02,
+    layerAccent01: white.layerAccent01,
     textPrimary: white.textPrimary,
     textSecondary: white.textSecondary,
     textDisabled: white.textDisabled,
@@ -36,6 +38,7 @@ export const tokens: Record<ThemeKey, CarbonChartTokens> = {
     background: g10.background,
     layer01: g10.layer01,
     layer02: g10.layer02,
+    layerAccent01: g10.layerAccent01,
     textPrimary: g10.textPrimary,
     textSecondary: g10.textSecondary,
     textDisabled: g10.textDisabled,
@@ -48,6 +51,7 @@ export const tokens: Record<ThemeKey, CarbonChartTokens> = {
     background: g90.background,
     layer01: g90.layer01,
     layer02: g90.layer02,
+    layerAccent01: g90.layerAccent01,
     textPrimary: g90.textPrimary,
     textSecondary: g90.textSecondary,
     textDisabled: g90.textDisabled,
@@ -60,6 +64,7 @@ export const tokens: Record<ThemeKey, CarbonChartTokens> = {
     background: g100.background,
     layer01: g100.layer01,
     layer02: g100.layer02,
+    layerAccent01: g100.layerAccent01,
     textPrimary: g100.textPrimary,
     textSecondary: g100.textSecondary,
     textDisabled: g100.textDisabled,

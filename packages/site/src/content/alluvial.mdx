@@ -19,7 +19,25 @@ Alluvial (Sankey) diagrams show flows between nodes. The width of each flow band
 
 ## Color
 
-Assign colors by source node using the categorical palette.
+Colors are assigned to source-only (left-side) nodes using the categorical N-color palette, matching Carbon Charts' behavior. Target-only nodes inherit color from the links flowing into them.
+
+In **monochrome** mode, all nodes and links share the first color of the N-color palette (where N = number of source nodes). This matches Carbon Charts' monochrome rendering.
+
+## Opacity
+
+Link opacity matches Carbon Charts `Ke.opacity` constants:
+
+| State                  | Opacity | Description                             |
+| ---------------------- | ------- | --------------------------------------- |
+| Default (resting)      | `0.8`   | All links at rest                       |
+| Hovered adjacent       | `1.0`   | Links connected to the hovered node     |
+| Blurred (non-adjacent) | `0.3`   | Links not connected to the hovered node |
+
+Node labels remain fully opaque (`opacity: 1`) in the blur state so they stay readable during hover.
+
+## Node labels
+
+Labels render as **`NodeName (total)`** inside each node bar, matching Carbon Charts' `${E.name} (${E.value})` format. The total is the sum of all link values passing through that node (inbound + outbound). Labels use white text on a black background.
 
 ## ECharts implementation notes
 

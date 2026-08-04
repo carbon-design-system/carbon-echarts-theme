@@ -98,6 +98,9 @@ importers:
         specifier: ^5.0.0
         version: 5.0.0
     devDependencies:
+      '@carbon/colors':
+        specifier: ^11.30.0
+        version: 11.54.0
       '@mdx-js/rollup':
         specifier: ^3.1.0
         version: 3.1.1(rollup@4.62.3)

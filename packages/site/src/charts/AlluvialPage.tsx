@@ -58,21 +58,13 @@ const data = [
   // ... more links
 ]
 
-const option = createAlluvialOptions(data, {
-  gradient: true,
-  colors: {
-    'About Modal':                  '#b28600',
-    Cards:                          '#da1e28',
-    'Create Flow':                  '#198038',
-    'Page Header':                  '#ee538b',
-    Notifications:                  '#08bdba',
-    'Data and AI, AI Apps':         '#1192e8',
-    'Data and AI, Info Architecture': '#a56eff',
-    Security:                       '#009d9a',
-    Automation:                     '#fa4d56',
-    'Public Cloud':                 '#198038',
-  },
-})
+// gradient: true blends each link from its source node color to its target node
+// color. The auto-palette colors are used by default — no colors override needed.
+const option = createAlluvialOptions(data, { gradient: true })
+
+// Optionally supply explicit per-node colors using Carbon color tokens:
+// import { red60, yellow50, cyan50 } from '@carbon/colors'
+// createAlluvialOptions(data, { gradient: true, colors: { Cards: red60, ... } })
 
 export default () => <ReactECharts option={option} theme="carbon-charts-default-light" />`,
 

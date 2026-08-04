@@ -36,8 +36,10 @@ export interface AlluvialPresetOptions {
    */
   colors?: Record<string, string>
   /**
-   * Monochrome mode: all nodes receive the same single-colour from the
-   * Carbon Charts 1-colour palette (purple-70 light / purple-30 dark).
+   * Monochrome mode: all nodes and links share a single colour.
+   * The colour is the first slot of the N-color palette (where N = number of
+   * source nodes), matching Carbon Charts' monochrome behaviour.
+   * e.g. 3 source nodes → 3-color palette option 1 → magenta50 (#ee5396) light.
    */
   monochrome?: boolean
   /** Color scheme used when deriving palette colors (default: 'light') */
@@ -105,7 +107,10 @@ export function createAlluvialOptions(
   // Resolve node colours
   let nodeColorMap: Record<string, string>
   if (monochrome) {
-    const monoColor = pickColors(1, colorScheme)[0]!
+    // Carbon Charts monochrome: all links use dataGroupName:0, which resolves to the
+    // first slot of the N-color palette (N = number of source nodes), not the 1-color
+    // palette. e.g. 3 source nodes → 3-color palette → first color = magenta50 (#ee5396).
+    const monoColor = pickColors(sourceOnlyNodes.length, colorScheme)[0]!
     nodeColorMap = Object.fromEntries(nodeNames.map((n) => [n, monoColor]))
   } else if (Object.keys(colors).length > 0) {
     // Only override nodes that have an explicit entry; leave others uncoloured
@@ -117,13 +122,21 @@ export function createAlluvialOptions(
     nodeColorMap = Object.fromEntries(sourceOnlyNodes.map((n, i) => [n, paletteColors[i]!]))
   }
 
+  // Compute per-node total value for label "(n)" suffix, matching Carbon Charts
+  const nodeTotals: Record<string, number> = {}
+  for (const d of data) {
+    nodeTotals[d.source] = (nodeTotals[d.source] ?? 0) + d.value
+    nodeTotals[d.target] = (nodeTotals[d.target] ?? 0) + d.value
+  }
+
   const nodes = nodeNames.map((name) => {
     const color = nodeColorMap[name]
     return color ? { name, itemStyle: { color } } : { name }
   })
 
-  // Link style: gradient blends from source to target colour
-  const lineStyle: Record<string, unknown> = { opacity: 0.3, curveness: 0.5 }
+  // Link style: gradient blends from source to target colour.
+  // Default opacity 0.8 matches Carbon Charts Ke.opacity.default.
+  const lineStyle: Record<string, unknown> = { opacity: 0.8, curveness: 0.5 }
   if (gradient) {
     lineStyle.color = 'gradient'
   }
@@ -143,11 +156,26 @@ export function createAlluvialOptions(
         nodeGap,
         data: nodes,
         links: data.map((d) => ({ source: d.source, target: d.target, value: d.value })),
-        label: { fontSize: 12 },
+        label: {
+          fontSize: 12,
+          color: '#ffffff',
+          backgroundColor: '#000000',
+          padding: [2, 4],
+          // Show "NodeName (total)" matching Carbon Charts node label format
+          formatter: (params: { name: string }) =>
+            `${params.name} (${nodeTotals[params.name] ?? 0})`,
+        },
         lineStyle,
         emphasis: {
+          // selected: opacity 1 — hovered adjacent link, matching Carbon Charts Ke.opacity.selected
           focus: 'adjacency',
-          lineStyle: { opacity: 0.6 },
+          lineStyle: { opacity: 1 },
+        },
+        // blur: unfocused non-adjacent links dimmed to 0.3 (Carbon Charts Ke.opacity.unfocus)
+        // Keep node labels fully visible so they remain readable during hover.
+        blur: {
+          lineStyle: { opacity: 0.3 },
+          label: { opacity: 1 },
         },
       },
     ],
