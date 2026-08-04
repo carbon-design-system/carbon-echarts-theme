@@ -151,17 +151,32 @@ const usdData = [
   { group: 'Dataset 1', value: 870 },
 ]
 
-// Slot [0] — default binning (binWidth: 10) on age data
-export const histogram: EChartsOption = createHistogramOptions(ageData, { binWidth: 10 })
+// Slot [0] — Carbon Charts `bins: 10` on age range 20–87 → D3 picks nice
+// 5-unit boundaries → 14 bins of width 5 (20,25,30,...,85,90)
+export const histogram: EChartsOption = createHistogramOptions(ageData, {
+  binWidth: 5,
+  xAxisLabel: 'Age',
+  yAxisLabel: 'No. of participants',
+})
 
 // Slot [1] — same age data (mirror of slot [0], tooltip always shown in Carbon)
-export const histogramTooltip: EChartsOption = createHistogramOptions(ageData, { binWidth: 10 })
+export const histogramTooltip: EChartsOption = createHistogramOptions(ageData, {
+  binWidth: 5,
+  xAxisLabel: 'Age',
+  yAxisLabel: 'No. of participants',
+})
 
 // Slot [2] — US$ dataset with binWidth: 10 (Carbon: bins=(870-200)/10=67)
-export const histogramCustomBin: EChartsOption = createHistogramOptions(usdData, { binWidth: 10 })
+export const histogramCustomBin: EChartsOption = createHistogramOptions(usdData, {
+  binWidth: 10,
+  xAxisLabel: 'US $ (million)',
+  yAxisLabel: 'No. of transactions',
+})
 
-// Slot [3] — age data with custom bins [20,40,50,60,90] → 4 buckets, binWidth not applicable
-// Carbon passes explicit bin edges; we use binWidth=20 as a reasonable approximation
+// Slot [3] — age data with custom bins [20,40,50,60,90] → 4 variable-width
+// buckets; use binWidth=20 as closest fixed-width approximation
 export const histogramCustomBinWidth: EChartsOption = createHistogramOptions(ageData, {
   binWidth: 20,
+  xAxisLabel: 'Age',
+  yAxisLabel: 'No. of participants',
 })
