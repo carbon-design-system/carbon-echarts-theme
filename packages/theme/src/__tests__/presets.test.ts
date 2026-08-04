@@ -575,9 +575,9 @@ describe('createDonutOptions', () => {
       (s?.label.formatter as ({ percent }: { percent?: number }) => string)({ percent: 46.2 }),
     ).toBe('46.2%')
     expect(s?.label.position).toBe('outer')
-    // Ghost series renders the total in the donut center
+    // Ghost series renders the total in the donut center via rich-text markup
     expect(typeof ghostSeries?.label.formatter).toBe('function')
-    expect(ghostSeries?.label.formatter()).toBe('100')
+    expect(ghostSeries?.label.formatter()).toBe('{total|100}')
     expect(ghostSeries?.label.position).toBe('center')
   })
 })
@@ -876,6 +876,17 @@ describe('createComboOptions', () => {
   it('dual-axis — yAxis is an array', () => {
     const opt = createComboOptions(groupedBarData, { secondaryGroups: ['Beta'] })
     expect(Array.isArray(opt.yAxis)).toBe(true)
+  })
+
+  it('loading returns an empty option shell', () => {
+    const opt = createComboOptions(groupedBarData, {
+      title: 'Combo Chart (loading)',
+      loading: true,
+    })
+    expect(opt.series).toEqual([])
+    expect(opt.xAxis).toEqual({ type: 'category', data: [] })
+    expect(opt.yAxis).toEqual({ type: 'value' })
+    expect(opt.title).toEqual({ text: 'Combo Chart (loading)' })
   })
 })
 
