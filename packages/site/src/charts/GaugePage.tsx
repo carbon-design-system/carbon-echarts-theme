@@ -21,14 +21,14 @@ const codeSamples = [
 
 const option = createGaugeOptions(
   [{ group: 'value', value: 42 }],
-  { unit: '%', type: 'semi', status: 'danger' },
+  { unit: '%', type: 'semi', status: 'danger', delta: -13.37 },
 )`,
 
   `import { createGaugeOptions } from '@carbon/echarts-theme/presets'
 
 const option = createGaugeOptions(
   [{ group: 'value', value: 42 }],
-  { unit: '%', type: 'full', status: 'warning' },
+  { unit: '%', type: 'full', status: 'warning', delta: -13.37 },
 )`,
 
   `import { createGaugeOptions } from '@carbon/echarts-theme/presets'

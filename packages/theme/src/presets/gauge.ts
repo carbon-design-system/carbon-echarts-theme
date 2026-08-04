@@ -14,7 +14,7 @@ export interface GaugePresetOptions {
   max?: number
   /** Unit/suffix shown on the label (e.g. '%') */
   unit?: string
-  /** 'semi' (180° arc, default) or 'full' (270° arc) */
+  /** 'semi' (180° arc, default) or 'full' (360° full circle) */
   type?: 'semi' | 'full'
   /** Font family for the center value label (defaults to theme textStyle) */
   fontFamily?: string
@@ -69,9 +69,9 @@ export function createGaugeOptions(
           ? alertColors[3]
           : (opts.color ?? 'inherit')
 
-  // Semi: 180° arc (Carbon Charts default), Full: 270° arc
-  const startAngle = type === 'full' ? 225 : 180
-  const endAngle = type === 'full' ? -45 : 0
+  // Semi: 180° arc (Carbon Charts default), Full: 360° full circle
+  const startAngle = type === 'full' ? 90 : 180
+  const endAngle = type === 'full' ? -270 : 0
 
   // Delta sub-label rendered below the main value using a rich-text formatter.
   // Triangle icons: ▼ (down / danger) or ▲ (up / success).
@@ -84,8 +84,8 @@ export function createGaugeOptions(
 
   // The main value label sits in the gauge `detail`; the delta uses a graphic
   // element rendered via a second zero-value series to keep positioning simple.
-  const mainOffsetY = type === 'full' ? '35%' : '-20%'
-  const deltaOffsetY = type === 'full' ? '60%' : '10%'
+  const mainOffsetY = type === 'full' ? '-10%' : '-20%'
+  const deltaOffsetY = type === 'full' ? '20%' : '10%'
 
   const fontFamily = opts.fontFamily ? { fontFamily: opts.fontFamily } : {}
   const textColor = opts.color ? { color: opts.color } : {}
@@ -97,9 +97,7 @@ export function createGaugeOptions(
         type: 'gauge',
         startAngle,
         endAngle,
-        // Push the geometric centre toward the lower half of the canvas so
-        // the arc fills the space and the flat opening faces down.
-        center: ['50%', type === 'full' ? '55%' : '65%'],
+        center: ['50%', type === 'full' ? '50%' : '65%'],
         // radius as % of the smaller canvas dimension — scales at any size.
         radius: type === 'full' ? '75%' : '85%',
         min,
@@ -124,7 +122,7 @@ export function createGaugeOptions(
           ...textColor,
           // When there's a delta, shift the main value up slightly so both
           // labels are vertically centred within the arc opening.
-          offsetCenter: [0, hasDelta ? mainOffsetY : type === 'full' ? '40%' : '-15%'],
+          offsetCenter: [0, hasDelta ? mainOffsetY : type === 'full' ? '0%' : '-15%'],
           valueAnimation: true,
         },
         data: [{ value, name: label }],
@@ -138,7 +136,7 @@ export function createGaugeOptions(
               type: 'gauge' as const,
               startAngle,
               endAngle,
-              center: ['50%', type === 'full' ? '55%' : '65%'],
+              center: ['50%', type === 'full' ? '50%' : '65%'],
               radius: type === 'full' ? '75%' : '85%',
               min,
               max,

@@ -42,9 +42,16 @@ export function Compare({
   const [chartInstance, setChartInstance] = React.useState<EChartsType | null>(null)
   const [fullscreen, setFullscreen] = React.useState(false)
   const [codeCopied, setCodeCopied] = React.useState(false)
-  const [showCarbon, setShowCarbon] = React.useState(false)
 
-  const carbonVisible = expandAll || showCarbon
+  // `showCarbon` is derived from expandAll (page-level toggle) but can be
+  // overridden locally. We store [lastSeenExpandAll, localValue] so that when
+  // expandAll changes we reset the local value without needing an effect or
+  // reading a ref during render.
+  const [carbonToggle, setCarbonToggle] = React.useState<[boolean, boolean]>([expandAll, expandAll])
+  const showCarbon = expandAll !== carbonToggle[0] ? expandAll : carbonToggle[1]
+  function setShowCarbon(value: boolean) {
+    setCarbonToggle([expandAll, value])
+  }
 
   // Mirror the Carbon Charts height when provided, so sparklines and other
   // size-constrained charts render at the same height as their Carbon equivalent.
@@ -128,7 +135,7 @@ export function Compare({
       )}
 
       {/* Carbon Charts panel — revealed below when toggle is on */}
-      {canCompare && carbonVisible && carbonExample && chartClass && (
+      {canCompare && showCarbon && carbonExample && chartClass && (
         <div className="compare__panel compare__panel--carbon">
           <div className="compare__panel-label">Carbon Charts</div>
           <div className="carbon-chart-holder">

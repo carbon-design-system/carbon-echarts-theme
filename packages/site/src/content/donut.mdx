@@ -34,4 +34,4 @@ Use the categorical palette. The first slice starts at the 12 o'clock position a
 
 ## ECharts implementation notes
 
-Donut charts use `radius: ['40%', '70%']`. The center label is rendered via `series[].label` with `position: 'center'`. `createDonutOptions` handles the inner radius and center text automatically.
+Donut charts use `radius: ['40%', '70%']`. The center displays the formatted total; passing `centerLabel` (e.g. `'Browsers'`) adds a sub-label below it. Both are rendered via a ghost series using ECharts rich text (`position: 'center'`). `createDonutOptions` handles all of this automatically.

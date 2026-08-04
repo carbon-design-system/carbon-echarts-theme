@@ -1,6 +1,7 @@
 import React from 'react'
 import { MDXProvider } from '@mdx-js/react'
-import { UnorderedList, ListItem } from '@carbon/react'
+import { UnorderedList, ListItem, Toggle } from '@carbon/react'
+import { CompareContext } from './CompareContext'
 
 interface ChartPageProps {
   title: string
@@ -20,6 +21,8 @@ export function ChartPage({
   examples,
   v2Only = false,
 }: ChartPageProps) {
+  const [expandAll, setExpandAll] = React.useState(false)
+
   return (
     <div className="chart-page">
       <div className="chart-page__hero">
@@ -39,7 +42,23 @@ export function ChartPage({
               in the next release for live side-by-side examples.
             </div>
           ) : (
-            examples
+            <>
+              {examples && (
+                <div className="chart-page__examples-toolbar">
+                  <Toggle
+                    id={`expand-all-${title.replace(/\s+/g, '-').toLowerCase()}`}
+                    labelText="Expand all comparisons"
+                    hideLabel
+                    labelA="Expand all comparisons"
+                    labelB="Expand all comparisons"
+                    toggled={expandAll}
+                    onToggle={(checked: boolean) => setExpandAll(checked)}
+                    size="sm"
+                  />
+                </div>
+              )}
+              <CompareContext.Provider value={{ expandAll }}>{examples}</CompareContext.Provider>
+            </>
           )}
         </div>
       </div>

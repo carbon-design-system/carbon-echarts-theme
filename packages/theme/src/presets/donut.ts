@@ -31,9 +31,9 @@ export interface DonutPresetOptions extends PiePresetOptions {
   innerRadius?: string
   /** Outer radius as a percentage string (default: '70%') */
   outerRadius?: string
-  /** Text to display in the donut hole center (replaces default total) */
+  /** Sub-label displayed below the formatted total in the donut hole (e.g. 'Browsers') */
   centerLabel?: string
-  /** Smaller subtitle text displayed below centerLabel */
+  /** Explicit override for the sub-label; takes precedence over centerLabel */
   centerSubLabel?: string
   /**
    * Layout alignment. 'center' centres the donut in the container.
@@ -99,16 +99,18 @@ export function createDonutOptions(
   // 'left' offsets the donut slightly left to visually balance with the legend.
   const centerPos: [string, string] = alignment === 'center' ? ['50%', '50%'] : ['50%', '42%']
 
-  // Center label text: prefer explicit centerLabel, else total aggregate
-  const centerText = centerLabel ?? totalLabel
+  // Carbon Charts behaviour: when centerLabel is provided it is shown as the
+  // subtitle BELOW the formatted total (e.g. "196,200\nBrowsers").
+  // centerSubLabel is an explicit override for the subtitle text.
+  const resolvedSubLabel = centerSubLabel ?? centerLabel
+  // Primary center text is always the formatted total
+  const centerText = totalLabel
 
   // Whether outer percentage labels are shown (showPercentageLabels overrides showLabels)
   const labelVisible = showPercentageLabels !== undefined ? showPercentageLabels : showLabels
 
-  // ECharts renders center text via a second transparent series with position:'center'.
-  // This is the canonical approach — graphic elements can't reliably vertically-center text.
-
-  // Build the center-label ghost series entry
+  // ECharts renders center text via a single ghost series using rich text,
+  // which reliably stacks the total and sub-label vertically.
   const centerLabelEntry: object = {
     type: 'pie',
     radius: [0, innerRadius],
@@ -120,40 +122,29 @@ export function createDonutOptions(
     label: {
       show: true,
       position: 'center',
-      fontSize: centerSubLabel ? 22 : 14,
-      fontWeight: centerSubLabel ? 700 : 400,
-      formatter: () => centerText,
+      formatter: resolvedSubLabel
+        ? () => `{total|${centerText}}\n{sub|${resolvedSubLabel}}`
+        : () => `{total|${centerText}}`,
+      rich: {
+        total: {
+          fontSize: 28,
+          fontWeight: 400,
+          lineHeight: 36,
+        },
+        sub: {
+          fontSize: 12,
+          fontWeight: 400,
+          lineHeight: 18,
+        },
+      },
     },
     labelLine: { show: false },
     itemStyle: { color: 'transparent', borderWidth: 0 },
     data: [{ value: 1, name: '_total_', itemStyle: { color: 'transparent' } }],
   }
 
-  // If a sub-label was requested, add a second ghost series for it
-  const subLabelEntry: object[] = centerSubLabel
-    ? [
-        {
-          type: 'pie',
-          radius: [0, innerRadius],
-          center: centerPos,
-          silent: true,
-          animation: false,
-          tooltip: { show: false },
-          legendHoverLink: false,
-          label: {
-            show: true,
-            position: 'center',
-            fontSize: 12,
-            fontWeight: 400,
-            // Push the sub-label below the main label with a leading newline
-            formatter: () => `\n\n${centerSubLabel}`,
-          },
-          labelLine: { show: false },
-          itemStyle: { color: 'transparent', borderWidth: 0 },
-          data: [{ value: 1, name: '_sublabel_', itemStyle: { color: 'transparent' } }],
-        },
-      ]
-    : []
+  // No second ghost series needed — rich text handles both lines in one label.
+  const subLabelEntry: object[] = []
 
   return {
     ...(title ? { title: { text: title } } : {}),

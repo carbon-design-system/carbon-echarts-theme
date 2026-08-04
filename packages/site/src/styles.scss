@@ -122,6 +122,22 @@ body {
   height: calc(100% - 3rem);
 }
 
+.side-nav-item__label {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  width: 100%;
+}
+
+.side-nav-item__no-echarts-tag.cds--tag {
+  flex-shrink: 0;
+  margin: 0;
+  font-size: 0.625rem;
+  padding-inline: 0.375rem;
+  min-inline-size: unset;
+  line-height: 1.2;
+}
+
 // When viewport is narrower than lg breakpoint, sidebar becomes overlay
 @media (max-width: 1055px) {
   .site-content {

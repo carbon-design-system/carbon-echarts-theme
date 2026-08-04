@@ -13,6 +13,7 @@ import {
   Content,
   SkipToContent,
   Dropdown,
+  Tag,
 } from '@carbon/react'
 import { useTheme, type CarbonTheme } from './ThemeContext'
 
@@ -26,6 +27,7 @@ const THEMES: { value: CarbonTheme; text: string }[] = [
 interface NavItem {
   label: string
   path: string
+  noEcharts?: boolean
 }
 
 interface NavGroup {
@@ -69,9 +71,9 @@ const NAV: NavGroup[] = [
       { label: 'Bar', path: '/bar' },
       { label: 'Boxplot', path: '/boxplot' },
       { label: 'Bubble', path: '/bubble' },
-      { label: 'Bullet', path: '/bullet' },
-      { label: 'Choropleth', path: '/choropleth' },
-      { label: 'Circle pack', path: '/circlepack' },
+      { label: 'Bullet', path: '/bullet', noEcharts: true },
+      { label: 'Choropleth', path: '/choropleth', noEcharts: true },
+      { label: 'Circle pack', path: '/circlepack', noEcharts: true },
       { label: 'Combo', path: '/combo' },
       { label: 'Donut', path: '/donut' },
       { label: 'Gauge', path: '/gauge' },
@@ -194,7 +196,14 @@ export function SiteLayout({ children }: SiteLayoutProps) {
                     item.path === '/' ? location.pathname === '/' : location.pathname === item.path
                   }
                 >
-                  {item.label}
+                  <span className="side-nav-item__label">
+                    {item.label}
+                    {item.noEcharts && (
+                      <Tag className="side-nav-item__no-echarts-tag" type="cool-gray" size="sm">
+                        No native
+                      </Tag>
+                    )}
+                  </span>
                 </SideNavMenuItem>
               ))}
             </SideNavMenu>
