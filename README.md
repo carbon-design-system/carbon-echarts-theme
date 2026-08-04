@@ -11,11 +11,12 @@ An official [Apache ECharts](https://echarts.apache.org) theme that ports the **
 
 ## Packages
 
-| Package                                  | Description                                                            |
-| ---------------------------------------- | ---------------------------------------------------------------------- |
-| [`packages/theme`](packages/theme)       | `@carbon/echarts-theme` — core theme objects, published to npm         |
-| [`packages/site`](packages/site)         | Showcase site and development harness (Vite + React)                   |
-| [`packages/codemods`](packages/codemods) | `@carbon/echarts-codemod` — migration transforms, published separately |
+| Package                                  | Description                                                                        |
+| ---------------------------------------- | ---------------------------------------------------------------------------------- |
+| [`packages/theme`](packages/theme)       | `@carbon/echarts-theme` — core theme objects, published to npm                     |
+| [`packages/site`](packages/site)         | Showcase site and development harness (Vite + React)                               |
+| [`packages/toolbar`](packages/toolbar)   | `@carbon/echarts-toolbar` — chart toolbar + CSV/image export _(planned)_           |
+| [`packages/codemods`](packages/codemods) | `@carbon/echarts-codemod` — migration transforms, published separately _(planned)_ |
 
 ---
 
@@ -76,15 +77,19 @@ All design tokens are derived from `@carbon/themes` at build time and inlined in
 
 Scaffold the monorepo, derive token maps from `@carbon/themes`, encode all four IBM data-vis palette types (categorical, sequential, diverging, alert), generate and publish `@carbon/echarts-theme@0.1.0`.
 
-### Phase 2 — Chart Presets + Site
+### Phase 2 — Chart Presets + Site 🚧
 
-`createXxxOptions(data, opts)` helper per chart type — returning a spec-accurate ECharts option object. Every new preset lands alongside an MDX design-guidance page and live examples on the showcase site. Priority order: Bar, Line, Area, Donut, Scatter, Heatmap, Gauge.
+`createXxxOptions(data, opts)` helpers for all Carbon Charts types — returning a spec-accurate ECharts option object with theme tokens, palette, and layout already applied. Presets are exported from the `@carbon/echarts-theme/presets` subpath. Live examples and MDX design-guidance pages for each chart type are published to the showcase site.
 
-### Phase 3 — Site Polish & Documentation
+### Phase 3 — Toolbar
 
-Complete MDX design-direction content for all chart types, pixel-diff toggle, Playwright visual regression baselines per chart × theme, production deploy.
+`@carbon/echarts-toolbar` — a standalone package providing a chart toolbar with CSV download, image export, and fullscreen support. Includes a zero-dependency core and a thin React adapter built on `@carbon/react`.
 
-### Phase 4 — Migration Guides & Codemods
+### Phase 4 — Site Polish & Documentation
+
+Complete MDX design-direction content for all chart types, pixel-diff toggle, Playwright visual regression baselines per chart × theme, production deploy. Each chart example includes an embedded **StackBlitz** sandbox so users can fork and experiment without a local setup.
+
+### Phase 5 — Migration Guides & Codemods
 
 `docs/migration-carbon-charts-to-echarts.md`, `docs/migration-echarts-to-carbon.md`, and `@carbon/echarts-codemod` with two automated transforms:
 
@@ -132,6 +137,8 @@ packages/
 │   └── src/
 │       ├── tokens.ts       # Derived from @carbon/themes — never hardcoded
 │       ├── palettes.ts     # Categorical, sequential, diverging, alert
+│       ├── skeleton.ts     # showSkeleton / createSkeletonCSS loading state
+│       ├── presets/        # createBarOptions, createLineOptions, … (30+ helpers)
 │       ├── themes/         # white.ts · g10.ts · g90.ts · g100.ts
 │       └── index.ts        # Public API
 │
@@ -141,9 +148,9 @@ packages/
 │       ├── charts/         # Page component per chart type
 │       └── components/     # ChartPage, SideBySide, ThemeSwitcher, CodeTabs
 │
+├── toolbar/        # @carbon/echarts-toolbar — chart toolbar + export (planned)
+│
 └── codemods/       # @carbon/echarts-codemod (published separately)
-    ├── carbon-charts-to-echarts/
-    └── echarts-theme-to-carbon/
 ```
 
 ---

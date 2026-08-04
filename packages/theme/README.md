@@ -127,6 +127,56 @@ echarts.registerTheme('carbon-white', carbonWhite)
 
 ---
 
+## Theme name constants
+
+Use the `THEME_NAMES` object and `CarbonThemeName` type to avoid hard-coding strings:
+
+```ts
+import { THEME_NAMES } from '@carbon/echarts-theme'
+import type { CarbonThemeName } from '@carbon/echarts-theme'
+
+const theme: CarbonThemeName = THEME_NAMES.g90 // 'carbon-g90'
+```
+
+---
+
+## Loading skeleton
+
+The `./skeleton` subpath provides a Carbon Charts-matching shimmer grid overlay for loading states. No global stylesheet is required — all styles are injected inline.
+
+```ts
+import { showSkeleton } from '@carbon/echarts-theme/skeleton'
+
+const hide = showSkeleton(chartContainerEl) // show
+const hide = showSkeleton(chartContainerEl, 'g90') // dark theme variant
+// later, once data has loaded:
+hide()
+```
+
+For SSR or CSS-in-JS, generate a stylesheet instead:
+
+```ts
+import { createSkeletonCSS, skeletonCSS } from '@carbon/echarts-theme/skeleton'
+
+// One theme
+const css = createSkeletonCSS('g100', '.my-skeleton')
+
+// Pre-built strings for all four themes
+const { white, g10, g90, g100 } = skeletonCSS
+```
+
+---
+
+## Font constants
+
+IBM Plex font-family strings are exported for use in custom chart options:
+
+```ts
+import { IBM_PLEX_FONT_FAMILY, IBM_PLEX_FONT_FAMILY_CONDENSED } from '@carbon/echarts-theme'
+```
+
+---
+
 ## Links
 
 - [Showcase site](https://echarts-theme.carbondesignsystem.com) — live side-by-side comparison with Carbon Charts
