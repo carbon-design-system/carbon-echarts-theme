@@ -3,12 +3,10 @@
   "release-type": "node",
   "changelog-type": "default",
   "separate-pull-requests": true,
-  "include-component-in-tag": true,
-  "tag-separator": "-",
+  "include-component-in-tag": false,
   "packages": {
     "packages/theme": {
       "package-name": "@carbon/echarts-theme",
-      "component": "theme",
       "changelog-path": "CHANGELOG.md"
     }
   }
