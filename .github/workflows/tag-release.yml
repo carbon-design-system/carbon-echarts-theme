@@ -1,4 +1,4 @@
-name: Cut release
+name: '1. Tag release (triggers publish)'
 
 on:
   workflow_dispatch:
