@@ -5,7 +5,6 @@
   "separate-pull-requests": true,
   "include-component-in-tag": true,
   "tag-separator": "-",
-  "bootstrap-sha": "264ed4d75979d28c883ea840753079cd0eb858e1",
   "packages": {
     "packages/theme": {
       "package-name": "@carbon/echarts-theme",
