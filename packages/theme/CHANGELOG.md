@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/carbon-design-system/carbon-echarts-theme/compare/theme-v0.2.0...theme-v0.2.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* **line:** multiple fixes for line charts ([e1dc5a6](https://github.com/carbon-design-system/carbon-echarts-theme/commit/e1dc5a699aeabda1c3972fbad07c1d4b6b9a586f))
+
 ## [0.2.0](https://github.com/carbon-design-system/carbon-echarts-theme/compare/theme-v0.1.0...theme-v0.2.0) (2026-08-04)
 
 
