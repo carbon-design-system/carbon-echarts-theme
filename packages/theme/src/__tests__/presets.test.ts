@@ -893,7 +893,7 @@ describe('createComboOptions', () => {
 // ── Lollipop + Sparkline ──────────────────────────────────────────────────────
 
 describe('createLollipopOptions', () => {
-  it('produces series (scatter + bar pairs)', () => {
+  it('produces scatter + bar pairs per group (dot + stick)', () => {
     const opt = createLollipopOptions(groupedBarData)
     // 2 groups × 2 (dot + stick) = 4 series
     expect((opt.series as unknown[]).length).toBe(4)

@@ -36,7 +36,7 @@ export function createLollipopOptions(
   const { groups, categories } = groupByGroup(data, 'key')
 
   const series = groups.flatMap((g) => [
-    // Dot
+    // Dot — scatter series, z:3 so it renders above the stick
     {
       type: 'scatter' as const,
       name: g.name,
@@ -49,17 +49,19 @@ export function createLollipopOptions(
       symbolSize: 10,
       z: 3,
     },
-    // Stick — line from zero to value for each point
+    // Stick — thin bar series centred on each category.
+    // barMaxWidth + barGap:'-100%' collapses all stick series onto the category
+    // centre so they never shift sideways, regardless of group count.
     {
       type: 'bar' as const,
       name: g.name,
       data: g.data.map((d) => d.value as number),
-      barWidth: 2,
+      barMaxWidth: 2,
+      barGap: '-100%',
       showBackground: false,
       itemStyle: { borderRadius: 0 },
       silent: true,
       legendHoverLink: false,
-      // Hide from legend (duplicate entry)
       tooltip: { show: false },
     },
   ])
