@@ -41,7 +41,7 @@ export function GraphPage() {
           title="Force-directed graph"
           echartsOption={graphOption}
           extended
-          echartsCode={`<ReactECharts option={graphOption} theme="carbon-white" />`}
+          optionCode={`<ReactECharts option={graphOption} theme="carbon-white" />`}
         />
       }
     />

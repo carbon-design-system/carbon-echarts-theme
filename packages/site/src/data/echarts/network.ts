@@ -10,7 +10,7 @@ import type { NetworkNode, NetworkLink } from '@carbon/echarts-theme/presets'
 
 // ── Shared node/link dataset (~15 nodes, ~20 links) ──────────────────────────
 
-const nodes: NetworkNode[] = [
+export const nodes: NetworkNode[] = [
   // Type 1 — core services
   { id: '1', name: 'Auth Service', value: 80, category: 'Type 1' },
   { id: '2', name: 'API Gateway', value: 100, category: 'Type 1' },
@@ -35,7 +35,7 @@ const nodes: NetworkNode[] = [
   { id: '15', name: 'Monitoring', value: 28, category: 'Type 4' },
 ]
 
-const links: NetworkLink[] = [
+export const links: NetworkLink[] = [
   // Clients → Gateway
   { source: '8', target: '2', value: 1 },
   { source: '9', target: '2', value: 1 },

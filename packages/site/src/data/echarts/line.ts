@@ -32,7 +32,7 @@ import {
 // ── Shared datasets (values match carboncharts/line.ts exactly) ───────────────
 
 /** lineData — 4 groups, 5 categories — matches carboncharts/line.ts lineData */
-const lineData = [
+export const lineData = [
   { group: 'Dataset 1', key: 'Qty', value: 34200 },
   { group: 'Dataset 1', key: 'More', value: 23500 },
   { group: 'Dataset 1', key: 'Sold', value: 53100 },
@@ -61,7 +61,7 @@ const lineData = [
  * Used for slot [5] (pre-selected groups demo — Dataset 1 + 3 active, 2 + 4 greyed).
  * ECharts limitation: per-series initial visibility cannot be pre-set from options alone.
  */
-const lineSelectedGroupsData = [
+export const lineSelectedGroupsData = [
   { group: 'Dataset 1', key: 'Qty', value: 34200 },
   { group: 'Dataset 1', key: 'More', value: 23500 },
   { group: 'Dataset 1', key: 'Sold', value: 53100 },
@@ -89,7 +89,7 @@ const lineSelectedGroupsData = [
  * Matches carboncharts/line.ts lineLongLabelData exactly.
  * Used for slot [8] (truncated label demo).
  */
-const lineLongLabelData = [
+export const lineLongLabelData = [
   { group: 'Dataset 1', key: 'Qty', value: 34200 },
   { group: 'Dataset 1', key: 'More', value: 23500 },
   { group: 'Dataset 1', key: 'Sold', value: 53100 },
@@ -129,7 +129,7 @@ const lineLongLabelData = [
 ]
 
 /** lineTimeSeriesData — 4 groups, date-keyed (ISO strings, with nulls) */
-const timeSeriesData = [
+export const timeSeriesData = [
   { group: 'Dataset 1', date: '2023-01-01', value: 50000 },
   { group: 'Dataset 1', date: '2023-01-05', value: 65000 },
   { group: 'Dataset 1', date: '2023-01-08', value: null as unknown as number },
@@ -153,7 +153,7 @@ const timeSeriesData = [
 ]
 
 /** lineTimeSeriesDenseData — 2 groups, sub-daily ISO timestamps */
-const timeSeriesDenseData = [
+export const timeSeriesDenseData = [
   { group: 'Dataset 1', date: '2023-01-01T00:00:00.000Z', value: -10000 },
   { group: 'Dataset 1', date: '2023-01-01T05:00:00.000Z', value: -12000 },
   { group: 'Dataset 1', date: '2023-01-01T10:00:00.000Z', value: -14000 },
@@ -197,7 +197,7 @@ const timeSeriesDenseData = [
 ]
 
 /** lineTimeSeriesDualAxesData — Temperature (left) + Rainfall (right) */
-const dualAxesData = [
+export const dualAxesData = [
   { group: 'Temperature', date: '2023-01-01', value: 23 },
   { group: 'Temperature', date: '2023-02-01', value: 15 },
   { group: 'Temperature', date: '2023-03-01', value: 24 },
@@ -215,7 +215,7 @@ const dualAxesData = [
 ]
 
 /** lineLogAxisData — single group, time-keyed */
-const logAxisData = [
+export const logAxisData = [
   { group: 'Dataset 1', date: '2023-12-30', value: 300100 },
   { group: 'Dataset 1', date: '2023-12-31', value: 235000 },
   { group: 'Dataset 1', date: '2024-01-01', value: 153100 },
@@ -224,7 +224,7 @@ const logAxisData = [
 ]
 
 /** lineTimeSeriesDataRotatedTicks — single group, daily ticks needing rotation */
-const rotatedTicksData = [
+export const rotatedTicksData = [
   { group: 'Dataset 1', date: '2023-12-30', value: 32100 },
   { group: 'Dataset 1', date: '2023-12-31', value: 23500 },
   { group: 'Dataset 1', date: '2024-01-01', value: 53100 },
@@ -233,7 +233,7 @@ const rotatedTicksData = [
 ]
 
 /** lineTimeSeriesFrenchLocaleData — monthly intervals */
-const frenchLocaleData = [
+export const frenchLocaleData = [
   { group: 'Dataset 1', date: '2023-10-01', value: 10 },
   { group: 'Dataset 1', date: '2023-11-01', value: 10 },
   { group: 'Dataset 1', date: '2023-12-01', value: 10 },

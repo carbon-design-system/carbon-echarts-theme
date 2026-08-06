@@ -2,7 +2,7 @@ import React from 'react'
 import { ChartPage } from '../components/ChartPage'
 import { Compare } from '../components/Compare'
 import NetworkMdx from '../content/network.mdx'
-import { networkBasic, networkCircular } from '../data/echarts/network'
+import { networkBasic, networkCircular, nodes, links } from '../data/echarts/network'
 
 const networkForceCode = `import { createNetworkOptions } from '@carbon/echarts-theme/presets'
 
@@ -24,6 +24,8 @@ const links = [/* ... */]
 
 const option = createNetworkOptions(nodes, links, { layout: 'circular' })`
 
+const networkData = [...nodes, ...links]
+
 export function NetworkDiagramPage() {
   return (
     <ChartPage
@@ -36,13 +38,15 @@ export function NetworkDiagramPage() {
             title="Force layout"
             echartsOption={networkBasic}
             extended
-            echartsCode={networkForceCode}
+            optionCode={networkForceCode}
+            chartData={networkData}
           />
           <Compare
             title="Circular layout"
             echartsOption={networkCircular}
             extended
-            echartsCode={networkCircularCode}
+            optionCode={networkCircularCode}
+            chartData={networkData}
           />
         </>
       }

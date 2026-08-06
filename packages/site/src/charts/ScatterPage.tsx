@@ -8,6 +8,10 @@ import {
   scatterTimeSeries,
   scatterDiscrete,
   scatterDualAxes,
+  doubleLinearData,
+  timeSeriesData as scatterTimeSeriesData,
+  discreteData as scatterDiscreteData,
+  dualAxesData,
 } from '../data/echarts/scatter'
 
 // Filter to test-tagged examples only
@@ -88,6 +92,14 @@ const option = createScatterOptions(data)
 // Note: Carbon Charts alwaysShowRulerTooltip — ECharts tooltip on hover only`,
 ]
 
+const chartDataSamples = [
+  doubleLinearData, // [0] linear x & y
+  scatterTimeSeriesData, // [1] time series
+  scatterDiscreteData, // [2] discrete
+  dualAxesData, // [3] dual axes
+  doubleLinearData, // [4] always ruler tooltip
+]
+
 export function ScatterPage() {
   return (
     <ChartPage
@@ -101,7 +113,8 @@ export function ScatterPage() {
           echartsOption={echartsOptions[i] ?? scatterLinear}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={chartDataSamples[i]}
         />
       ))}
     />

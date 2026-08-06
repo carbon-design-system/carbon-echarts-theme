@@ -3,7 +3,7 @@ import { ChartPage } from '../components/ChartPage'
 import { Compare } from '../components/Compare'
 import TreeMdx from '../content/tree.mdx'
 import { chartTypes, examples } from '../data/carboncharts/tree'
-import { tree, treeHorizontal } from '../data/echarts/tree'
+import { tree, treeHorizontal, treeData } from '../data/echarts/tree'
 
 // Filter to test-tagged examples only
 // Carbon test order: [0] Dendrogram (LR), [1] Tree (LR)
@@ -40,6 +40,11 @@ const option = createTreeOptionsFromTabular(data, {
 })`,
 ]
 
+const chartDataSamples = [
+  [treeData], // [0] dendrogram — wrap in array for consistent chartData type
+  [treeData], // [1] top-bottom
+]
+
 export function TreePage() {
   return (
     <ChartPage
@@ -53,7 +58,8 @@ export function TreePage() {
           echartsOption={echartsOptions[i] ?? tree}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={chartDataSamples[i]}
         />
       ))}
     />

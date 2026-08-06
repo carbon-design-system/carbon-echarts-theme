@@ -18,6 +18,15 @@ import {
   lineTimeSeries,
   lineTimeSeriesDense,
   lineDualAxis,
+  lineData,
+  lineSelectedGroupsData,
+  lineLongLabelData,
+  timeSeriesData as lineTimeSeriesData,
+  timeSeriesDenseData,
+  dualAxesData as lineDualAxesData,
+  logAxisData,
+  rotatedTicksData,
+  frenchLocaleData,
 } from '../data/echarts/line'
 
 // Filter to test-tagged examples only
@@ -302,6 +311,23 @@ const option = createTimeSeriesLineOptions(data, {
 })`,
 ]
 
+const chartDataSamples = [
+  lineData, // [0] custom domain
+  rotatedTicksData, // [1] rotated ticks
+  frenchLocaleData, // [2] French locale
+  logAxisData, // [3] log axis
+  lineData, // [4] custom colors
+  lineSelectedGroupsData, // [5] selected groups
+  lineData, // [6] legend orientation
+  lineTimeSeriesData, // [7] thresholds
+  lineLongLabelData, // [8] long labels
+  lineData, // [9] discrete
+  lineTimeSeriesData, // [10] always ruler tooltip
+  lineTimeSeriesData, // [11] time series
+  timeSeriesDenseData, // [12] time series dense
+  lineDualAxesData, // [13] dual axis
+]
+
 export function LinePage() {
   return (
     <ChartPage
@@ -315,7 +341,8 @@ export function LinePage() {
           echartsOption={echartsOptions[i] ?? lineDiscrete}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={chartDataSamples[i]}
         />
       ))}
     />

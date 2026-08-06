@@ -10,6 +10,10 @@ import {
   alluvialMonochrome,
   alluvialAligned,
   alluvialCustomColors,
+  basicData,
+  multiCategoryData,
+  monochromeData,
+  alignedData,
 } from '../data/echarts/alluvial'
 
 // Filter to test-tagged examples only
@@ -106,17 +110,28 @@ const option = createAlluvialOptions(data, { nodeAlign: 'left' })`,
   `import { createAlluvialOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
-  { source: 'A', target: 'X', value: 3 },
+  { source: 'About Modal', target: 'Data and AI, AI Apps', value: 5 },
+  { source: 'Cards',       target: 'Data and AI, Info Architecture', value: 15 },
   // ... more links
 ]
 
+// Color keys that don't match node names are ignored; nodes use the auto-palette.
 const option = createAlluvialOptions(data, {
   colors: {
-    A: '#da1e28',
-    B: '#0f62fe',
-    C: '#198038',
+    A: '#d12771',
+    B: '#08bdba',
+    C: '#6fdc8c',
   },
 })`,
+]
+
+const chartDataSamples = [
+  basicData, // [0] Basic
+  basicData, // [1] Gradient
+  multiCategoryData, // [2] Multiple categories
+  monochromeData, // [3] Monochrome
+  alignedData, // [4] Aligned nodes
+  basicData, // [5] Custom colors
 ]
 
 export function AlluvialPage() {
@@ -132,7 +147,8 @@ export function AlluvialPage() {
           echartsOption={echartsOptions[i]!}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={chartDataSamples[i]}
         />
       ))}
     />

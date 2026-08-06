@@ -8,6 +8,10 @@ import {
   bubbleTimeSeries,
   bubbleDiscrete,
   bubbleDualDiscrete,
+  linearData,
+  timeSeriesData as bubbleTimeSeriesData,
+  discreteData as bubbleDiscreteData,
+  dualDiscreteData,
 } from '../data/echarts/bubble'
 
 // Filter to test-tagged examples only
@@ -84,6 +88,14 @@ const data = [
 const option = createBubbleOptions(data, { dualDiscrete: true })`,
 ]
 
+const chartDataSamples = [
+  linearData, // [0] linear
+  bubbleTimeSeriesData, // [1] always ruler tooltip
+  bubbleTimeSeriesData, // [2] time series
+  bubbleDiscreteData, // [3] discrete
+  dualDiscreteData, // [4] dual discrete axes
+]
+
 export function BubblePage() {
   return (
     <ChartPage
@@ -97,7 +109,8 @@ export function BubblePage() {
           echartsOption={echartsOptions[i] ?? bubbleLinear}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={chartDataSamples[i]}
         />
       ))}
     />

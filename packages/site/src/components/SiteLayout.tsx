@@ -13,7 +13,6 @@ import {
   Content,
   SkipToContent,
   Dropdown,
-  Tag,
 } from '@carbon/react'
 import { useTheme, type CarbonTheme } from './ThemeContext'
 
@@ -27,7 +26,6 @@ const THEMES: { value: CarbonTheme; text: string }[] = [
 interface NavItem {
   label: string
   path: string
-  noEcharts?: boolean
 }
 
 interface NavGroup {
@@ -71,9 +69,6 @@ const NAV: NavGroup[] = [
       { label: 'Bar', path: '/bar' },
       { label: 'Boxplot', path: '/boxplot' },
       { label: 'Bubble', path: '/bubble' },
-      { label: 'Bullet', path: '/bullet', noEcharts: true },
-      { label: 'Choropleth', path: '/choropleth', noEcharts: true },
-      { label: 'Circle pack', path: '/circlepack', noEcharts: true },
       { label: 'Combo', path: '/combo' },
       { label: 'Donut', path: '/donut' },
       { label: 'Gauge', path: '/gauge' },
@@ -82,25 +77,33 @@ const NAV: NavGroup[] = [
       { label: 'Line', path: '/line' },
       { label: 'Lollipop', path: '/lollipop' },
       { label: 'Meter', path: '/meter' },
-      { label: 'Network Diagrams', path: '/network-diagrams' },
       { label: 'Pie', path: '/pie' },
       { label: 'Radar', path: '/radar' },
       { label: 'Scatter', path: '/scatter' },
       { label: 'Tree', path: '/tree' },
       { label: 'Treemap', path: '/treemap' },
-      { label: 'Word cloud', path: '/wordcloud' },
     ],
   },
   {
-    label: 'ECharts extended',
+    label: 'ECharts only',
     items: [
       { label: 'Candlestick', path: '/extended/candlestick' },
       { label: 'Funnel', path: '/extended/funnel' },
       { label: 'Gantt', path: '/extended/gantt' },
       { label: 'Graph', path: '/extended/graph' },
+      { label: 'Network Diagrams', path: '/extended/network-diagrams' },
       { label: 'Parallel', path: '/extended/parallel' },
       { label: 'Sunburst', path: '/extended/sunburst' },
       { label: 'Theme River', path: '/extended/theme-river' },
+      { label: 'Word cloud', path: '/extended/wordcloud' },
+    ],
+  },
+  {
+    label: 'Carbon Charts only',
+    items: [
+      { label: 'Bullet', path: '/bullet' },
+      { label: 'Choropleth', path: '/choropleth' },
+      { label: 'Circle pack', path: '/circlepack' },
     ],
   },
 ]
@@ -196,14 +199,7 @@ export function SiteLayout({ children }: SiteLayoutProps) {
                     item.path === '/' ? location.pathname === '/' : location.pathname === item.path
                   }
                 >
-                  <span className="side-nav-item__label">
-                    {item.label}
-                    {item.noEcharts && (
-                      <Tag className="side-nav-item__no-echarts-tag" type="cool-gray" size="sm">
-                        No native
-                      </Tag>
-                    )}
-                  </span>
+                  <span className="side-nav-item__label">{item.label}</span>
                 </SideNavMenuItem>
               ))}
             </SideNavMenu>

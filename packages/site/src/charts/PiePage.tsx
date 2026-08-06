@@ -3,7 +3,7 @@ import { ChartPage } from '../components/ChartPage'
 import { Compare } from '../components/Compare'
 import PieMdx from '../content/pie.mdx'
 import { chartTypes, examples } from '../data/carboncharts/pie'
-import { pie, pieCentered, pieValueMapsTo } from '../data/echarts/donut'
+import { pie, pieCentered, pieValueMapsTo, data, dataMapsTo } from '../data/echarts/donut'
 
 // Filter to test-tagged examples only
 // Carbon test order: [0] Pie, [1] Pie (centered), [2] Pie (value maps to count)
@@ -54,6 +54,12 @@ const data = [
 const option = createPieOptions(data, { valueMapsTo: 'count' })`,
 ]
 
+const chartDataSamples = [
+  data, // [0] Pie
+  data, // [1] Pie (centered)
+  dataMapsTo, // [2] Pie (value maps to count)
+]
+
 export function PiePage() {
   return (
     <ChartPage
@@ -67,7 +73,8 @@ export function PiePage() {
           echartsOption={echartsOptions[i] ?? pie}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={chartDataSamples[i]}
         />
       ))}
     />

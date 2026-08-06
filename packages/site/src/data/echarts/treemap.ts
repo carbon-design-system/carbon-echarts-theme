@@ -6,7 +6,7 @@ import type { EChartsOption } from 'echarts'
 import { createTreemapOptions } from '@carbon/echarts-theme/presets'
 
 // ── Flat format for slot [0] — same hierarchy expressed as group/key rows ────
-const flatData = [
+export const flatData = [
   { group: 'Oceania', key: 'A', value: 800 },
   { group: 'Oceania', key: 'B', value: 200 },
   { group: 'Oceania', key: 'C', value: 100 },

@@ -9,6 +9,9 @@ import {
   heatmapDivergent,
   heatmapMissingData,
   heatmapCustomColorDomain,
+  data as heatmapData,
+  positiveNegativeData,
+  missingData,
 } from '../data/echarts/heatmap'
 
 // Filter to test-tagged examples only
@@ -116,6 +119,15 @@ const option = createHeatmapOptions(data, {
 // Note: axis order enforced by insertion order of unique group values`,
 ]
 
+const chartDataSamples = [
+  heatmapData, // [0] basic
+  heatmapData, // [1] custom color range
+  positiveNegativeData, // [2] divergent
+  missingData, // [3] missing data
+  heatmapData, // [4] custom color domain
+  heatmapData, // [5] axis order
+]
+
 export function HeatmapPage() {
   return (
     <ChartPage
@@ -129,7 +141,8 @@ export function HeatmapPage() {
           echartsOption={echartsOptions[i] ?? heatmap}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={chartDataSamples[i]}
         />
       ))}
     />

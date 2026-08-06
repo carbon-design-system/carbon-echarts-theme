@@ -131,6 +131,33 @@ const option = createMeterOptions(
 )`,
   ]
 
+  const meterChartData = [
+    [{ group: 'Dataset 1', value: 56 }], // [0] with statuses
+    [{ group: 'Dataset 1', value: 56 }], // [1] statuses + custom color
+    [{ group: 'Dataset 1', value: 56 }], // [2] no status
+    [
+      // [3] proportional
+      { group: 'emails', value: 202 },
+      { group: 'photos', value: 654 },
+      { group: 'text messages', value: 723 },
+      { group: 'other', value: 120 },
+    ],
+    [
+      // [4] proportional + peak + statuses
+      { group: 'emails', value: 202 },
+      { group: 'photos', value: 654 },
+      { group: 'text messages', value: 723 },
+      { group: 'other', value: 120 },
+    ],
+    [
+      // [5] proportional (truncated)
+      { group: 'emails', value: 202 },
+      { group: 'photos', value: 654 },
+      { group: 'text messages', value: 723 },
+      { group: 'other', value: 120 },
+    ],
+  ]
+
   return (
     <ChartPage
       title="Meter"
@@ -143,7 +170,8 @@ const option = createMeterOptions(
           echartsOption={echartsOptions[i]}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={meterChartData[i]}
         />
       ))}
     />

@@ -39,6 +39,12 @@ const option = createGaugeOptions(
 )`,
 ]
 
+const gaugeChartData = [
+  [{ group: 'value', value: 42 }], // [0] semicircular danger
+  [{ group: 'value', value: 42 }], // [1] circular warning
+  [{ group: 'value', value: 67 }], // [2] circular custom color
+]
+
 export function GaugePage() {
   const { theme } = useTheme()
   const t = tokens[theme]
@@ -60,7 +66,8 @@ export function GaugePage() {
           echartsOption={echartsOptions[i]}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={gaugeChartData[i]}
         />
       ))}
     />

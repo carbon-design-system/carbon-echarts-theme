@@ -35,7 +35,7 @@ export function ParallelPage() {
           title="Parallel coordinates"
           echartsOption={parallelOption}
           extended
-          echartsCode={`<ReactECharts option={parallelOption} theme="carbon-white" />`}
+          optionCode={`<ReactECharts option={parallelOption} theme="carbon-white" />`}
         />
       }
     />

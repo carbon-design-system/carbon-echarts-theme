@@ -20,7 +20,7 @@ import {
 // ── Shared datasets ────────────────────────────────────────────────────────────
 
 // Basic / Gradient / Custom-colors all use the same flow data
-const basicData: AlluvialDatum[] = [
+export const basicData: AlluvialDatum[] = [
   { source: 'About Modal', target: 'Data and AI, AI Apps', value: 5 },
   { source: 'About Modal', target: 'Data and AI, Info Architecture', value: 4 },
   { source: 'About Modal', target: 'Public Cloud', value: 3 },
@@ -45,7 +45,7 @@ const basicData: AlluvialDatum[] = [
 ]
 
 // Multiple Categories — Titanic dataset
-const multiCategoryData: AlluvialDatum[] = [
+export const multiCategoryData: AlluvialDatum[] = [
   { source: '1st', target: 'Female', value: 25 },
   { source: '1st', target: 'Male', value: 35 },
   { source: '2nd', target: 'Female', value: 35 },
@@ -63,7 +63,7 @@ const multiCategoryData: AlluvialDatum[] = [
 ]
 
 // Monochrome — simple A/B/C → X/Y/Z with custom node padding
-const monochromeData: AlluvialDatum[] = [
+export const monochromeData: AlluvialDatum[] = [
   { source: 'A', target: 'X', value: 3 },
   { source: 'A', target: 'Y', value: 5 },
   { source: 'A', target: 'Z', value: 8 },
@@ -76,7 +76,7 @@ const monochromeData: AlluvialDatum[] = [
 ]
 
 // Aligned Nodes — left-aligned with a 3-column flow (A/B/C → X/Y → Z)
-const alignedData: AlluvialDatum[] = [
+export const alignedData: AlluvialDatum[] = [
   { source: 'A', target: 'X', value: 3 },
   { source: 'A', target: 'Y', value: 7 },
   { source: 'B', target: 'X', value: 8 },
@@ -84,9 +84,6 @@ const alignedData: AlluvialDatum[] = [
   { source: 'C', target: 'X', value: 5 },
   { source: 'Y', target: 'Z', value: 13 },
 ]
-
-// Custom Colors — same A/B/C → X/Y/Z data with explicit per-node colours
-const customColorData: AlluvialDatum[] = monochromeData
 
 // ── Gradient color scale — matches Carbon Charts optionsGradient.color.scale ──
 // All values are Carbon design tokens from @carbon/colors (imported at top of file).
@@ -105,7 +102,8 @@ const gradientColors: Record<string, string> = {
   'Public Cloud': green60,
 }
 
-// Custom colors for the A/B/C nodes
+// Custom colors — keys A/B/C don't match any nodes in basicData,
+// so both Carbon Charts and ECharts render with their default auto-palette.
 const customColors: Record<string, string> = {
   A: '#d12771',
   B: '#08bdba',
@@ -139,7 +137,9 @@ export const alluvialAligned: EChartsOption = createAlluvialOptions(alignedData,
   nodeAlign: 'left',
 })
 
-/** [5] Custom colours — per-node colour overrides on A/B/C nodes */
-export const alluvialCustomColors: EChartsOption = createAlluvialOptions(customColorData, {
+/** [5] Custom colours — uses basicData matching Carbon Charts optionsCustomColors.
+ *  The color scale keys (A/B/C) don't match any node names in basicData, so
+ *  both Carbon Charts and ECharts render with their default auto-palette. */
+export const alluvialCustomColors: EChartsOption = createAlluvialOptions(basicData, {
   colors: customColors,
 })

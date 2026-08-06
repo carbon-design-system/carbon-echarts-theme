@@ -12,6 +12,12 @@ export interface LollipopPresetOptions {
   title?: string
   /** Render as horizontal lollipop (default: false) */
   horizontal?: boolean
+  /**
+   * Title label for the category axis (bottom for vertical, left for horizontal).
+   * Maps to Carbon Charts `axes.bottom.title` / `axes.left.title`.
+   * Used as the column header in the tabular representation.
+   */
+  categoryAxisTitle?: string
 }
 
 /**
@@ -25,7 +31,7 @@ export function createLollipopOptions(
   data: ChartTabularData,
   opts: LollipopPresetOptions = {},
 ): EChartsOption {
-  const { title, horizontal = false } = opts
+  const { title, horizontal = false, categoryAxisTitle } = opts
 
   const { groups, categories } = groupByGroup(data, 'key')
 
@@ -66,10 +72,22 @@ export function createLollipopOptions(
     ...(horizontal
       ? {
           xAxis: { type: 'value' },
-          yAxis: { type: 'category', data: categories },
+          yAxis: {
+            type: 'category',
+            data: categories,
+            ...(categoryAxisTitle
+              ? { name: categoryAxisTitle, nameLocation: 'middle', nameGap: 80 }
+              : {}),
+          },
         }
       : {
-          xAxis: { type: 'category', data: categories },
+          xAxis: {
+            type: 'category',
+            data: categories,
+            ...(categoryAxisTitle
+              ? { name: categoryAxisTitle, nameLocation: 'middle', nameGap: 32 }
+              : {}),
+          },
           yAxis: { type: 'value' },
         }),
     series,

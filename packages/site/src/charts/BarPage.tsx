@@ -15,6 +15,12 @@ import {
   barCustomColors,
   barJapaneseLocale,
   barLongLabel,
+  simpleBarData,
+  timeSeriesData as barTimeSeriesData,
+  floatingBarData,
+  floatingHorizontalBarData,
+  floatingHorizontalTimeSeriesData,
+  longLabelData,
 } from '../data/echarts/bar'
 
 // Filter to test-tagged examples only
@@ -287,6 +293,23 @@ const data = [
 const option = createHorizontalBarOptions(data)`,
 ]
 
+const chartDataSamples = [
+  simpleBarData, // [0] vertical simple discrete
+  barTimeSeriesData, // [1] vertical simple time series
+  simpleBarData, // [2] horizontal simple discrete
+  barTimeSeriesData, // [3] horizontal simple time series
+  floatingHorizontalTimeSeriesData, // [4] floating horizontal time series
+  floatingBarData, // [5] floating vertical discrete
+  floatingHorizontalBarData, // [6] floating horizontal discrete
+  simpleBarData, // [7] custom domain
+  simpleBarData, // [8] custom colors
+  simpleBarData, // [9] centered legend
+  simpleBarData, // [10] custom legend order
+  simpleBarData, // [11] additional legend items
+  barTimeSeriesData, // [12] Japanese locale
+  longLabelData, // [13] truncated labels
+]
+
 export function BarPage() {
   return (
     <ChartPage
@@ -300,7 +323,8 @@ export function BarPage() {
           echartsOption={echartsOptions[i] ?? barSimple}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={chartDataSamples[i]}
         />
       ))}
     />

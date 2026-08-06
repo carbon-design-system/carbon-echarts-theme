@@ -16,7 +16,7 @@ import { createHeatmapOptions } from '@carbon/echarts-theme/presets'
 import { sequentialTeal, divergingRedCyan } from '@carbon/echarts-theme'
 
 // Matches carboncharts/heatmap.ts `heatmapData` (letters A-J × months Jan-Dec)
-const data = [
+export const data = [
   { group: 'January', key: 'A', value: 41 },
   { group: 'January', key: 'B', value: 7 },
   { group: 'January', key: 'C', value: 66 },
@@ -154,7 +154,7 @@ export const heatmapCustomColorRange: EChartsOption = createHeatmapOptions(data,
 
 // ── Slot [2] — positive/negative diverging data ───────────────────────────────
 // Matches carboncharts/heatmap.ts heatmapPositiveNegativeData
-const positiveNegativeData = [
+export const positiveNegativeData = [
   { group: 'January', key: 'A', value: -4.1 },
   { group: 'January', key: 'B', value: 0.7 },
   { group: 'January', key: 'C', value: 6.6 },
@@ -401,7 +401,7 @@ const missingPresent = new Map<string, number>([
   ['December-G', 87],
 ])
 
-const missingData = MONTHS.flatMap((month) =>
+export const missingData = MONTHS.flatMap((month) =>
   LETTERS.map((letter) => ({
     group: month,
     key: letter,

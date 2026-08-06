@@ -316,12 +316,26 @@ body {
   background-color: colors.$gray-80;
 }
 
-.compare__code-label {
+.compare__code-tab {
   padding: $spacing-03 $spacing-05;
   @include type.type-style('label-01');
   font-weight: 600;
   color: colors.$gray-30;
   letter-spacing: 0.16px;
+  background: none;
+  border: none;
+  border-right: 1px solid colors.$gray-60;
+  cursor: pointer;
+
+  &:hover {
+    color: colors.$gray-10;
+  }
+
+  &--active {
+    color: colors.$gray-10;
+    background-color: colors.$gray-90;
+    border-bottom: 2px solid colors.$blue-40;
+  }
 }
 
 .compare__code-copy {
@@ -491,177 +505,6 @@ body {
     );
     animation: cc-skeleton-shimmer 2.5s infinite linear;
   }
-}
-
-// Toolbar floats in the upper-right of the chart canvas — always visible
-.chart-toolbar {
-  position: absolute;
-  top: $spacing-02;
-  right: $spacing-02;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 1px;
-  background-color: $layer-01;
-  border-radius: 2px;
-  padding: $spacing-01;
-}
-
-.chart-toolbar__btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: $spacing-07;
-  height: $spacing-07;
-  padding: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: $text-secondary;
-  border-radius: 2px;
-  flex-shrink: 0;
-  pointer-events: auto;
-
-  &:hover:not(:disabled) {
-    background-color: $layer-hover-01;
-    color: $text-primary;
-  }
-}
-
-.chart-toolbar__btn--active {
-  background-color: $layer-selected-01;
-  color: $text-primary;
-}
-
-.chart-toolbar__btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* Overflow menu */
-.chart-toolbar__menu-wrap {
-  position: relative;
-}
-
-.chart-toolbar__menu {
-  position: absolute;
-  top: calc(100% + $spacing-01);
-  right: 0;
-  z-index: 200;
-  background-color: $layer-01;
-  border: 1px solid $border-subtle-01;
-  border-radius: 2px;
-  box-shadow: 0 $spacing-01 $spacing-05 rgba(0, 0, 0, 0.15);
-  min-width: 160px;
-  overflow: hidden;
-}
-
-.chart-toolbar__menu-item {
-  display: block;
-  width: 100%;
-  padding: $spacing-04 $spacing-05;
-  @include type.type-style('body-01');
-  text-align: left;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: $text-primary;
-
-  &:hover {
-    background-color: $layer-hover-01;
-  }
-}
-
-/* Table modal — rendered via createPortal into document.body */
-.chart-toolbar__modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9000;
-  background-color: rgba(22, 22, 22, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: $spacing-05;
-}
-
-.chart-toolbar__modal {
-  background-color: $layer-01;
-  border-top: 4px solid $interactive;
-  width: 100%;
-  max-width: 760px;
-  max-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.chart-toolbar__modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: $spacing-05 $spacing-05 $spacing-05 $spacing-06;
-  flex-shrink: 0;
-  border-bottom: 1px solid $border-subtle-01;
-}
-
-.chart-toolbar__modal-title {
-  @include type.type-style('heading-03');
-  color: $text-primary;
-}
-
-.chart-toolbar__modal-close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: $spacing-09;
-  height: $spacing-09;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: $icon-primary;
-  flex-shrink: 0;
-
-  &:hover {
-    background-color: $layer-hover-01;
-  }
-}
-
-.chart-toolbar__modal-body {
-  overflow: auto;
-  flex: 1;
-}
-
-.chart-toolbar__modal-empty {
-  padding: $spacing-06;
-  color: $text-secondary;
-  @include type.type-style('body-01');
-}
-
-.chart-toolbar__modal-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 1px;
-  flex-shrink: 0;
-  border-top: 1px solid $border-subtle-01;
-  padding: $spacing-05;
-}
-
-/* Fullscreen panel */
-.compare__panel--fullscreen {
-  position: fixed;
-  inset: 0;
-  z-index: 900;
-  background-color: $background;
-  display: flex;
-  flex-direction: column;
-  border-radius: 0;
-  border: none;
-}
-
-.compare__panel--fullscreen .compare__chart-wrap {
-  flex: 1;
-  min-height: 0;
 }
 
 /* ── Mobile responsive ───────────────────────────────────────────────────── */

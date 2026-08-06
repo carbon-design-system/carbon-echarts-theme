@@ -3,7 +3,12 @@ import 'echarts-wordcloud'
 import { ChartPage } from '../components/ChartPage'
 import { Compare } from '../components/Compare'
 import WordcloudMdx from '../content/wordcloud.mdx'
-import { wordcloudBasic, wordcloudCircular, wordcloudDiamond } from '../data/echarts/wordcloud'
+import {
+  wordcloudBasic,
+  wordcloudCircular,
+  wordcloudDiamond,
+  wordData,
+} from '../data/echarts/wordcloud'
 
 const circleCode = `import { createWordCloudOptions } from '@carbon/echarts-theme/presets'
 
@@ -39,19 +44,22 @@ export function WordcloudPage() {
             title="Word cloud — circle"
             echartsOption={wordcloudCircular}
             extended
-            echartsCode={circleCode}
+            optionCode={circleCode}
+            chartData={wordData}
           />
           <Compare
             title="Word cloud — diamond"
             echartsOption={wordcloudDiamond}
             extended
-            echartsCode={diamondCode}
+            optionCode={diamondCode}
+            chartData={wordData}
           />
           <Compare
             title="Word cloud — basic"
             echartsOption={wordcloudBasic}
             extended
-            echartsCode={basicCode}
+            optionCode={basicCode}
+            chartData={wordData}
           />
         </>
       }

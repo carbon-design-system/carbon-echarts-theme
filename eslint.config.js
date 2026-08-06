@@ -29,6 +29,25 @@ export default [
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
     },
   },
+  // Toolbar package source files
+  {
+    files: ['packages/toolbar/src/**/*.ts', 'packages/toolbar/src/**/*.tsx'],
+    ignores: ['**/tsup.config.ts', '**/vitest.config.ts'],
+    languageOptions: {
+      parser: tsparser,
+      parserOptions: {
+        project: true,
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tseslint,
+    },
+    rules: {
+      ...tseslint.configs.recommended.rules,
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+    },
+  },
   // Site package source files — use tsconfig.app.json
   {
     files: ['packages/site/src/**/*.ts', 'packages/site/src/**/*.tsx'],
@@ -62,7 +81,11 @@ export default [
     languageOptions: {
       parser: tsparser,
       parserOptions: {
-        project: ['./packages/theme/tsconfig.node.json', './packages/site/tsconfig.node.json'],
+        project: [
+          './packages/theme/tsconfig.node.json',
+          './packages/site/tsconfig.node.json',
+          './packages/toolbar/tsconfig.node.json',
+        ],
         tsconfigRootDir: import.meta.dirname,
       },
     },

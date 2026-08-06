@@ -12,6 +12,11 @@ import {
   areaBounded,
   areaZoombar,
   areaSkeleton,
+  timeSeriesData,
+  discreteData,
+  curvedData,
+  boundedData,
+  sparkLineData,
 } from '../data/echarts/area'
 
 // Filter to test-tagged examples only
@@ -129,6 +134,17 @@ fetchData().then(data => {
 })`,
 ]
 
+const chartDataSamples = [
+  timeSeriesData, // [0] Time series area
+  timeSeriesData, // [1] Always ruler tooltip
+  sparkLineData, // [2] Sparkline
+  discreteData, // [3] Discrete domain
+  curvedData, // [4] Natural curve
+  boundedData, // [5] Bounded area
+  boundedData, // [6] Zoombar
+  undefined, // [7] Skeleton (no data)
+]
+
 export function AreaPage() {
   return (
     <ChartPage
@@ -142,7 +158,8 @@ export function AreaPage() {
           echartsOption={echartsOptions[i] ?? areaTimeSeries}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={chartDataSamples[i]}
           showLoading={i === 7}
         />
       ))}

@@ -3,7 +3,7 @@ import { ChartPage } from '../components/ChartPage'
 import { Compare } from '../components/Compare'
 import DonutMdx from '../content/donut.mdx'
 import { chartTypes, examples } from '../data/carboncharts/donut'
-import { donut, donutCentered, donutValueMapsTo } from '../data/echarts/donut'
+import { donut, donutCentered, donutValueMapsTo, data, dataMapsTo } from '../data/echarts/donut'
 
 // Filter to test-tagged examples only
 // Carbon test order: [0] Donut, [1] Donut (centered), [2] Donut (value maps to count)
@@ -57,6 +57,12 @@ const data = [
 const option = createDonutOptions(data, { valueMapsTo: 'count' })`,
 ]
 
+const chartDataSamples = [
+  data, // [0] Donut
+  data, // [1] Donut (centered)
+  dataMapsTo, // [2] Donut (value maps to count)
+]
+
 export function DonutPage() {
   return (
     <ChartPage
@@ -70,7 +76,8 @@ export function DonutPage() {
           echartsOption={echartsOptions[i] ?? donut}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={chartDataSamples[i]}
         />
       ))}
     />

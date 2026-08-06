@@ -95,13 +95,11 @@ export function App() {
           <Route path="/line" element={<LinePage />} />
           <Route path="/lollipop" element={<LollipopPage />} />
           <Route path="/meter" element={<MeterPage />} />
-          <Route path="/network-diagrams" element={<NetworkDiagramPage />} />
           <Route path="/pie" element={<PiePage />} />
           <Route path="/radar" element={<RadarPage />} />
           <Route path="/scatter" element={<ScatterPage />} />
           <Route path="/tree" element={<TreePage />} />
           <Route path="/treemap" element={<TreemapPage />} />
-          <Route path="/wordcloud" element={<WordcloudPage />} />
 
           {/* Extended */}
           <Route path="/extended/sunburst" element={<SunburstPage />} />
@@ -111,6 +109,8 @@ export function App() {
           <Route path="/extended/theme-river" element={<ThemeRiverPage />} />
           <Route path="/extended/candlestick" element={<CandlestickPage />} />
           <Route path="/extended/gantt" element={<GanttPage />} />
+          <Route path="/extended/network-diagrams" element={<NetworkDiagramPage />} />
+          <Route path="/extended/wordcloud" element={<WordcloudPage />} />
 
           {/* 404 fallback */}
           <Route

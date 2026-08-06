@@ -7,7 +7,7 @@ import { createHistogramOptions } from '@carbon/echarts-theme/presets'
 
 // Matches carboncharts/histogram.ts `histogramContinueData` — raw age observations
 // (groups collapsed to a single series since our preset counts all observations)
-const ageData = [
+export const ageData = [
   { group: 'Dataset 1', value: 20 },
   { group: 'Dataset 2', value: 21 },
   { group: 'Dataset 2', value: 23 },
@@ -41,7 +41,7 @@ const ageData = [
 
 // Matches carboncharts/histogram.ts `histogramContinueWithBinsNumberData`
 // Carbon uses bins: (870 - 200) / 10 = 67 bins → binWidth: 10
-const usdData = [
+export const usdData = [
   { group: 'Dataset 1', value: 200 },
   { group: 'Dataset 1', value: 210 },
   { group: 'Dataset 1', value: 230 },

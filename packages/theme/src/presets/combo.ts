@@ -58,6 +58,12 @@ export interface ComboPresetOptions {
   title?: string
   /** Color scheme ('light' or 'dark'). Defaults to 'light'. */
   colorScheme?: 'light' | 'dark'
+  /** Optional label for the category (x/y) axis — used as the column header in the tabular view. */
+  xAxisName?: string
+  /** Optional label for the primary value axis — used in the tabular view. */
+  yAxisName?: string
+  /** Optional label for the secondary value axis — used in the tabular view. */
+  yAxisSecondaryName?: string
 }
 
 /**
@@ -83,6 +89,9 @@ export function createComboOptions(
     colorScheme = 'light',
     title,
     loading = false,
+    xAxisName,
+    yAxisName,
+    yAxisSecondaryName,
   } = opts
 
   if (loading) {
@@ -213,19 +222,30 @@ export function createComboOptions(
       legend: { type: 'scroll', bottom: 0 },
       grid: GRID,
       xAxis: xAxisArr,
-      yAxis: { type: 'category' as const, data: categories },
+      yAxis: {
+        type: 'category' as const,
+        data: categories,
+        ...(xAxisName ? { name: xAxisName } : {}),
+      },
       series,
     }
   }
 
   // Vertical (default)
-  const yAxis = hasDualAxis
-    ? [{ type: 'value' as const }, { type: 'value' as const, splitLine: { show: false } }]
-    : { type: 'value' as const }
+  const yAxisDef = hasDualAxis
+    ? [
+        { type: 'value' as const, ...(yAxisName ? { name: yAxisName } : {}) },
+        {
+          type: 'value' as const,
+          splitLine: { show: false },
+          ...(yAxisSecondaryName ? { name: yAxisSecondaryName } : {}),
+        },
+      ]
+    : { type: 'value' as const, ...(yAxisName ? { name: yAxisName } : {}) }
 
   const xAxisDef = timeSeries
-    ? { type: 'time' as const }
-    : { type: 'category' as const, data: categories }
+    ? { type: 'time' as const, ...(xAxisName ? { name: xAxisName } : {}) }
+    : { type: 'category' as const, data: categories, ...(xAxisName ? { name: xAxisName } : {}) }
 
   return {
     ...(title ? { title: { text: title } } : {}),
@@ -233,7 +253,7 @@ export function createComboOptions(
     legend: { type: 'scroll', bottom: 0 },
     grid: GRID,
     xAxis: xAxisDef,
-    yAxis,
+    yAxis: yAxisDef,
     series,
   }
 }

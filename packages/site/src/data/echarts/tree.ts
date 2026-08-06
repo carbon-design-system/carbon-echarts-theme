@@ -9,7 +9,7 @@ import type { TreeNode } from '@carbon/echarts-theme/presets'
 // Carbon's tree data is an array of sibling top-level nodes under an implicit
 // root named "flare" (set via treeOptions.tree.rootTitle = 'flare').
 // We wrap them under a single root node to satisfy ECharts' single-root format.
-const treeData: TreeNode = {
+export const treeData: TreeNode = {
   name: 'flare',
   children: [
     {

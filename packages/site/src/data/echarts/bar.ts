@@ -27,7 +27,7 @@ import {
 
 // ── Simple discrete bar ───────────────────────────────────────────────────────
 // Matches carboncharts/bar.ts `simpleBarData`
-const simpleBarData = [
+export const simpleBarData = [
   { group: 'Qty', value: 65000 },
   { group: 'More', value: 29123 },
   { group: 'Sold', value: 35213 },
@@ -38,7 +38,7 @@ const simpleBarData = [
 // ── Time series bar ───────────────────────────────────────────────────────────
 // Bug 5 fix: use ISO date strings in `date` field matching Carbon's
 // `simpleBarTimeSeriesData` exactly (was using `key` with label strings).
-const timeSeriesData = [
+export const timeSeriesData = [
   { group: 'Qty', date: '2023-01-01', value: 10000 },
   { group: 'More', date: '2023-01-02', value: 65000 },
   { group: 'Sold', date: '2023-01-03', value: 30000 },
@@ -49,7 +49,7 @@ const timeSeriesData = [
 // ── Floating vertical discrete ────────────────────────────────────────────────
 // Bug 1 fix: use value: [base, end] tuple format matching Carbon's
 // `floatingBarData` exactly (was using separate `base` + `value` fields).
-const floatingBarData = [
+export const floatingBarData = [
   { group: 'Qty', value: [30000, 65000] },
   { group: 'More', value: [15000, 29123] },
   { group: 'Sold', value: [22000, 35213] },
@@ -59,7 +59,7 @@ const floatingBarData = [
 
 // ── Floating horizontal discrete ──────────────────────────────────────────────
 // Matches Carbon's `floatingHorizontalBarData`
-const floatingHorizontalBarData = [
+export const floatingHorizontalBarData = [
   { group: 'Qty', value: [30000, 65000] },
   { group: 'More', value: [15000, 29123] },
   { group: 'Sold', value: [22000, 35213] },
@@ -71,7 +71,7 @@ const floatingHorizontalBarData = [
 // Bug 3 fix: use date-keyed [base, end] tuples matching Carbon's
 // `floatingHorizontalBarTimeSeriesData`. Was incorrectly reusing discrete data.
 // Note: rows with a plain number value (no base offset) use [0, value].
-const floatingHorizontalTimeSeriesData = [
+export const floatingHorizontalTimeSeriesData = [
   { group: 'Qty', date: '2023-01-01', value: [10000, 41000] },
   { group: 'More', date: '2023-01-02', value: [0, 65000] },
   { group: 'Sold', date: '2023-01-03', value: [0, 30000] },
@@ -81,7 +81,7 @@ const floatingHorizontalTimeSeriesData = [
 
 // ── Long label data for slot [13] ────────────────────────────────────────────
 // Matches carboncharts/bar.ts simpleHorizontalBarLongLabelData
-const longLabelData = [
+export const longLabelData = [
   { group: '6591DA8668C339B1B39297C61091E320C35391AB7AFC15B469F96B8A2DD0C231', value: 65000 },
   { group: '347FEDE2F7403759069E5F84B65B49D2467D8914B5184738699259AA310EB0F9', value: 29123 },
   { group: '232D788298773BB389DBB8FCE44D3FB4E878879BE7AFB0B303BCE0D56EBB92E2', value: 35213 },

@@ -281,7 +281,8 @@ export function ComboPage() {
           echartsOption={echartsOptions[i] ?? comboBarLine}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={examples[i]?.data}
           showLoading={i === 13}
         />
       ))}

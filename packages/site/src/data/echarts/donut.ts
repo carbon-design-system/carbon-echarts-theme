@@ -8,7 +8,7 @@ import { createDonutOptions, createPieOptions } from '@carbon/echarts-theme/pres
 
 // ── Shared data — mirrors carboncharts/pie.ts exactly ────────────────────────
 
-const data = [
+export const data = [
   { group: '2V2N 9KYPM version 1', value: 20000 },
   { group: 'L22I P66EP L22I P66EP L22I P66EP', value: 65000 },
   { group: 'JQAI 2M4L1', value: 75000 },
@@ -18,7 +18,7 @@ const data = [
 ]
 
 // valueMapsTo data — mirrors carboncharts/pie.ts pieDataMapsTo exactly
-const dataMapsTo = [
+export const dataMapsTo = [
   { group: '2V2N 9KYPM version 1', value: 0, count: 28000 },
   { group: 'L22I P66EP L22I P66EP L22I P66EP', value: 0, count: 65000 },
   { group: 'JQAI 2M4L1', value: 0, count: 75000 },

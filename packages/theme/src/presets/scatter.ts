@@ -18,6 +18,10 @@ export interface ScatterPresetOptions {
   title?: string
   /** Color scheme for palette selection ('light' or 'dark'). Default: 'light' */
   colorScheme?: 'light' | 'dark'
+  /** Label for the x axis (shown in tabular view as column header) */
+  xAxisName?: string
+  /** Label for the y axis (shown in tabular view as column header) */
+  yAxisName?: string
 }
 
 export interface BubblePresetOptions extends ScatterPresetOptions {
@@ -52,7 +56,14 @@ export function createScatterOptions(
   data: ChartTabularData,
   opts: ScatterPresetOptions = {},
 ): EChartsOption {
-  const { timeSeries = false, secondaryGroups = [], title, colorScheme = 'light' } = opts
+  const {
+    timeSeries = false,
+    secondaryGroups = [],
+    title,
+    colorScheme = 'light',
+    xAxisName,
+    yAxisName,
+  } = opts
   const hasDualAxis = secondaryGroups.length > 0
 
   // Group by series name
@@ -99,15 +110,25 @@ export function createScatterOptions(
     : { type: 'value' as const }
 
   const xAxis = timeSeries
-    ? { type: 'time' as const }
+    ? { type: 'time' as const, ...(xAxisName ? { name: xAxisName } : {}) }
     : isDiscrete
       ? {
           type: 'category' as const,
           data: categoryLabels,
           boundaryGap: false,
           splitLine: { show: true },
+          ...(xAxisName ? { name: xAxisName } : {}),
         }
-      : { type: 'value' as const }
+      : { type: 'value' as const, ...(xAxisName ? { name: xAxisName } : {}) }
+
+  type YAxisEntry = { type: 'value'; splitLine?: { show: boolean } }
+  const yAxisWithName = hasDualAxis
+    ? (yAxis as YAxisEntry[]).map((a: YAxisEntry, i: number) =>
+        i === 0 && yAxisName ? { ...a, name: yAxisName } : a,
+      )
+    : yAxisName
+      ? { ...(yAxis as object), name: yAxisName }
+      : yAxis
 
   return {
     ...(title ? { title: { text: title } } : {}),
@@ -115,7 +136,7 @@ export function createScatterOptions(
     legend: { type: 'scroll', bottom: 0 },
     grid: GRID,
     xAxis,
-    yAxis,
+    yAxis: yAxisWithName,
     series,
   }
 }
@@ -142,6 +163,8 @@ export function createBubbleOptions(
     maxSize = 30,
     colorScheme = 'light',
     dualDiscrete,
+    xAxisName,
+    yAxisName,
   } = opts
 
   // ── Dual discrete mode ─────────────────────────────────────────────────────
@@ -187,8 +210,16 @@ export function createBubbleOptions(
       tooltip: { trigger: 'item' },
       legend: { type: 'scroll', bottom: 0 },
       grid: GRID,
-      xAxis: { type: 'category', data: [...xCategories] },
-      yAxis: { type: 'category', data: [...yCategories] },
+      xAxis: {
+        type: 'category',
+        data: [...xCategories],
+        ...(xAxisName ? { name: xAxisName } : {}),
+      },
+      yAxis: {
+        type: 'category',
+        data: [...yCategories],
+        ...(yAxisName ? { name: yAxisName } : {}),
+      },
       series,
     }
   }
@@ -247,11 +278,17 @@ export function createBubbleOptions(
     legend: { type: 'scroll', bottom: 0 },
     grid: GRID,
     xAxis: timeSeries
-      ? { type: 'time' }
+      ? { type: 'time', ...(xAxisName ? { name: xAxisName } : {}) }
       : isDiscrete
-        ? { type: 'category', data: categoryLabels, boundaryGap: true, splitLine: { show: true } }
-        : { type: 'value' },
-    yAxis: { type: 'value' },
+        ? {
+            type: 'category',
+            data: categoryLabels,
+            boundaryGap: true,
+            splitLine: { show: true },
+            ...(xAxisName ? { name: xAxisName } : {}),
+          }
+        : { type: 'value', ...(xAxisName ? { name: xAxisName } : {}) },
+    yAxis: { type: 'value', ...(yAxisName ? { name: yAxisName } : {}) },
     series,
   }
 }

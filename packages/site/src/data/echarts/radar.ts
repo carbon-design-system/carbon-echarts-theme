@@ -15,7 +15,7 @@ import type { ChartTabularData } from '@carbon/echarts-theme/presets'
 
 // ── Slot [0] and [1] — standard product × feature data ───────────────────────
 // Matches carboncharts/radar.ts radarData (product/feature/score fields)
-const radarData = [
+export const radarData = [
   { group: 'Product 1', key: 'Price', value: 60 },
   { group: 'Product 1', key: 'Usability', value: 92 },
   { group: 'Product 1', key: 'Availability', value: 5 },
@@ -32,7 +32,7 @@ const radarData = [
 // Matches carboncharts/radar.ts radarWithMissingDataData
 // Note: Water missing Sydney (only 14 rows instead of 15) — the null position
 // is preserved by the preset's sparse fill (kvMap.get(k) ?? 0).
-const radarMissingData = [
+export const radarMissingData = [
   { group: 'Sugar', key: 'London', value: 25 },
   { group: 'Oil', key: 'London', value: 6 },
   { group: 'Water', key: 'London', value: 12 },
@@ -52,7 +52,7 @@ const radarMissingData = [
 
 // ── Slot [3] — dense: month × activity × hoursAvg ────────────────────────────
 // Matches carboncharts/radar.ts radarDenseData (custom field names)
-const radarDenseData = [
+export const radarDenseData = [
   { month: 'January', activity: 'Eating', hoursAvg: 2 },
   { month: 'January', activity: 'Drinking', hoursAvg: 6 },
   { month: 'January', activity: 'Sleeping', hoursAvg: 6 },
@@ -97,7 +97,7 @@ const radarDenseData = [
 
 // ── Slot [4] — custom max score: single product, values ≤60, maxValue:100 ────
 // Matches carboncharts/radar.ts radarWithCustomMaxScore
-const radarCustomMaxData = [
+export const radarCustomMaxData = [
   { group: 'Product 1', key: 'Price', value: 50 },
   { group: 'Product 1', key: 'Usability', value: 20 },
   { group: 'Product 1', key: 'Availability', value: 5 },

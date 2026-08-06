@@ -35,7 +35,7 @@ export function CandlestickPage() {
           title="Candlestick (OHLC)"
           echartsOption={candlestickOption}
           extended
-          echartsCode={`<ReactECharts option={candlestickOption} theme="carbon-white" />`}
+          optionCode={`<ReactECharts option={candlestickOption} theme="carbon-white" />`}
         />
       }
     />

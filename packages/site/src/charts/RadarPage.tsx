@@ -9,6 +9,10 @@ import {
   radarMissingDatapoints,
   radarDense,
   radarCustomMax,
+  radarData,
+  radarMissingData,
+  radarDenseData,
+  radarCustomMaxData,
 } from '../data/echarts/radar'
 
 // Filter to test-tagged examples only
@@ -100,6 +104,14 @@ const data = [
 const option = createRadarOptions(data, { maxValue: 100 })`,
 ]
 
+const chartDataSamples = [
+  radarData, // [0] Radar
+  radarData, // [1] Radar (centered)
+  radarMissingData, // [2] Radar (missing datapoints)
+  radarDenseData, // [3] Radar (dense)
+  radarCustomMaxData, // [4] Radar (custom max score)
+]
+
 export function RadarPage() {
   return (
     <ChartPage
@@ -113,7 +125,8 @@ export function RadarPage() {
           echartsOption={echartsOptions[i] ?? radar}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={chartDataSamples[i]}
         />
       ))}
     />

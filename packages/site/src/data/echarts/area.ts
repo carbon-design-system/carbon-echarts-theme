@@ -28,7 +28,7 @@ import {
 // ── Shared datasets (values match carboncharts/area.ts exactly) ───────────────
 
 /** `data` — 3 groups, ISO date-keyed time series */
-const timeSeriesData = [
+export const timeSeriesData = [
   { group: 'Dataset 1', date: '2023-01-01', value: 0 },
   { group: 'Dataset 1', date: '2023-01-06', value: 57312 },
   { group: 'Dataset 1', date: '2023-01-08', value: 21432 },
@@ -47,7 +47,7 @@ const timeSeriesData = [
 ]
 
 /** `dataDiscrete` — 3 groups, label-keyed (a/b/c/d/e) */
-const discreteData = [
+export const discreteData = [
   { group: 'Dataset 1', value: 10000, key: 'a' },
   { group: 'Dataset 1', value: 65000, key: 'b' },
   { group: 'Dataset 1', value: 10000, key: 'c' },
@@ -66,7 +66,7 @@ const discreteData = [
 ]
 
 /** `dataCurved` — 2 groups, time-keyed, negative values */
-const curvedData = [
+export const curvedData = [
   { group: 'Dataset 1', date: '2023-01-01', value: 0 },
   { group: 'Dataset 1', date: '2023-01-06', value: -37312 },
   { group: 'Dataset 1', date: '2023-01-08', value: -22392 },
@@ -83,7 +83,7 @@ const curvedData = [
  * `dataBounded` — 1 group with value/min/max fields matching Carbon Charts exactly.
  * ECharts has no native bounded-area band; approximated via createBoundedAreaOptions.
  */
-const boundedData = [
+export const boundedData = [
   { group: 'Dataset 1', date: '2023-01-01', value: 47263, min: 40000, max: 50000 },
   { group: 'Dataset 1', date: '2023-01-05', value: 14178, min: 10000, max: 20000 },
   { group: 'Dataset 1', date: '2023-01-08', value: 23094, min: 10000, max: 25000 },
@@ -92,7 +92,7 @@ const boundedData = [
 ]
 
 /** `sparkLineData` — single group, ISO timestamps (minute-resolution), matches Carbon Charts */
-const sparkLineData = [
+export const sparkLineData = [
   { group: 'Dataset 1', date: '2019-05-21T19:21:00.000Z', value: 2 },
   { group: 'Dataset 1', date: '2019-05-21T19:22:00.000Z', value: 3 },
   { group: 'Dataset 1', date: '2019-05-21T19:23:00.000Z', value: 5 },

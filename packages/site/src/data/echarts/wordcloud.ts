@@ -5,7 +5,7 @@
 import type { EChartsOption } from 'echarts'
 import { createWordCloudOptions } from '@carbon/echarts-theme/presets'
 
-const wordData = [
+export const wordData = [
   { name: 'JavaScript', value: 1000 },
   { name: 'TypeScript', value: 850 },
   { name: 'Python', value: 800 },

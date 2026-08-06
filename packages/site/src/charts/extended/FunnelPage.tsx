@@ -32,7 +32,7 @@ export function FunnelPage() {
           title="Funnel"
           echartsOption={funnelOption}
           extended
-          echartsCode={`<ReactECharts option={funnelOption} theme="carbon-white" />`}
+          optionCode={`<ReactECharts option={funnelOption} theme="carbon-white" />`}
         />
       }
     />

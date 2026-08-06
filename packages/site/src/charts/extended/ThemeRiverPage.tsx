@@ -37,7 +37,7 @@ export function ThemeRiverPage() {
           title="Theme River"
           echartsOption={themeRiverOption}
           extended
-          echartsCode={`<ReactECharts option={themeRiverOption} theme="carbon-white" />`}
+          optionCode={`<ReactECharts option={themeRiverOption} theme="carbon-white" />`}
         />
       }
     />

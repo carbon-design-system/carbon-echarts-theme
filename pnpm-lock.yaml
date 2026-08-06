@@ -61,6 +61,9 @@ importers:
       '@carbon/echarts-theme':
         specifier: workspace:*
         version: link:../theme
+      '@carbon/echarts-toolbar':
+        specifier: workspace:*
+        version: link:../toolbar
       '@carbon/ibmdotcom-web-components':
         specifier: ^2.17.0
         version: 2.56.0(@carbon/grid@11.58.0)(@carbon/themes@11.77.0)(@carbon/type@11.63.0)(sass@1.102.0)
@@ -137,6 +140,27 @@ importers:
       echarts:
         specifier: ^6.1.0
         version: 6.1.0
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.24)(typescript@5.9.3)(yaml@2.9.0)
+      typescript:
+        specifier: ^5.8.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.0
+        version: 3.2.7(@types/debug@4.1.13)(@types/node@26.1.2)(jiti@2.6.1)(jsdom@28.1.0)(sass@1.102.0)(yaml@2.9.0)
+
+  packages/toolbar:
+    devDependencies:
+      '@vitest/coverage-v8':
+        specifier: ^3.0.0
+        version: 3.2.7(vitest@3.2.7(@types/debug@4.1.13)(@types/node@26.1.2)(jiti@2.6.1)(jsdom@28.1.0)(sass@1.102.0)(yaml@2.9.0))
+      echarts:
+        specifier: ^6.1.0
+        version: 6.1.0
+      sass:
+        specifier: ^1.89.0
+        version: 1.102.0
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.24)(typescript@5.9.3)(yaml@2.9.0)

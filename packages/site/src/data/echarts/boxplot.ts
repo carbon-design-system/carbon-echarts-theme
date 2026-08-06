@@ -6,7 +6,7 @@ import type { EChartsOption } from 'echarts'
 import { createBoxplotOptions } from '@carbon/echarts-theme/presets'
 
 // Matches carboncharts/boxplot.ts data (Q1-Q4 × Mon-Fri)
-const rawData = [
+export const rawData = [
   { group: 'Q1', key: 'Q1', value: 65000 },
   { group: 'Q1', key: 'Q1', value: 29123 },
   { group: 'Q1', key: 'Q1', value: 35213 },

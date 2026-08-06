@@ -13,7 +13,7 @@ import { createBubbleOptions } from '@carbon/echarts-theme/presets'
 
 // [0] Linear bubble: sales vs profit, surplus = bubble size
 // Matches carboncharts/bubble.ts bubbleDoubleLinearData
-const linearData = [
+export const linearData = [
   { group: 'Dataset 1', key: 10000, value: 32100, surplus: 50000 },
   { group: 'Dataset 1', key: 12000, value: 23500, surplus: 34000 },
   { group: 'Dataset 1', key: 14000, value: 53100, surplus: 63000 },
@@ -27,7 +27,7 @@ const linearData = [
 ]
 
 // [1] & [2] Time series bubble — matches bubbleTimeSeriesData
-const timeSeriesData = [
+export const timeSeriesData = [
   { group: 'Dataset 1', date: '2023-01-01', value: 50000, surplus: 1108792759.4591982 },
   { group: 'Dataset 1', date: '2023-01-05', value: 65000, surplus: 590247271.3872744 },
   { group: 'Dataset 1', date: '2023-01-08', value: null, surplus: 9219.520929038921 },
@@ -51,7 +51,7 @@ const timeSeriesData = [
 ]
 
 // [3] Discrete bubble — matches bubbleDiscreteData (4 datasets), surplus = size
-const discreteData = [
+export const discreteData = [
   { group: 'Dataset 1', key: 'Qty', value: 8000, surplus: 50000 },
   { group: 'Dataset 1', key: 'More', value: 23500, surplus: 15000 },
   { group: 'Dataset 1', key: 'Sold', value: 53100, surplus: 32000 },
@@ -79,7 +79,7 @@ const discreteData = [
 // We store all fields using their original Carbon field names:
 //   group = year, problem = x-category, product = y-category, value = bubble size
 // ChartTabularDatum.value must be numeric — value here IS numeric (it drives bubble size).
-const dualDiscreteData = [
+export const dualDiscreteData = [
   { group: '2014', value: 162, problem: 'Skills', product: 'Cloud' },
   { group: '2014', value: 340, problem: 'Skills', product: 'Mainframe' },
   { group: '2014', value: 202, problem: 'Software', product: 'Cloud' },
@@ -100,15 +100,23 @@ const dualDiscreteData = [
   { group: '2018', value: 274, problem: 'Staffing', product: 'Mainframe' },
 ]
 
-export const bubbleLinear: EChartsOption = createBubbleOptions(linearData, { sizeField: 'surplus' })
+export const bubbleLinear: EChartsOption = createBubbleOptions(linearData, {
+  sizeField: 'surplus',
+  xAxisName: 'No. of employees',
+  yAxisName: 'Annual sales',
+})
 export const bubbleTimeSeries: EChartsOption = createBubbleOptions(timeSeriesData, {
   timeSeries: true,
   sizeField: 'surplus',
+  xAxisName: '2023 Annual Sales Figures',
 })
 export const bubbleDiscrete: EChartsOption = createBubbleOptions(discreteData, {
   sizeField: 'surplus',
+  xAxisName: '2023 Annual Sales Figures',
 })
 export const bubbleDualDiscrete: EChartsOption = createBubbleOptions(dualDiscreteData, {
   sizeField: 'value',
   dualDiscrete: { xField: 'problem', yField: 'product' },
+  xAxisName: 'Problems',
+  yAxisName: 'Products',
 })

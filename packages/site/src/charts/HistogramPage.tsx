@@ -8,6 +8,8 @@ import {
   histogramTooltip,
   histogramCustomBin,
   histogramCustomBinWidth,
+  ageData,
+  usdData,
 } from '../data/echarts/histogram'
 
 // Filter to test-tagged examples only
@@ -84,6 +86,13 @@ const option = createHistogramOptions(data, {
 })`,
 ]
 
+const chartDataSamples = [
+  ageData, // [0] linear
+  ageData, // [1] always show ruler tooltip
+  usdData, // [2] US$ bins
+  ageData, // [3] wider bins
+]
+
 export function HistogramPage() {
   return (
     <ChartPage
@@ -97,7 +106,8 @@ export function HistogramPage() {
           echartsOption={echartsOptions[i] ?? histogram}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={chartDataSamples[i]}
         />
       ))}
     />

@@ -24,7 +24,7 @@ function norm(data: ChartTabularData): ChartTabularData {
 
 // ── [0] Bar + Line (dual Y) ────────────────────────────────────────────────────
 // Carbon: comboSimpleData — School A (bar, left Y) + Temperature (line, right Y)
-const simpleRaw: ChartTabularData = [
+export const simpleRaw: ChartTabularData = [
   { group: 'School A', date: 'Monday', value: 10000 },
   { group: 'School A', date: 'Tuesday', value: 65000 },
   { group: 'School A', date: 'Wednesday', value: 30000 },
@@ -41,6 +41,9 @@ export const comboBarLine: EChartsOption = createComboOptions(simpleRaw, {
   xField: 'date',
   lineGroups: ['Temperature'],
   secondaryGroups: ['Temperature'],
+  xAxisName: 'Day of the Week',
+  yAxisName: 'USA Summer School Attendance',
+  yAxisSecondaryName: 'Temperature (°F)',
 })
 
 // ── [1] Bar + Line — tooltip variant (same data as [0]) ───────────────────────
@@ -48,11 +51,14 @@ export const comboBarLineRuler: EChartsOption = createComboOptions(simpleRaw, {
   xField: 'date',
   lineGroups: ['Temperature'],
   secondaryGroups: ['Temperature'],
+  xAxisName: 'Day of the Week',
+  yAxisName: 'USA Summer School Attendance',
+  yAxisSecondaryName: 'Temperature (°F)',
 })
 
 // ── [2] Stacked bar + Line (dual Y) ───────────────────────────────────────────
 // Carbon: comboStackedData — Florida/California/Tokyo (stacked bar) + Temperature (line, right Y)
-const stackedRaw: ChartTabularData = [
+export const stackedRaw: ChartTabularData = [
   { group: 'Florida', key: 'Monday', value: 65000 },
   { group: 'Florida', key: 'Tuesday', value: 29123 },
   { group: 'Florida', key: 'Wednesday', value: 35213 },
@@ -79,11 +85,14 @@ export const comboStackedBarLine: EChartsOption = createComboOptions(stackedRaw,
   lineGroups: ['Temperature'],
   secondaryGroups: ['Temperature'],
   stacked: true,
+  xAxisName: '2018 Annual Sales Figures',
+  yAxisName: 'Disney Park Attendance',
+  yAxisSecondaryName: 'Temperature (°C)',
 })
 
 // ── [3] Grouped bar + Line (dual Y) ───────────────────────────────────────────
 // Carbon: comboGroupedData — Location 1/2/3 (grouped bar) + Temperature (line, right Y)
-const groupedRaw: ChartTabularData = [
+export const groupedRaw: ChartTabularData = [
   { group: 'Location 1', key: 'Monday', value: 65000 },
   { group: 'Location 1', key: 'Tuesday', value: -39123 },
   { group: 'Location 1', key: 'Wednesday', value: -35213 },
@@ -109,13 +118,15 @@ const groupedRaw: ChartTabularData = [
 export const comboGroupedLine: EChartsOption = createComboOptions(groupedRaw, {
   lineGroups: ['Temperature'],
   secondaryGroups: ['Temperature'],
+  yAxisName: 'Sales',
+  yAxisSecondaryName: 'Temperature (°C)',
 })
 
 // ── [4] Floating bar + Line ────────────────────────────────────────────────────
 // Carbon: comboSimpleFloatingData — School A (line, left Y) + Temperature (floating bar, right Y)
 // NOTE: in Carbon, Temperature is the floating bar and School A is the line.
 // temp field = [base, end] tuples for Temperature (floating).
-const floatingRaw: ChartTabularData = [
+export const floatingRaw: ChartTabularData = [
   { group: 'School A', date: 'Monday', value: 50000 },
   { group: 'School A', date: 'Tuesday', value: 45000 },
   { group: 'School A', date: 'Wednesday', value: 58000 },
@@ -133,11 +144,14 @@ export const comboFloatingLine: EChartsOption = createComboOptions(floatingRaw, 
   lineGroups: ['School A'],
   floatingGroups: ['Temperature'],
   secondaryGroups: ['Temperature'],
+  xAxisName: 'Day of the Week',
+  yAxisName: 'USA Summer School Attendance',
+  yAxisSecondaryName: 'Temperature (°F)',
 })
 
 // ── [5] Grouped horizontal bar + Line ─────────────────────────────────────────
 // Carbon: comboGroupedHorizontalData — Location 1/2/3 (grouped horiz bar) + Temperature (line)
-const groupedHorizontalRaw: ChartTabularData = [
+export const groupedHorizontalRaw: ChartTabularData = [
   { group: 'Location 1', key: 'Monday', value: 65000 },
   { group: 'Location 1', key: 'Tuesday', value: -39123 },
   { group: 'Location 1', key: 'Wednesday', value: -35213 },
@@ -156,6 +170,8 @@ export const comboGroupedHorizontal: EChartsOption = createComboOptions(groupedH
   horizontal: true,
   lineGroups: ['Temperature'],
   secondaryGroups: ['Temperature'],
+  yAxisName: 'Sales',
+  yAxisSecondaryName: 'Temperature (°C)',
 })
 
 // ── [6] Horizontal bar + Line ──────────────────────────────────────────────────
@@ -165,11 +181,14 @@ export const comboHorizontalLine: EChartsOption = createComboOptions(simpleRaw, 
   horizontal: true,
   lineGroups: ['Temperature'],
   secondaryGroups: ['Temperature'],
+  xAxisName: 'Day of the Week',
+  yAxisName: 'USA Summer School Attendance',
+  yAxisSecondaryName: 'Temperature (°F)',
 })
 
 // ── [7] Area + Line (dual Y) ───────────────────────────────────────────────────
 // Carbon: comboAreaLineData — Health (area) + Temperature (line, right Y)
-const areaLineRaw: ChartTabularData = norm([
+export const areaLineRaw: ChartTabularData = norm([
   { group: 'Health', key: 'January', value: 312 },
   { group: 'Health', key: 'February', value: 232 },
   { group: 'Health', key: 'March', value: 432 },
@@ -192,11 +211,13 @@ export const comboAreaLine: EChartsOption = createComboOptions(areaLineRaw, {
   areaGroups: ['Health'],
   lineGroups: ['Temperature'],
   secondaryGroups: ['Temperature'],
+  yAxisName: 'Score',
+  yAxisSecondaryName: 'Temperature (°C)',
 })
 
 // ── [8] Stacked area + Line (time series, dual Y) ────────────────────────────
 // Carbon: comboStackedAreaLine — Dataset 1/2/3 (stacked area, date field) + Temperature (line, right Y)
-const stackedAreaLineRaw: ChartTabularData = [
+export const stackedAreaLineRaw: ChartTabularData = [
   { group: 'Dataset 1 with a very long name', date: '2023-01-01', value: 10000 },
   { group: 'Dataset 1 with a very long name', date: '2023-01-05', value: 65000 },
   { group: 'Dataset 1 with a very long name', date: '2023-01-08', value: 10000 },
@@ -229,11 +250,13 @@ export const comboStackedAreaLine: EChartsOption = createComboOptions(stackedAre
   stacked: true,
   lineGroups: ['Temperature'],
   secondaryGroups: ['Temperature'],
+  yAxisName: 'left',
+  yAxisSecondaryName: 'right',
 })
 
 // ── [9] Bar + Scatter + Line (dual Y) ─────────────────────────────────────────
 // Carbon: comboLineScatterData — Attendance (bar) + Paris/Marseille (scatter, right Y) + Avg Temperature (line, right Y)
-const scatterLineRaw: ChartTabularData = norm([
+export const scatterLineRaw: ChartTabularData = norm([
   { group: 'Paris', key: 'Monday', value: 25 },
   { group: 'Paris', key: 'Tuesday', value: 33 },
   { group: 'Paris', key: 'Wednesday', value: 27 },
@@ -260,11 +283,13 @@ export const comboScatterLine: EChartsOption = createComboOptions(scatterLineRaw
   lineGroups: ['Avg Temperature'],
   scatterGroups: ['Paris', 'Marseille'],
   secondaryGroups: ['Avg Temperature', 'Paris', 'Marseille'],
+  yAxisName: 'Attendance',
+  yAxisSecondaryName: 'Temperature (°C)',
 })
 
 // ── [10] Area + Line (time series, dual Y) ────────────────────────────────────
 // Carbon: comboAreaLineTimeSeriesData — Health (area, key=date) + Temperature (line, right Y)
-const areaLineTimeSeriesRaw: ChartTabularData = [
+export const areaLineTimeSeriesRaw: ChartTabularData = [
   { group: 'Health', key: '2022-12-30', value: 312 },
   { group: 'Health', key: '2023-01-06', value: 232 },
   { group: 'Health', key: '2023-01-08', value: 432 },
@@ -289,6 +314,8 @@ export const comboAreaLineTimeSeries: EChartsOption = createComboOptions(areaLin
   areaGroups: ['Health'],
   lineGroups: ['Temperature'],
   secondaryGroups: ['Temperature'],
+  yAxisName: 'Score',
+  yAxisSecondaryName: 'Temperature (°C)',
 })
 
 export const comboEmpty: EChartsOption = createComboOptions([], {

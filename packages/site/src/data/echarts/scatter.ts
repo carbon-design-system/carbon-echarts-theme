@@ -13,7 +13,7 @@ import { createScatterOptions } from '@carbon/echarts-theme/presets'
 
 // [0] & [4] Linear scatter: employees vs sales
 // Carbon's doubleLinearScatterData uses employees→key, sales→value
-const doubleLinearData = [
+export const doubleLinearData = [
   { group: 'Dataset 1', key: 5000, value: 32100 },
   { group: 'Dataset 1', key: 3000, value: 25100 },
   { group: 'Dataset 1', key: 8000, value: 12100 },
@@ -26,7 +26,7 @@ const doubleLinearData = [
 ]
 
 // [1] Time series scatter — matches lineTimeSeriesData from carboncharts/line.ts
-const timeSeriesData = [
+export const timeSeriesData = [
   { group: 'Dataset 1', date: '2023-01-01', value: 50000 },
   { group: 'Dataset 1', date: '2023-01-05', value: 65000 },
   { group: 'Dataset 1', date: '2023-01-08', value: null },
@@ -50,7 +50,7 @@ const timeSeriesData = [
 ]
 
 // [2] Discrete scatter — matches scatterDiscreteData (4 datasets)
-const discreteData = [
+export const discreteData = [
   { group: 'Dataset 1', key: 'Qty', value: 34200 },
   { group: 'Dataset 1', key: 'More', value: 23500 },
   { group: 'Dataset 1', key: 'Sold', value: 53100 },
@@ -75,7 +75,7 @@ const discreteData = [
 
 // [3] Dual axes — Orders (orderCount) and Products (productCount)
 // ECharts handles this as two separate value series on a category x-axis
-const dualAxesData = [
+export const dualAxesData = [
   { group: 'Orders', key: 'January', value: 121 },
   { group: 'Orders', key: 'February', value: 321 },
   { group: 'Orders', key: 'March', value: 370 },
@@ -88,12 +88,19 @@ const dualAxesData = [
   { group: 'Products', key: 'May', value: 34100 },
 ]
 
-export const scatterLinear: EChartsOption = createScatterOptions(doubleLinearData)
+export const scatterLinear: EChartsOption = createScatterOptions(doubleLinearData, {
+  xAxisName: 'No. of employees',
+  yAxisName: 'Annual sales',
+})
 export const scatterTimeSeries: EChartsOption = createScatterOptions(timeSeriesData, {
   timeSeries: true,
+  xAxisName: '2019 Annual Sales Figures',
 })
-export const scatterDiscrete: EChartsOption = createScatterOptions(discreteData)
+export const scatterDiscrete: EChartsOption = createScatterOptions(discreteData, {
+  xAxisName: '2019 Annual Sales Figures',
+})
 /** [3] Dual axes — Products series on secondary (right) Y axis */
 export const scatterDualAxes: EChartsOption = createScatterOptions(dualAxesData, {
   secondaryGroups: ['Products'],
+  yAxisName: 'order count',
 })

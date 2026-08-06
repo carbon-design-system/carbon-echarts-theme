@@ -3,7 +3,11 @@ import { ChartPage } from '../components/ChartPage'
 import { Compare } from '../components/Compare'
 import LollipopMdx from '../content/lollipop.mdx'
 import { chartTypes, examples } from '../data/carboncharts/lollipop'
-import { lollipopDiscrete, lollipopHorizontal } from '../data/echarts/lollipop'
+import {
+  lollipopDiscrete,
+  lollipopHorizontal,
+  data as lollipopData,
+} from '../data/echarts/lollipop'
 
 // Filter to test-tagged examples only
 // Carbon test order: [0] Lollipop (discrete), [1] Lollipop (horizontal)
@@ -40,6 +44,11 @@ const data = [
 const option = createLollipopOptions(data, { horizontal: true })`,
 ]
 
+const chartDataSamples = [
+  lollipopData, // [0] discrete
+  lollipopData, // [1] horizontal
+]
+
 export function LollipopPage() {
   return (
     <ChartPage
@@ -53,7 +62,8 @@ export function LollipopPage() {
           echartsOption={echartsOptions[i] ?? lollipopDiscrete}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={chartDataSamples[i]}
         />
       ))}
     />

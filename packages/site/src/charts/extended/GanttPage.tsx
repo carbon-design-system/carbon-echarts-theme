@@ -117,7 +117,7 @@ export function GanttPage() {
           title="Gantt (project schedule)"
           echartsOption={ganttOption}
           extended
-          echartsCode={ganttCode}
+          optionCode={ganttCode}
         />
       }
     />

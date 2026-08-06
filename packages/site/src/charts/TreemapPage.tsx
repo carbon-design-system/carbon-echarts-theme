@@ -3,7 +3,7 @@ import { ChartPage } from '../components/ChartPage'
 import { Compare } from '../components/Compare'
 import TreemapMdx from '../content/treemap.mdx'
 import { chartTypes, examples } from '../data/carboncharts/treemap'
-import { treemap, treemapNested } from '../data/echarts/treemap'
+import { treemap, treemapNested, flatData } from '../data/echarts/treemap'
 
 // Filter to test-tagged examples only
 // Carbon test order: [0] Treemap, [1] Treemap (Custom colors)
@@ -49,6 +49,11 @@ const option = createTreemapOptions(data, {
 })`,
 ]
 
+const chartDataSamples = [
+  flatData, // [0] Treemap
+  flatData, // [1] Treemap (nested)
+]
+
 export function TreemapPage() {
   return (
     <ChartPage
@@ -62,7 +67,8 @@ export function TreemapPage() {
           echartsOption={echartsOptions[i] ?? treemap}
           carbonExample={ex}
           chartClass={chartTypes.vanilla}
-          echartsCode={codeSamples[i]}
+          optionCode={codeSamples[i]}
+          chartData={chartDataSamples[i]}
         />
       ))}
     />

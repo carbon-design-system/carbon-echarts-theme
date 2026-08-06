@@ -50,7 +50,7 @@ export function SunburstPage() {
           title="Sunburst"
           echartsOption={sunburstOption}
           extended
-          echartsCode={`<ReactECharts option={sunburstOption} theme="carbon-white" />`}
+          optionCode={`<ReactECharts option={sunburstOption} theme="carbon-white" />`}
         />
       }
     />
