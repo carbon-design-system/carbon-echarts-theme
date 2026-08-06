@@ -10,6 +10,11 @@
       "package-name": "@carbon/echarts-theme",
       "component": "theme",
       "changelog-path": "CHANGELOG.md"
+    },
+    "packages/toolbar": {
+      "package-name": "@carbon/echarts-toolbar",
+      "component": "toolbar",
+      "changelog-path": "CHANGELOG.md"
     }
   }
 }

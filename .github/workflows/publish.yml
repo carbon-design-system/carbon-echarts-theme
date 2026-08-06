@@ -3,7 +3,7 @@ name: Publish to npm
 on:
   push:
     # Release Please tags packages as `theme-v0.2.0`
-    tags: ['theme-v*']
+    tags: ['theme-v*', 'toolbar-v*']
 
 jobs:
   publish:
@@ -41,7 +41,7 @@ jobs:
       - name: Promote packages to `latest`
         run: |
           # @carbon/echarts-codemod is not yet published — add it back when codemods ship
-          for pkg in @carbon/echarts-theme; do
+          for pkg in @carbon/echarts-theme @carbon/echarts-toolbar; do
             version=$(npm view $pkg@next version)
             npm dist-tag add $pkg@$version latest
           done
