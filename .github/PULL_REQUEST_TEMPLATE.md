@@ -31,7 +31,7 @@ Closes #
 As the author of this PR, before marking ready for review, confirm you:
 
 - [ ] Reviewed every line of the diff
-- [ ] Updated documentation and storybook examples
+- [ ] Updated documentation and code examples
 - [ ] Wrote passing tests that cover this change
 - [ ] Addressed any impact on accessibility (a11y)
 - [ ] Tested for cross-browser consistency
