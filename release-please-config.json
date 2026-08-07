@@ -3,7 +3,7 @@
   "release-type": "node",
   "changelog-type": "default",
   "separate-pull-requests": true,
-  "pull-request-title-pattern": "chore(${scope}): release @carbon/echarts-${component} ${version}",
+  "pull-request-title-pattern": "chore${scope}: release @carbon/echarts${component} ${version}",
   "include-component-in-tag": true,
   "tag-separator": "-",
   "packages": {
@@ -15,7 +15,8 @@
     "packages/toolbar": {
       "package-name": "@carbon/echarts-toolbar",
       "component": "toolbar",
-      "changelog-path": "CHANGELOG.md"
+      "changelog-path": "CHANGELOG.md",
+      "bootstrap-sha": "f9c85b5b285300d0dbf2e35aed9f76831c5ee5a5"
     }
   }
 }
