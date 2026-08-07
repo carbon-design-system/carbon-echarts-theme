@@ -16,7 +16,8 @@
       "package-name": "@carbon/echarts-toolbar",
       "component": "toolbar",
       "changelog-path": "CHANGELOG.md",
-      "bootstrap-sha": "f9c85b5b285300d0dbf2e35aed9f76831c5ee5a5"
+      "bootstrap-sha": "f9c85b5b285300d0dbf2e35aed9f76831c5ee5a5",
+      "initial-version": "0.1.0"
     }
   }
 }
