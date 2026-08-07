@@ -59,6 +59,12 @@ export interface BarPresetOptions {
    */
   barWidth?: string | number
   /**
+   * Maximum bar width in pixels for grouped (multi-series) bar charts.
+   * Mirrors Carbon Charts' default bar width cap (~16 px per bar in a group).
+   * Defaults to 16 for grouped bars; has no effect on single-series or stacked charts.
+   */
+  barMaxWidth?: number
+  /**
    * Explicit Y-axis domain `[min, max]`.
    * Maps to Carbon Charts `axes.left.domain` (or `axes.bottom.domain` for horizontal).
    * When provided, the value axis is clamped to this range regardless of the data.
@@ -125,6 +131,26 @@ export function createBarOptions(
   const hasXField = data.some((d) => d[xField] !== undefined)
   const resolvedXField = hasXField ? xField : ('group' as const)
   const { groups, categories } = groupByGroup(data, resolvedXField)
+
+  // When the x-axis is a date field, format the category axis tick labels to
+  // match Carbon Charts' style (e.g. "Jan 1", "Jan 2").  We stay on a category
+  // axis so bars are evenly spaced regardless of calendar gaps — exactly what
+  // Carbon Charts does for grouped/stacked bar time series.
+  const dateAxisFormatter =
+    resolvedXField === 'date'
+      ? (value: string) => {
+          const parts = /^(\d{4})-(\d{2})-(\d{2})/.exec(value)
+          const d = parts
+            ? new Date(Number(parts[1]), Number(parts[2]) - 1, Number(parts[3]))
+            : new Date(value)
+          if (isNaN(d.getTime())) return value
+          // Match Carbon Charts: show month name only on the first tick of that
+          // month; subsequent ticks show just the day number.
+          const day = d.getDate()
+          const month = d.toLocaleString('en-US', { month: 'short' })
+          return day === 1 ? `${month} ${day}` : String(day)
+        }
+      : undefined
 
   let series: SeriesOption[]
 
@@ -326,6 +352,13 @@ export function createBarOptions(
   // Bug 4 fix: apply barWidth for single-series key/date axis bars too
   const barWidth = opts.barWidth ?? (isSingleSeries ? '40%' : undefined)
 
+  // Grouped multi-series: cap bar width to match Carbon Charts' compact grouping.
+  // Carbon Charts uses ~16 px per bar within a group. barMaxWidth prevents bars
+  // from stretching to fill the full category band when there are few categories.
+  // barCategoryGap and barGap are set on the first series (ECharts applies them
+  // chart-wide when set on any bar series).
+  const barMaxWidth = !isSingleSeries && !stacked ? (opts.barMaxWidth ?? 16) : undefined
+
   series = groups.map((g, i) =>
     isSingleSeries
       ? {
@@ -343,6 +376,11 @@ export function createBarOptions(
           itemStyle: { color: resolvedMultiColors[i] },
           data: g.data,
           ...(stacked ? { stack: 'total' } : {}),
+          // Apply grouping geometry on all series (ECharts honours the last value seen)
+          ...(barMaxWidth ? { barMaxWidth } : {}),
+          // barGap: gap between bars within the same category group (~Carbon Charts tight packing)
+          // barCategoryGap: gap between category groups (wider, matching Carbon Charts)
+          ...(!stacked ? { barGap: '5%', barCategoryGap: '40%' } : {}),
         },
   )
 
@@ -353,16 +391,18 @@ export function createBarOptions(
     type: 'value' as const,
     ...(opts.yDomain ? { min: opts.yDomain[0], max: opts.yDomain[1] } : {}),
   }
+  // Active formatter: locale override wins, then date formatter, then truncation.
+  const activeFormatter = localeFormatter ?? dateAxisFormatter
   const categoryAxis = {
     type: 'category' as const,
     data: categories,
-    ...(opts.truncateLabels || localeFormatter
+    ...(opts.truncateLabels || activeFormatter
       ? {
           axisLabel: {
-            ...(opts.truncateLabels && !localeFormatter
+            ...(opts.truncateLabels && !activeFormatter
               ? { formatter: makeTruncateFormatter(opts.truncateLabels) }
               : {}),
-            ...(localeFormatter ? { formatter: localeFormatter } : {}),
+            ...(activeFormatter ? { formatter: activeFormatter } : {}),
           },
         }
       : {}),
