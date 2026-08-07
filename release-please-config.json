@@ -2,8 +2,8 @@
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "release-type": "node",
   "changelog-type": "default",
-  "separate-pull-requests": true,
-  "pull-request-title-pattern": "chore${scope}: release @carbon/echarts${component} ${version}",
+  "separate-pull-requests": false,
+  "pull-request-title-pattern": "chore${scope}: release carbon-echarts-theme",
   "include-component-in-tag": true,
   "tag-separator": "-",
   "packages": {
