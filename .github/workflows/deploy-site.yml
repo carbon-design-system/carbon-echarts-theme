@@ -17,6 +17,8 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    # Only redeploy the site for theme releases — toolbar releases don't affect the site.
+    if: ${{ github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'theme-v') }}
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
