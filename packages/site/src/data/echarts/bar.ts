@@ -21,6 +21,8 @@
 import type { EChartsOption } from 'echarts'
 import {
   createBarOptions,
+  createGroupedBarOptions,
+  createStackedBarOptions,
   createHorizontalBarOptions,
   createFloatingBarOptions,
 } from '@carbon/echarts-theme/presets'
@@ -131,3 +133,197 @@ export const barCustomColors: EChartsOption = createBarOptions(simpleBarData, {
 export const barLongLabel: EChartsOption = createHorizontalBarOptions(longLabelData, {
   truncateLabels: 120,
 })
+
+// ── Grouped bar data ──────────────────────────────────────────────────────────
+
+/** Vertical grouped discrete — 4 datasets × 5 categories (matches Carbon groupedBarData) */
+export const groupedBarData = [
+  { group: 'Dataset 1', key: 'Qty', value: 65000 },
+  { group: 'Dataset 1', key: 'More', value: -29123 },
+  { group: 'Dataset 1', key: 'Sold', value: -35213 },
+  { group: 'Dataset 1', key: 'Restocking', value: 51213 },
+  { group: 'Dataset 1', key: 'Misc', value: 16932 },
+  { group: 'Dataset 2', key: 'Qty', value: 32432 },
+  { group: 'Dataset 2', key: 'More', value: -21312 },
+  { group: 'Dataset 2', key: 'Sold', value: -56456 },
+  { group: 'Dataset 2', key: 'Restocking', value: -21312 },
+  { group: 'Dataset 2', key: 'Misc', value: 34234 },
+  { group: 'Dataset 3', key: 'Qty', value: -12312 },
+  { group: 'Dataset 3', key: 'More', value: 23232 },
+  { group: 'Dataset 3', key: 'Sold', value: 34232 },
+  { group: 'Dataset 3', key: 'Restocking', value: -12312 },
+  { group: 'Dataset 3', key: 'Misc', value: -34234 },
+  { group: 'Dataset 4', key: 'Qty', value: -32423 },
+  { group: 'Dataset 4', key: 'More', value: 21313 },
+  { group: 'Dataset 4', key: 'Sold', value: 64353 },
+  { group: 'Dataset 4', key: 'Restocking', value: 24134 },
+  { group: 'Dataset 4', key: 'Misc', value: 24134 },
+]
+
+/** Grouped bar time series — 2 datasets × 5 dates */
+export const groupedBarTimeSeriesData = [
+  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-02', value: 65000 },
+  { group: 'Dataset 1', date: '2023-01-03', value: 30000 },
+  { group: 'Dataset 1', date: '2023-01-06', value: 49213 },
+  { group: 'Dataset 1', date: '2023-01-07', value: 51213 },
+  { group: 'Dataset 2', date: '2023-01-01', value: 8000 },
+  { group: 'Dataset 2', date: '2023-01-02', value: 67000 },
+  { group: 'Dataset 2', date: '2023-01-03', value: 15000 },
+  { group: 'Dataset 2', date: '2023-01-06', value: 51213 },
+  { group: 'Dataset 2', date: '2023-01-07', value: 45213 },
+]
+
+/** Compact (missing bars) grouped data */
+export const groupedBarCompactData = [
+  { group: 'Dataset 1', key: 'Q1', value: 65000 },
+  { group: 'Dataset 1', key: 'Q2', value: 29123 },
+  { group: 'Dataset 1', key: 'Q4', value: 51213 },
+  { group: 'Dataset 2', key: 'Q1', value: 32432 },
+  { group: 'Dataset 2', key: 'Q3', value: 21312 },
+  { group: 'Dataset 3', key: 'Q2', value: 23232 },
+  { group: 'Dataset 3', key: 'Q3', value: 34232 },
+  { group: 'Dataset 3', key: 'Q4', value: 12312 },
+  { group: 'Dataset 4', key: 'Q1', value: 32423 },
+  { group: 'Dataset 4', key: 'Q4', value: 24134 },
+  { group: 'Dataset 5', key: 'Q2', value: 18500 },
+  { group: 'Dataset 5', key: 'Q3', value: 42100 },
+  { group: 'Dataset 6', key: 'Q1', value: 55600 },
+]
+
+// Grouped ECharts options
+// Carbon grouped test order:
+//  [g0] groupedBarSelectedGroupsOptions  → pre-selected groups (ECharts: no equivalent, render same as grouped)
+//  [g1] groupedBarOptions                → vertical grouped discrete
+//  [g2] groupedBarCompactOptions         → compact (missing bars)
+//  [g3] groupedBarTimeSeriesOptions      → vertical grouped time series
+//  [g7] groupedHorizontalBarOptions      → horizontal grouped discrete
+//  [g8] groupedBarHorizontalTimeSeriesOptions → horizontal grouped time series
+
+export const barGrouped: EChartsOption = createGroupedBarOptions(groupedBarData)
+export const barGroupedCompact: EChartsOption = createGroupedBarOptions(groupedBarCompactData)
+export const barGroupedTimeSeries: EChartsOption = createGroupedBarOptions(
+  groupedBarTimeSeriesData,
+  {
+    xField: 'date',
+  },
+)
+export const barGroupedHorizontal: EChartsOption = createHorizontalBarOptions(groupedBarData)
+export const barGroupedHorizontalTimeSeries: EChartsOption = createHorizontalBarOptions(
+  groupedBarTimeSeriesData,
+  { xField: 'date' },
+)
+
+// ── Stacked bar data ──────────────────────────────────────────────────────────
+
+/** Vertical stacked discrete — 4 datasets × 5 categories (all positive) */
+export const stackedBarData = [
+  { group: 'Dataset 1', key: 'Qty', value: 65000 },
+  { group: 'Dataset 1', key: 'More', value: 29123 },
+  { group: 'Dataset 1', key: 'Sold', value: 35213 },
+  { group: 'Dataset 1', key: 'Restocking', value: 51213 },
+  { group: 'Dataset 1', key: 'Misc', value: 16932 },
+  { group: 'Dataset 2', key: 'Qty', value: 32432 },
+  { group: 'Dataset 2', key: 'More', value: 21312 },
+  { group: 'Dataset 2', key: 'Sold', value: 56456 },
+  { group: 'Dataset 2', key: 'Restocking', value: 21312 },
+  { group: 'Dataset 2', key: 'Misc', value: 34234 },
+  { group: 'Dataset 3', key: 'Qty', value: 12312 },
+  { group: 'Dataset 3', key: 'More', value: 23232 },
+  { group: 'Dataset 3', key: 'Sold', value: 34232 },
+  { group: 'Dataset 3', key: 'Restocking', value: 12312 },
+  { group: 'Dataset 3', key: 'Misc', value: 34234 },
+  { group: 'Dataset 4', key: 'Qty', value: 32423 },
+  { group: 'Dataset 4', key: 'More', value: 21313 },
+  { group: 'Dataset 4', key: 'Sold', value: 64353 },
+  { group: 'Dataset 4', key: 'Restocking', value: 24134 },
+  { group: 'Dataset 4', key: 'Misc', value: 32423 },
+]
+
+/** Stacked divergent — Dataset 4 has negative values */
+export const stackedBarNegativeData = [
+  ...stackedBarData.filter((d) => d.group !== 'Dataset 4'),
+  { group: 'Dataset 4', key: 'Qty', value: -32423 },
+  { group: 'Dataset 4', key: 'More', value: -21313 },
+  { group: 'Dataset 4', key: 'Sold', value: -64353 },
+  { group: 'Dataset 4', key: 'Restocking', value: -24134 },
+  { group: 'Dataset 4', key: 'Misc', value: -32423 },
+]
+
+/** Stacked bar time series — 4 datasets, sparse dates */
+export const stackedBarTimeSeriesData = [
+  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-05', value: 65000 },
+  { group: 'Dataset 1', date: '2023-01-08', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-13', value: 49213 },
+  { group: 'Dataset 1', date: '2023-01-17', value: 51213 },
+  { group: 'Dataset 2', date: '2023-01-03', value: 75000 },
+  { group: 'Dataset 2', date: '2023-01-06', value: 57312 },
+  { group: 'Dataset 2', date: '2023-01-08', value: 21432 },
+  { group: 'Dataset 2', date: '2023-01-15', value: 70323 },
+  { group: 'Dataset 2', date: '2023-01-19', value: 21300 },
+  { group: 'Dataset 3', date: '2023-01-01', value: 50000 },
+  { group: 'Dataset 3', date: '2023-01-05', value: 15000 },
+  { group: 'Dataset 3', date: '2023-01-08', value: 20000 },
+  { group: 'Dataset 3', date: '2023-01-13', value: 39213 },
+  { group: 'Dataset 3', date: '2023-01-17', value: 61213 },
+  { group: 'Dataset 4', date: '2023-01-02', value: 10 },
+  { group: 'Dataset 4', date: '2023-01-06', value: 37312 },
+  { group: 'Dataset 4', date: '2023-01-08', value: 51432 },
+  { group: 'Dataset 4', date: '2023-01-15', value: 40323 },
+  { group: 'Dataset 4', date: '2023-01-19', value: 31300 },
+]
+
+/** Stacked bar short-interval time series — ISO timestamps (millisecond precision) */
+export const stackedBarShortIntervalData = [
+  { group: 'Dataset 1', date: '2023-01-01T08:05:06.111Z', value: 0 },
+  { group: 'Dataset 1', date: '2023-01-01T08:05:06.222Z', value: 65000 },
+  { group: 'Dataset 1', date: '2023-01-01T08:05:06.333Z', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-01T08:05:06.444Z', value: 49213 },
+  { group: 'Dataset 1', date: '2023-01-01T08:05:06.555Z', value: 0 },
+  { group: 'Dataset 2', date: '2023-01-01T08:05:06.111Z', value: 0 },
+  { group: 'Dataset 2', date: '2023-01-01T08:05:06.222Z', value: 57312 },
+  { group: 'Dataset 2', date: '2023-01-01T08:05:06.333Z', value: 21432 },
+  { group: 'Dataset 2', date: '2023-01-01T08:05:06.444Z', value: 70323 },
+  { group: 'Dataset 2', date: '2023-01-01T08:05:06.555Z', value: 0 },
+  { group: 'Dataset 3', date: '2023-01-01T08:05:06.111Z', value: 0 },
+  { group: 'Dataset 3', date: '2023-01-01T08:05:06.222Z', value: 15000 },
+  { group: 'Dataset 3', date: '2023-01-01T08:05:06.333Z', value: 20000 },
+  { group: 'Dataset 3', date: '2023-01-01T08:05:06.444Z', value: 39213 },
+  { group: 'Dataset 3', date: '2023-01-01T08:05:06.555Z', value: 0 },
+  { group: 'Dataset 4', date: '2023-01-01T08:05:06.111Z', value: 0 },
+  { group: 'Dataset 4', date: '2023-01-01T08:05:06.222Z', value: 37312 },
+  { group: 'Dataset 4', date: '2023-01-01T08:05:06.333Z', value: 51432 },
+  { group: 'Dataset 4', date: '2023-01-01T08:05:06.444Z', value: 40323 },
+  { group: 'Dataset 4', date: '2023-01-01T08:05:06.555Z', value: 0 },
+]
+
+// Stacked ECharts options
+// Carbon stacked test order:
+//  [s0] stackedBarOptions                       → vertical stacked discrete
+//  [s1] stackedBarAlwaysRulerTooltipOptions      → always ruler tooltip (ECharts limitation)
+//  [s2] stackedBarNegativeOptions                → divergent (negative values)
+//  [s3] stackedBarTimeSeriesOptions              → vertical stacked time series
+//  [s4] stackedBarShortIntervalTimeSeriesOptions → short-interval time series
+//  [s7] stackedHorizontalBarOptions              → horizontal stacked discrete
+//  [s8] stackedHorizontalBarTimeSeriesOptions    → horizontal stacked time series
+
+export const barStacked: EChartsOption = createStackedBarOptions(stackedBarData)
+export const barStackedNegative: EChartsOption = createStackedBarOptions(stackedBarNegativeData)
+export const barStackedTimeSeries: EChartsOption = createStackedBarOptions(
+  stackedBarTimeSeriesData,
+  {
+    xField: 'date',
+  },
+)
+export const barStackedShortInterval: EChartsOption = createStackedBarOptions(
+  stackedBarShortIntervalData,
+  { xField: 'date' },
+)
+export const barStackedHorizontal: EChartsOption = createStackedBarOptions(stackedBarData, {
+  horizontal: true,
+})
+export const barStackedHorizontalTimeSeries: EChartsOption = createStackedBarOptions(
+  stackedBarTimeSeriesData,
+  { xField: 'date', horizontal: true },
+)

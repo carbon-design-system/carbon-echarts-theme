@@ -1,9 +1,18 @@
 import React from 'react'
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@carbon/react'
 import { ChartPage } from '../components/ChartPage'
 import { Compare } from '../components/Compare'
 import BarMdx from '../content/bar.mdx'
-import { chartTypes, examples } from '../data/carboncharts/bar'
 import {
+  chartTypes,
+  examples,
+  chartTypesGrouped,
+  examplesGrouped,
+  chartTypesStacked,
+  examplesStacked,
+} from '../data/carboncharts/bar'
+import {
+  // Simple
   barSimple,
   barTimeSeries,
   barHorizontal,
@@ -21,7 +30,29 @@ import {
   floatingHorizontalBarData,
   floatingHorizontalTimeSeriesData,
   longLabelData,
+  // Grouped
+  barGrouped,
+  barGroupedCompact,
+  barGroupedTimeSeries,
+  barGroupedHorizontal,
+  barGroupedHorizontalTimeSeries,
+  groupedBarData,
+  groupedBarCompactData,
+  groupedBarTimeSeriesData,
+  // Stacked
+  barStacked,
+  barStackedNegative,
+  barStackedTimeSeries,
+  barStackedShortInterval,
+  barStackedHorizontal,
+  barStackedHorizontalTimeSeries,
+  stackedBarData,
+  stackedBarNegativeData,
+  stackedBarTimeSeriesData,
+  stackedBarShortIntervalData,
 } from '../data/echarts/bar'
+
+// ── Simple (non-grouped / non-stacked) examples ───────────────────────────────
 
 // Filter to test-tagged examples only
 const testExamples = examples.filter((ex) => ex.tags?.includes('test'))
@@ -310,23 +341,275 @@ const chartDataSamples = [
   longLabelData, // [13] truncated labels
 ]
 
+// ── Grouped examples ──────────────────────────────────────────────────────────
+
+// Carbon grouped test order (test-tagged, excluding legend-only examples):
+//  [g1] groupedBarOptions                → vertical grouped discrete
+//  [g2] groupedBarCompactOptions         → compact (missing bars)
+//  [g3] groupedBarTimeSeriesOptions      → vertical grouped time series
+//  [g7] groupedHorizontalBarOptions      → horizontal grouped discrete
+//  [g8] groupedBarHorizontalTimeSeriesOptions → horizontal grouped time series
+//
+// [g0] groupedBarSelectedGroupsOptions is excluded — it is tagged ['test','legend'] and uses
+// Carbon's data.selectedGroups API which has no ECharts equivalent. Including it creates a
+// misleading comparison (Carbon shows 2 of 4 datasets; ECharts shows all 4).
+const testGroupedExamples = examplesGrouped.filter(
+  (ex) => ex.tags?.includes('test') && !ex.tags?.includes('legend'),
+)
+
+const groupedEchartsOptions = [
+  barGrouped, // [g1] vertical grouped discrete
+  barGroupedCompact, // [g2] compact (missing bars)
+  barGroupedTimeSeries, // [g3] vertical grouped time series
+  barGroupedHorizontal, // [g7] horizontal grouped discrete
+  barGroupedHorizontalTimeSeries, // [g8] horizontal grouped time series
+]
+
+const groupedTitles = [
+  'Vertical grouped bar (discrete)',
+  'Grouped bar (compact — missing bars collapsed)',
+  'Vertical grouped bar (time series)',
+  'Horizontal grouped bar (discrete)',
+  'Horizontal grouped bar (time series)',
+]
+
+const groupedCodeSamples: string[] = [
+  `import { createGroupedBarOptions } from '@carbon/echarts-theme/presets'
+
+const data = [
+  { group: 'Dataset 1', key: 'Qty', value: 65000 },
+  { group: 'Dataset 1', key: 'More', value: -29123 },
+  { group: 'Dataset 2', key: 'Qty', value: 32432 },
+  // ...
+]
+
+const option = createGroupedBarOptions(data)`,
+
+  `import { createGroupedBarOptions } from '@carbon/echarts-theme/presets'
+
+// Sparse data (missing bars for some groups) — ECharts renders null values as gaps
+const data = [
+  { group: 'Dataset 1', key: 'Q1', value: 65000 },
+  { group: 'Dataset 1', key: 'Q2', value: 29123 },
+  // Q3 missing for Dataset 1
+  { group: 'Dataset 2', key: 'Q1', value: 32432 },
+  { group: 'Dataset 2', key: 'Q3', value: 21312 },
+  // ...
+]
+
+const option = createGroupedBarOptions(data)`,
+
+  `import { createGroupedBarOptions } from '@carbon/echarts-theme/presets'
+
+const data = [
+  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 2', date: '2023-01-01', value: 8000 },
+  // ...
+]
+
+const option = createGroupedBarOptions(data, { xField: 'date' })`,
+
+  `import { createHorizontalBarOptions } from '@carbon/echarts-theme/presets'
+
+// Horizontal grouped bar — pass multi-series data with a key field
+const data = [
+  { group: 'Dataset 1', key: 'Qty', value: 65000 },
+  { group: 'Dataset 2', key: 'Qty', value: 32432 },
+  // ...
+]
+
+const option = createHorizontalBarOptions(data)`,
+
+  `import { createHorizontalBarOptions } from '@carbon/echarts-theme/presets'
+
+const data = [
+  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 2', date: '2023-01-01', value: 8000 },
+  // ...
+]
+
+const option = createHorizontalBarOptions(data, { xField: 'date' })`,
+]
+
+const groupedChartDataSamples = [
+  groupedBarData, // [g1] vertical grouped discrete
+  groupedBarCompactData, // [g2] compact
+  groupedBarTimeSeriesData, // [g3] vertical grouped time series
+  groupedBarData, // [g7] horizontal grouped discrete
+  groupedBarTimeSeriesData, // [g8] horizontal grouped time series
+]
+
+// ── Stacked examples ──────────────────────────────────────────────────────────
+
+// Carbon stacked test order (test-tagged only):
+//  [s0] stackedBarOptions                       → vertical stacked discrete
+//  [s1] stackedBarAlwaysRulerTooltipOptions      → always ruler tooltip (ECharts limitation)
+//  [s2] stackedBarNegativeOptions                → divergent (negative values)
+//  [s3] stackedBarTimeSeriesOptions              → vertical stacked time series
+//  [s4] stackedBarShortIntervalTimeSeriesOptions → short-interval time series
+//  [s7] stackedHorizontalBarOptions              → horizontal stacked discrete
+//  [s8] stackedHorizontalBarTimeSeriesOptions    → horizontal stacked time series
+const testStackedExamples = examplesStacked.filter((ex) => ex.tags?.includes('test'))
+
+const stackedEchartsOptions = [
+  barStacked, // [s0] vertical stacked discrete
+  barStacked, // [s1] always ruler tooltip — ECharts: same as stacked (no alwaysShowRulerTooltip)
+  barStackedNegative, // [s2] divergent (negative values)
+  barStackedTimeSeries, // [s3] vertical stacked time series
+  barStackedShortInterval, // [s4] short-interval time series
+  barStackedHorizontal, // [s7] horizontal stacked discrete
+  barStackedHorizontalTimeSeries, // [s8] horizontal stacked time series
+]
+
+const stackedTitles = [
+  'Vertical stacked bar (discrete)',
+  'Stacked bar (always ruler tooltip) — ECharts: tooltip on hover only',
+  'Vertical stacked bar (divergent)',
+  'Vertical stacked bar (time series)',
+  'Vertical stacked bar (short interval time series)',
+  'Horizontal stacked bar (discrete)',
+  'Horizontal stacked bar (time series)',
+]
+
+const stackedCodeSamples: string[] = [
+  `import { createStackedBarOptions } from '@carbon/echarts-theme/presets'
+
+const data = [
+  { group: 'Dataset 1', key: 'Qty', value: 65000 },
+  { group: 'Dataset 2', key: 'Qty', value: 32432 },
+  // ...
+]
+
+const option = createStackedBarOptions(data)`,
+
+  `import { createStackedBarOptions } from '@carbon/echarts-theme/presets'
+
+const data = [/* discrete stacked data */]
+
+const option = createStackedBarOptions(data)
+// Note: Carbon Charts tooltip.alwaysShowRulerTooltip — ECharts: tooltip on hover only`,
+
+  `import { createStackedBarOptions } from '@carbon/echarts-theme/presets'
+
+// Divergent stack — Dataset 4 has negative values
+const data = [
+  { group: 'Dataset 1', key: 'Qty', value: 65000 },
+  { group: 'Dataset 4', key: 'Qty', value: -32423 },
+  // ...
+]
+
+const option = createStackedBarOptions(data)`,
+
+  `import { createStackedBarOptions } from '@carbon/echarts-theme/presets'
+
+const data = [
+  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 2', date: '2023-01-03', value: 75000 },
+  // ...
+]
+
+const option = createStackedBarOptions(data, { xField: 'date' })`,
+
+  `import { createStackedBarOptions } from '@carbon/echarts-theme/presets'
+
+// Short-interval time series — ISO timestamp strings (millisecond precision)
+const data = [
+  { group: 'Dataset 1', date: '2023-01-01T08:05:06.111Z', value: 0 },
+  { group: 'Dataset 1', date: '2023-01-01T08:05:06.222Z', value: 65000 },
+  // ...
+]
+
+const option = createStackedBarOptions(data, { xField: 'date' })`,
+
+  `import { createStackedBarOptions } from '@carbon/echarts-theme/presets'
+
+const data = [
+  { group: 'Dataset 1', key: 'Qty', value: 65000 },
+  { group: 'Dataset 2', key: 'Qty', value: 32432 },
+  // ...
+]
+
+const option = createStackedBarOptions(data, { horizontal: true })`,
+
+  `import { createStackedBarOptions } from '@carbon/echarts-theme/presets'
+
+const data = [
+  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 2', date: '2023-01-03', value: 75000 },
+  // ...
+]
+
+const option = createStackedBarOptions(data, { xField: 'date', horizontal: true })`,
+]
+
+const stackedChartDataSamples = [
+  stackedBarData, // [s0] vertical stacked discrete
+  stackedBarData, // [s1] always ruler tooltip
+  stackedBarNegativeData, // [s2] divergent
+  stackedBarTimeSeriesData, // [s3] vertical stacked time series
+  stackedBarShortIntervalData, // [s4] short-interval time series
+  stackedBarData, // [s7] horizontal stacked discrete
+  stackedBarTimeSeriesData, // [s8] horizontal stacked time series
+]
+
+// ── Page component ────────────────────────────────────────────────────────────
+
 export function BarPage() {
   return (
     <ChartPage
       title="Bar"
       description="Compare values across discrete categories."
       overview={<BarMdx />}
-      examples={testExamples.map((ex, i) => (
-        <Compare
-          key={i}
-          title={titles[i] ?? `Example ${i + 1}`}
-          echartsOption={echartsOptions[i] ?? barSimple}
-          carbonExample={ex}
-          chartClass={chartTypes.vanilla}
-          optionCode={codeSamples[i]}
-          chartData={chartDataSamples[i]}
-        />
-      ))}
+      examples={
+        <Tabs>
+          <TabList aria-label="Bar chart variants">
+            <Tab>Simple</Tab>
+            <Tab>Grouped</Tab>
+            <Tab>Stacked</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              {testExamples.map((ex, i) => (
+                <Compare
+                  key={i}
+                  title={titles[i] ?? `Example ${i + 1}`}
+                  echartsOption={echartsOptions[i] ?? barSimple}
+                  carbonExample={ex}
+                  chartClass={chartTypes.vanilla}
+                  optionCode={codeSamples[i]}
+                  chartData={chartDataSamples[i]}
+                />
+              ))}
+            </TabPanel>
+            <TabPanel>
+              {testGroupedExamples.map((ex, i) => (
+                <Compare
+                  key={i}
+                  title={groupedTitles[i] ?? `Grouped example ${i + 1}`}
+                  echartsOption={groupedEchartsOptions[i] ?? barGrouped}
+                  carbonExample={ex}
+                  chartClass={chartTypesGrouped.vanilla}
+                  optionCode={groupedCodeSamples[i]}
+                  chartData={groupedChartDataSamples[i]}
+                />
+              ))}
+            </TabPanel>
+            <TabPanel>
+              {testStackedExamples.map((ex, i) => (
+                <Compare
+                  key={i}
+                  title={stackedTitles[i] ?? `Stacked example ${i + 1}`}
+                  echartsOption={stackedEchartsOptions[i] ?? barStacked}
+                  carbonExample={ex}
+                  chartClass={chartTypesStacked.vanilla}
+                  optionCode={stackedCodeSamples[i]}
+                  chartData={stackedChartDataSamples[i]}
+                />
+              ))}
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      }
     />
   )
 }
