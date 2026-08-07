@@ -198,7 +198,119 @@ export const areaZoombar: EChartsOption = createBoundedAreaOptions(boundedData, 
  */
 export const areaSkeleton: EChartsOption = {}
 
-// ── Stacked convenience export ────────────────────────────────────────────────
-export const areaStacked: EChartsOption = createStackedAreaOptions(timeSeriesData, {
+// ── Stacked area datasets (matching carboncharts/area.ts examplesStacked) ─────
+
+/** Stacked time-series data — 3 groups, aligned dates */
+export const stackedData = [
+  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-05', value: 65000 },
+  { group: 'Dataset 1', date: '2023-01-08', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-13', value: 49213 },
+  { group: 'Dataset 1', date: '2023-01-17', value: 51213 },
+  { group: 'Dataset 2', date: '2023-01-01', value: 20000 },
+  { group: 'Dataset 2', date: '2023-01-05', value: 25000 },
+  { group: 'Dataset 2', date: '2023-01-08', value: 60000 },
+  { group: 'Dataset 2', date: '2023-01-13', value: 30213 },
+  { group: 'Dataset 2', date: '2023-01-17', value: 55213 },
+  { group: 'Dataset 3', date: '2023-01-01', value: 30000 },
+  { group: 'Dataset 3', date: '2023-01-05', value: 20000 },
+  { group: 'Dataset 3', date: '2023-01-08', value: 40000 },
+  { group: 'Dataset 3', date: '2023-01-13', value: 60213 },
+  { group: 'Dataset 3', date: '2023-01-17', value: 25213 },
+]
+
+/** Uneven stacked data — sparse dates per group */
+export const stackedUnevenData = [
+  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-08', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-13', value: 49213 },
+  { group: 'Dataset 1', date: '2023-01-17', value: 51213 },
+  { group: 'Dataset 2', date: '2023-01-05', value: 25000 },
+  { group: 'Dataset 2', date: '2023-01-08', value: 60000 },
+  { group: 'Dataset 2', date: '2023-01-17', value: 55213 },
+  { group: 'Dataset 3', date: '2023-01-01', value: 30000 },
+  { group: 'Dataset 3', date: '2023-01-05', value: 20000 },
+  { group: 'Dataset 3', date: '2023-01-08', value: 40000 },
+  { group: 'Dataset 3', date: '2023-01-13', value: 60213 },
+  { group: 'Dataset 3', date: '2023-01-17', value: 25213 },
+]
+
+/** Delta tooltip data — 2 groups */
+export const stackedDeltaData = [
+  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-05', value: 65000 },
+  { group: 'Dataset 1', date: '2023-01-08', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-13', value: 49213 },
+  { group: 'Dataset 1', date: '2023-01-17', value: 51213 },
+  { group: 'Dataset 2', date: '2023-01-01', value: 20000 },
+  { group: 'Dataset 2', date: '2023-01-05', value: 25000 },
+  { group: 'Dataset 2', date: '2023-01-08', value: 60000 },
+  { group: 'Dataset 2', date: '2023-01-13', value: 30213 },
+  { group: 'Dataset 2', date: '2023-01-17', value: 55213 },
+]
+
+/** Toolbar/zoombar data — 4 groups, 2019 ISO timestamps */
+export const stackedToolbarData = [
+  { group: 'Dataset 1', date: '2019-01-01T05:00:00.000Z', value: 10000 },
+  { group: 'Dataset 1', date: '2019-01-05T05:00:00.000Z', value: 65000 },
+  { group: 'Dataset 1', date: '2019-01-08T05:00:00.000Z', value: 10000 },
+  { group: 'Dataset 1', date: '2019-01-13T05:00:00.000Z', value: 49213 },
+  { group: 'Dataset 1', date: '2019-01-17T05:00:00.000Z', value: 51213 },
+  { group: 'Dataset 2', date: '2019-01-03T05:00:00.000Z', value: 75000 },
+  { group: 'Dataset 2', date: '2019-01-06T05:00:00.000Z', value: 57312 },
+  { group: 'Dataset 2', date: '2019-01-08T05:00:00.000Z', value: 21432 },
+  { group: 'Dataset 2', date: '2019-01-15T05:00:00.000Z', value: 70323 },
+  { group: 'Dataset 2', date: '2019-01-19T05:00:00.000Z', value: 21300 },
+  { group: 'Dataset 3', date: '2019-01-01T05:00:00.000Z', value: 50000 },
+  { group: 'Dataset 3', date: '2019-01-05T05:00:00.000Z', value: 15000 },
+  { group: 'Dataset 3', date: '2019-01-08T05:00:00.000Z', value: 20000 },
+  { group: 'Dataset 3', date: '2019-01-13T05:00:00.000Z', value: 39213 },
+  { group: 'Dataset 3', date: '2019-01-17T05:00:00.000Z', value: 61213 },
+  { group: 'Dataset 4', date: '2019-01-02T05:00:00.000Z', value: 10 },
+  { group: 'Dataset 4', date: '2019-01-06T05:00:00.000Z', value: 37312 },
+  { group: 'Dataset 4', date: '2019-01-08T05:00:00.000Z', value: 51432 },
+  { group: 'Dataset 4', date: '2019-01-15T05:00:00.000Z', value: 40323 },
+  { group: 'Dataset 4', date: '2019-01-19T05:00:00.000Z', value: 31300 },
+]
+
+// ── Stacked area ECharts option exports ───────────────────────────────────────
+
+/** [s0] Stacked time series area */
+export const areaStacked: EChartsOption = createStackedAreaOptions(stackedData, {
   timeSeries: true,
+  smooth: true,
+  title: 'Time Series',
+})
+
+/** [s1] Stacked percentage — pre-computed column-total normalisation, 0–100% y-axis */
+export const areaStackedPercentage: EChartsOption = createStackedAreaOptions(stackedData, {
+  timeSeries: true,
+  smooth: true,
+  percentage: true,
+  title: 'Time Series (Percentage)',
+})
+
+/** [s2] Stacked uneven data — sparse dates handled natively by ECharts time axis */
+export const areaStackedUneven: EChartsOption = createStackedAreaOptions(stackedUnevenData, {
+  timeSeries: true,
+  smooth: true,
+  title: 'Time Series (Uneven Data)',
+})
+
+/**
+ * [s3] Stacked with delta tooltip — ECharts limitation: no showTotal/customTotalCalculation;
+ * rendered as standard stacked area.
+ */
+export const areaStackedDelta: EChartsOption = createStackedAreaOptions(stackedDeltaData, {
+  timeSeries: true,
+  smooth: true,
+  title: 'Area chart with Delta Tooltip — ECharts: standard stacked',
+})
+
+/** [s4] Stacked with zoombar (toolbar override) */
+export const areaStackedZoombar: EChartsOption = createStackedAreaOptions(stackedToolbarData, {
+  timeSeries: true,
+  smooth: false,
+  title: 'Vertical stacked area (time series) w/toolbar override',
+  dataZoom: true,
 })

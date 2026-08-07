@@ -1,8 +1,9 @@
 import React from 'react'
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@carbon/react'
 import { ChartPage } from '../components/ChartPage'
 import { Compare } from '../components/Compare'
 import AreaMdx from '../content/area.mdx'
-import { chartTypes, examples } from '../data/carboncharts/area'
+import { chartTypes, examples, chartTypesStacked, examplesStacked } from '../data/carboncharts/area'
 import {
   areaTimeSeries,
   areaAlwaysRuler,
@@ -17,9 +18,19 @@ import {
   curvedData,
   boundedData,
   sparkLineData,
+  areaStacked,
+  areaStackedPercentage,
+  areaStackedUneven,
+  areaStackedDelta,
+  areaStackedZoombar,
+  stackedData,
+  stackedUnevenData,
+  stackedDeltaData,
+  stackedToolbarData,
 } from '../data/echarts/area'
 
-// Filter to test-tagged examples only
+// ── Standard (non-stacked) examples ──────────────────────────────────────────
+
 // Carbon test order (8 test examples):
 //  [0] options                (time series area)
 //  [1] optionsAlwaysRulerTooltip
@@ -31,7 +42,6 @@ import {
 //  [7] optionsSkeleton        (skeleton)
 const testExamples = examples.filter((ex) => ex.tags?.includes('test'))
 
-// ECharts equivalents paired by test example index
 const echartsOptions = [
   areaTimeSeries, // [0] Time series area
   areaAlwaysRuler, // [1] Always ruler tooltip (ECharts limitation)
@@ -145,24 +155,134 @@ const chartDataSamples = [
   undefined, // [7] Skeleton (no data)
 ]
 
+// ── Stacked examples ─────────────────────────────────────────────────────────
+
+const testStackedExamples = examplesStacked.filter((ex) => ex.tags?.includes('test'))
+
+const stackedEchartsOptions = [
+  areaStacked, // [s0] Stacked time series
+  areaStackedPercentage, // [s1] Percentage stacked (ECharts limitation)
+  areaStackedUneven, // [s2] Uneven data
+  areaStackedDelta, // [s3] Delta tooltip (ECharts limitation)
+  areaStackedZoombar, // [s4] With zoombar
+]
+
+const stackedTitles = [
+  'Stacked time series area',
+  'Stacked time series area (percentage)',
+  'Stacked time series area (uneven data)',
+  'Stacked area with delta tooltip — ECharts: standard stacked',
+  'Stacked area with zoombar',
+]
+
+const stackedCodeSamples = [
+  `import { createStackedAreaOptions } from '@carbon/echarts-theme/presets'
+
+const data = [
+  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 2', date: '2023-01-01', value: 20000 },
+  { group: 'Dataset 3', date: '2023-01-01', value: 30000 },
+  // ...
+]
+
+const option = createStackedAreaOptions(data, { timeSeries: true, smooth: true })`,
+
+  `import { createStackedAreaOptions } from '@carbon/echarts-theme/presets'
+
+const data = [/* time series data */]
+
+// percentage: true pre-computes each value as value / columnTotal * 100
+// and switches the y-axis to a 0–100% scale with % labels
+const option = createStackedAreaOptions(data, {
+  timeSeries: true,
+  smooth: true,
+  percentage: true,
+})`,
+
+  `import { createStackedAreaOptions } from '@carbon/echarts-theme/presets'
+
+// ECharts time axis handles sparse / unaligned series natively
+const data = [
+  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 2', date: '2023-01-05', value: 25000 }, // different start date
+  // ...
+]
+
+const option = createStackedAreaOptions(data, { timeSeries: true, smooth: true })`,
+
+  `import { createStackedAreaOptions } from '@carbon/echarts-theme/presets'
+
+const data = [/* two-group time series */]
+
+const option = createStackedAreaOptions(data, { timeSeries: true, smooth: true })
+// Note: Carbon Charts delta tooltip (showTotal + customTotalCalculation) has
+// no ECharts equivalent — rendered as a standard stacked area.`,
+
+  `import { createStackedAreaOptions } from '@carbon/echarts-theme/presets'
+
+const data = [/* four-group time series */]
+
+// dataZoom adds a scrollbar — matches Carbon Charts zoomBar.top.enabled
+const option = createStackedAreaOptions(data, {
+  timeSeries: true,
+  smooth: true,
+  dataZoom: true,
+})`,
+]
+
+const stackedChartDataSamples = [
+  stackedData, // [s0] Standard stacked
+  stackedData, // [s1] Percentage
+  stackedUnevenData, // [s2] Uneven
+  stackedDeltaData, // [s3] Delta tooltip
+  stackedToolbarData, // [s4] Zoombar
+]
+
+// ── Page component ────────────────────────────────────────────────────────────
+
 export function AreaPage() {
   return (
     <ChartPage
       title="Area"
       description="Show volume or cumulative totals over time."
       overview={<AreaMdx />}
-      examples={testExamples.map((ex, i) => (
-        <Compare
-          key={i}
-          title={titles[i] ?? `Example ${i + 1}`}
-          echartsOption={echartsOptions[i] ?? areaTimeSeries}
-          carbonExample={ex}
-          chartClass={chartTypes.vanilla}
-          optionCode={codeSamples[i]}
-          chartData={chartDataSamples[i]}
-          showLoading={i === 7}
-        />
-      ))}
+      examples={
+        <Tabs>
+          <TabList aria-label="Area chart variants">
+            <Tab>Standard</Tab>
+            <Tab>Stacked</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              {testExamples.map((ex, i) => (
+                <Compare
+                  key={i}
+                  title={titles[i] ?? `Example ${i + 1}`}
+                  echartsOption={echartsOptions[i] ?? areaTimeSeries}
+                  carbonExample={ex}
+                  chartClass={chartTypes.vanilla}
+                  optionCode={codeSamples[i]}
+                  chartData={chartDataSamples[i]}
+                  showLoading={i === 7}
+                />
+              ))}
+            </TabPanel>
+            <TabPanel>
+              {testStackedExamples.map((ex, i) => (
+                <Compare
+                  key={i}
+                  title={stackedTitles[i] ?? `Stacked example ${i + 1}`}
+                  echartsOption={stackedEchartsOptions[i] ?? areaStacked}
+                  carbonExample={ex}
+                  chartClass={chartTypesStacked.vanilla}
+                  optionCode={stackedCodeSamples[i]}
+                  chartData={stackedChartDataSamples[i]}
+                />
+              ))}
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      }
     />
   )
 }

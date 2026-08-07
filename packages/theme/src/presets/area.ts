@@ -12,6 +12,12 @@ const GRID_ZOOM_TOP = { top: 100, bottom: 56, left: 48, right: 24, containLabel:
 export interface AreaPresetOptions {
   /** Stack all series into a cumulative area chart */
   stacked?: boolean
+  /**
+   * Normalise stacked values to 100% (requires stacked: true).
+   * Each value is pre-computed as value / columnTotal * 100.
+   * Equivalent to Carbon Charts' axes.left.percentage: true.
+   */
+  percentage?: boolean
   /** Use date field as x-axis (time-series mode) */
   timeSeries?: boolean
   /** Smooth the area lines (equivalent to Carbon's curveNatural / curveMonotoneX) */
@@ -92,6 +98,7 @@ export function createAreaOptions(
 ): EChartsOption {
   const {
     stacked = false,
+    percentage = false,
     timeSeries = false,
     smooth = false,
     dataZoom = false,
@@ -112,18 +119,71 @@ export function createAreaOptions(
 
   if (timeSeries) {
     const order: string[] = []
-    const byGroup = new Map<string, Array<[string, number | null]>>()
+    // keyed map: group → (dateStr → value)
+    const byGroup = new Map<string, Map<string, number | null>>()
     for (const d of data) {
       if (!byGroup.has(d.group)) {
         order.push(d.group)
-        byGroup.set(d.group, [])
+        byGroup.set(d.group, new Map())
       }
       const dateStr = d.date instanceof Date ? d.date.toISOString() : String(d.date ?? '')
-      byGroup.get(d.group)!.push([dateStr, d.value as number | null])
+      byGroup.get(d.group)!.set(dateStr, d.value as number | null)
     }
     groupNames = order
-    categories = []
-    seriesDataMap = byGroup
+
+    if (stacked) {
+      // For stacked time series, all series must share the same ordered x-positions
+      // so ECharts can compute cumulative totals correctly. Build a union of all
+      // timestamps (sorted), then switch to a category axis so every series aligns
+      // by index. Missing entries are padded with 0 so absent series contribute
+      // nothing to the stack without creating holes (matching Carbon Charts behaviour).
+      const allDates = [
+        ...new Set(
+          data.map((d) => (d.date instanceof Date ? d.date.toISOString() : String(d.date ?? ''))),
+        ),
+      ].sort()
+      categories = allDates
+
+      // Build raw per-group scalar arrays — missing positions become 0, not null,
+      // so ECharts stacks them as zero-height contributions rather than gaps.
+      const rawMap = new Map(
+        order.map((name) => {
+          const lookup = byGroup.get(name)!
+          return [name, allDates.map((date) => (lookup.has(date) ? (lookup.get(date) ?? 0) : 0))]
+        }),
+      )
+
+      if (percentage) {
+        // Pre-compute column totals then normalise each value to 0–100
+        const colTotals = allDates.map((_, ci) =>
+          order.reduce((sum, name) => {
+            const v = rawMap.get(name)![ci]
+            return sum + (v ?? 0)
+          }, 0),
+        )
+        seriesDataMap = new Map(
+          order.map((name) => {
+            const raw = rawMap.get(name)!
+            return [
+              name,
+              raw.map((v, ci) => {
+                if (v === null) return null
+                const total = colTotals[ci]
+                return total === 0 ? 0 : Math.round((v / total) * 10000) / 100 // 2 d.p.
+              }),
+            ]
+          }),
+        )
+      } else {
+        seriesDataMap = rawMap
+      }
+    } else {
+      // Non-stacked: sparse per-group arrays — ECharts time axis handles gaps natively
+      categories = []
+      seriesDataMap = new Map(
+        order.map((name) => [name, [...byGroup.get(name)!.entries()].map(([d, v]) => [d, v])]),
+      )
+    }
   } else {
     const { groups, categories: cats } = groupByGroup(data, 'key')
     groupNames = groups.map((g) => g.name)
@@ -156,26 +216,56 @@ export function createAreaOptions(
       bottom: 0,
       icon: 'roundRect',
     },
-    xAxis: timeSeries
-      ? {
-          type: 'time',
-          axisLabel: {
-            formatter: (value: number) =>
-              new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(
-                new Date(value),
-              ),
+    xAxis:
+      timeSeries && !stacked
+        ? {
+            type: 'time',
+            axisLabel: {
+              formatter: (value: number) =>
+                new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(
+                  new Date(value),
+                ),
+            },
+            ...(xAxisTitle ? { name: xAxisTitle, nameLocation: 'middle', nameGap: 32 } : {}),
+          }
+        : {
+            // Category axis: used for discrete data AND stacked time-series
+            // (stacked requires aligned positions by index, not continuous time).
+            // boundaryGap: false makes the first/last categories sit flush with the
+            // axis edges, matching the time-axis behaviour and removing the clipping.
+            type: 'category',
+            data: categories,
+            boundaryGap: timeSeries ? false : true,
+            axisLabel: timeSeries
+              ? {
+                  formatter: (value: string) =>
+                    new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(
+                      new Date(value),
+                    ),
+                }
+              : undefined,
+            ...(xAxisTitle ? { name: xAxisTitle, nameLocation: 'middle', nameGap: 32 } : {}),
           },
-          ...(xAxisTitle ? { name: xAxisTitle, nameLocation: 'middle', nameGap: 32 } : {}),
-        }
-      : {
-          type: 'category',
-          data: categories,
-          ...(xAxisTitle ? { name: xAxisTitle, nameLocation: 'middle', nameGap: 32 } : {}),
-        },
     yAxis: {
       type: 'value',
+      ...(percentage
+        ? {
+            min: 0,
+            max: 100,
+            axisLabel: { formatter: (v: number) => `${v}%` },
+          }
+        : {}),
       ...(yAxisLabel
         ? { name: yAxisLabel, nameLocation: 'middle', nameGap: 56, nameRotate: 90 }
+        : {}),
+    },
+    tooltip: {
+      trigger: 'axis',
+      ...(percentage
+        ? {
+            valueFormatter: (v: unknown) =>
+              v === null || v === undefined ? '–' : `${(v as number).toFixed(1)}%`,
+          }
         : {}),
     },
     series,
@@ -185,11 +275,32 @@ export function createAreaOptions(
             { type: 'inside' },
             {
               type: 'slider',
-              top: 0,
-              height: 40,
+              top: 8,
+              height: 32,
               showDataShadow: true,
               showDetail: false,
-              filterMode: 'none',
+              // weakFilter lets the zoom window move continuously between
+              // category ticks instead of snapping to each index
+              filterMode: 'weakFilter',
+              // Transparent slider body — the chart mini-preview shows through
+              backgroundColor: 'transparent',
+              borderColor: 'rgba(0,0,0,0.1)',
+              // Semi-transparent dark overlay dims the unselected region,
+              // matching Carbon Charts' faded-out outside area
+              fillerColor: 'rgba(0,0,0,0.12)',
+              // Handle styling
+              handleStyle: {
+                color: 'var(--cds-interactive, #0f62fe)',
+                borderColor: 'var(--cds-interactive, #0f62fe)',
+              },
+              moveHandleStyle: {
+                color: 'var(--cds-interactive, #0f62fe)',
+              },
+              emphasis: {
+                handleStyle: {
+                  color: 'var(--cds-interactive-hover, #0050e6)',
+                },
+              },
             },
           ],
         }

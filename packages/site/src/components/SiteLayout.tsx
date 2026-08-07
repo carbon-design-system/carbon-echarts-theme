@@ -65,7 +65,7 @@ const NAV: NavGroup[] = [
     label: 'Chart types',
     items: [
       { label: 'Alluvial / Sankey', path: '/alluvial' },
-      { label: 'Area', path: '/area' },
+      { label: 'Area (standard, stacked)', path: '/area' },
       { label: 'Bar', path: '/bar' },
       { label: 'Boxplot', path: '/boxplot' },
       { label: 'Bubble', path: '/bubble' },

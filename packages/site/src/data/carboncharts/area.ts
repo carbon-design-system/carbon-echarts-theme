@@ -1,4 +1,9 @@
-import { type AreaChartOptions, type ChartTabularData, ScaleTypes } from '@carbon/charts'
+import {
+  type AreaChartOptions,
+  type StackedAreaChartOptions,
+  type ChartTabularData,
+  ScaleTypes,
+} from '@carbon/charts'
 import { addZoomBarToOptions } from './zoombar'
 import type { AxisChartOptions } from '@carbon/charts'
 import type { ChartTypes, Example } from './types'
@@ -11,6 +16,16 @@ export const chartTypes: ChartTypes = {
   react: vanilla,
   angular: ['AreaChartComponent', 'ibm-area-chart'],
   vue: `Ccv${vanilla}`,
+}
+
+const stackedVanilla = 'StackedAreaChart'
+
+export const chartTypesStacked: ChartTypes = {
+  vanilla: stackedVanilla,
+  svelte: stackedVanilla,
+  react: stackedVanilla,
+  angular: ['StackedAreaChartComponent', 'ibm-stacked-area-chart'],
+  vue: `Ccv${stackedVanilla}`,
 }
 
 const options: AreaChartOptions = {
@@ -377,3 +392,208 @@ export const examples: Example[] = [
   },
   { data: [], tags: ['empty'], options: optionsEmpty },
 ]
+
+// ── Stacked area data ─────────────────────────────────────────────────────────
+
+const stackedData: ChartTabularData = [
+  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-05', value: 65000 },
+  { group: 'Dataset 1', date: '2023-01-08', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-13', value: 49213 },
+  { group: 'Dataset 1', date: '2023-01-17', value: 51213 },
+  { group: 'Dataset 2', date: '2023-01-01', value: 20000 },
+  { group: 'Dataset 2', date: '2023-01-05', value: 25000 },
+  { group: 'Dataset 2', date: '2023-01-08', value: 60000 },
+  { group: 'Dataset 2', date: '2023-01-13', value: 30213 },
+  { group: 'Dataset 2', date: '2023-01-17', value: 55213 },
+  { group: 'Dataset 3', date: '2023-01-01', value: 30000 },
+  { group: 'Dataset 3', date: '2023-01-05', value: 20000 },
+  { group: 'Dataset 3', date: '2023-01-08', value: 40000 },
+  { group: 'Dataset 3', date: '2023-01-13', value: 60213 },
+  { group: 'Dataset 3', date: '2023-01-17', value: 25213 },
+]
+
+const stackedDataUneven: ChartTabularData = [
+  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-08', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-13', value: 49213 },
+  { group: 'Dataset 1', date: '2023-01-17', value: 51213 },
+  { group: 'Dataset 2', date: '2023-01-05', value: 25000 },
+  { group: 'Dataset 2', date: '2023-01-08', value: 60000 },
+  { group: 'Dataset 2', date: '2023-01-17', value: 55213 },
+  { group: 'Dataset 3', date: '2023-01-01', value: 30000 },
+  { group: 'Dataset 3', date: '2023-01-05', value: 20000 },
+  { group: 'Dataset 3', date: '2023-01-08', value: 40000 },
+  { group: 'Dataset 3', date: '2023-01-13', value: 60213 },
+  { group: 'Dataset 3', date: '2023-01-17', value: 25213 },
+]
+
+const stackedDataDelta: ChartTabularData = [
+  { group: 'Dataset 1', date: '2023-01-01', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-05', value: 65000 },
+  { group: 'Dataset 1', date: '2023-01-08', value: 10000 },
+  { group: 'Dataset 1', date: '2023-01-13', value: 49213 },
+  { group: 'Dataset 1', date: '2023-01-17', value: 51213 },
+  { group: 'Dataset 2', date: '2023-01-01', value: 20000 },
+  { group: 'Dataset 2', date: '2023-01-05', value: 25000 },
+  { group: 'Dataset 2', date: '2023-01-08', value: 60000 },
+  { group: 'Dataset 2', date: '2023-01-13', value: 30213 },
+  { group: 'Dataset 2', date: '2023-01-17', value: 55213 },
+]
+
+const stackedToolbarData: ChartTabularData = [
+  { group: 'Dataset 1', date: '2019-01-01T05:00:00.000Z', value: 10000 },
+  { group: 'Dataset 1', date: '2019-01-05T05:00:00.000Z', value: 65000 },
+  { group: 'Dataset 1', date: '2019-01-08T05:00:00.000Z', value: 10000 },
+  { group: 'Dataset 1', date: '2019-01-13T05:00:00.000Z', value: 49213 },
+  { group: 'Dataset 1', date: '2019-01-17T05:00:00.000Z', value: 51213 },
+  { group: 'Dataset 2', date: '2019-01-03T05:00:00.000Z', value: 75000 },
+  { group: 'Dataset 2', date: '2019-01-06T05:00:00.000Z', value: 57312 },
+  { group: 'Dataset 2', date: '2019-01-08T05:00:00.000Z', value: 21432 },
+  { group: 'Dataset 2', date: '2019-01-15T05:00:00.000Z', value: 70323 },
+  { group: 'Dataset 2', date: '2019-01-19T05:00:00.000Z', value: 21300 },
+  { group: 'Dataset 3', date: '2019-01-01T05:00:00.000Z', value: 50000 },
+  { group: 'Dataset 3', date: '2019-01-05T05:00:00.000Z', value: 15000 },
+  { group: 'Dataset 3', date: '2019-01-08T05:00:00.000Z', value: 20000 },
+  { group: 'Dataset 3', date: '2019-01-13T05:00:00.000Z', value: 39213 },
+  { group: 'Dataset 3', date: '2019-01-17T05:00:00.000Z', value: 61213 },
+  { group: 'Dataset 4', date: '2019-01-02T05:00:00.000Z', value: 10 },
+  { group: 'Dataset 4', date: '2019-01-06T05:00:00.000Z', value: 37312 },
+  { group: 'Dataset 4', date: '2019-01-08T05:00:00.000Z', value: 51432 },
+  { group: 'Dataset 4', date: '2019-01-15T05:00:00.000Z', value: 40323 },
+  { group: 'Dataset 4', date: '2019-01-19T05:00:00.000Z', value: 31300 },
+]
+
+// ── Stacked area options ──────────────────────────────────────────────────────
+
+const stackedOptions: StackedAreaChartOptions = {
+  title: 'Time Series',
+  axes: {
+    left: {
+      stacked: true,
+      scaleType: ScaleTypes.LINEAR,
+      mapsTo: 'value',
+    },
+    bottom: {
+      scaleType: ScaleTypes.TIME,
+      mapsTo: 'date',
+    },
+  },
+  curve: 'curveMonotoneX',
+  height: '400px',
+}
+
+const stackedOptionsPercentage: StackedAreaChartOptions = {
+  title: 'Time Series (Percentage)',
+  axes: {
+    left: {
+      stacked: true,
+      percentage: true,
+      ticks: {
+        formatter: (tick: number | Date) => `${tick as number}%`,
+      },
+    },
+    bottom: {
+      scaleType: ScaleTypes.TIME,
+      mapsTo: 'date',
+    },
+  },
+  curve: 'curveMonotoneX',
+  height: '400px',
+}
+
+const stackedOptionsUneven: StackedAreaChartOptions = {
+  title: 'Time Series (Uneven Data)',
+  axes: {
+    left: {
+      stacked: true,
+    },
+    bottom: {
+      scaleType: ScaleTypes.TIME,
+      mapsTo: 'date',
+    },
+  },
+  curve: 'curveMonotoneX',
+  height: '400px',
+}
+
+const stackedOptionsDelta: StackedAreaChartOptions = {
+  title: 'Area chart with Delta Tooltip',
+  axes: {
+    left: {
+      stacked: true,
+      scaleType: ScaleTypes.LINEAR,
+      mapsTo: 'value',
+    },
+    bottom: {
+      scaleType: ScaleTypes.TIME,
+      mapsTo: 'date',
+    },
+  },
+  tooltip: {
+    showTotal: true,
+    totalLabel: 'Delta',
+    customTotalCalculation: (data) => {
+      const values = data.map((d: { value: number }) => d.value).filter((v: number) => v != null)
+      if (values.length === 0) return 0
+      return Math.max(...values) - Math.min(...values)
+    },
+  },
+  curve: 'curveMonotoneX',
+  height: '400px',
+}
+
+const stackedOptionsToolbar: StackedAreaChartOptions = {
+  title: 'Vertical stacked area (time series) w/toolbar override',
+  axes: {
+    left: {
+      mapsTo: 'value',
+      stacked: true,
+    },
+    bottom: {
+      mapsTo: 'date',
+      scaleType: ScaleTypes.TIME,
+    },
+  },
+  toolbar: {
+    enabled: true,
+    numberOfIcons: 3,
+    controls: [{ type: 'Zoom in' }, { type: 'Zoom out' }, { type: 'Reset zoom' }],
+  },
+  zoomBar: {
+    top: {
+      enabled: true,
+    },
+  },
+  height: '400px',
+}
+
+export const examplesStacked: Example[] = [
+  {
+    data: stackedData,
+    options: stackedOptions,
+    tags: ['test'],
+  },
+  {
+    data: stackedData,
+    options: stackedOptionsPercentage,
+    tags: ['test'],
+  },
+  {
+    data: stackedDataUneven,
+    options: stackedOptionsUneven,
+    tags: ['test'],
+  },
+  {
+    data: stackedDataDelta,
+    options: stackedOptionsDelta,
+    tags: ['test'],
+  },
+  {
+    data: stackedToolbarData,
+    options: stackedOptionsToolbar,
+    tags: ['test', 'toolbar', 'zoombar'],
+  },
+]
+
+export { stackedData, stackedDataUneven, stackedDataDelta, stackedToolbarData }

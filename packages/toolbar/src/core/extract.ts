@@ -151,7 +151,9 @@ export function buildTableData(instance: EChartsType): TableData | null {
   }
 
   // Discrete category-axis line (and area) — emit long format matching Carbon Charts.
-  // Line series data items are objects { name, value } (produced by groupByGroup).
+  // Line series data items are objects { name, value } (produced by groupByGroup) for
+  // discrete axes, or plain scalars (produced by stacked time-series) where the x-value
+  // comes from categoryData[index].
   // Bar charts use the wide pivot instead, so we gate on type === 'line'.
   const allLineType = (visibleSeries.length ? visibleSeries : series).every(
     (s: any) => (s.type ?? '').toLowerCase() === 'line',
@@ -162,7 +164,12 @@ export function buildTableData(instance: EChartsType): TableData | null {
     const valueAxis = yAxis.find((a: any) => a?.type === 'value' || !a?.type) ?? yAxis[0]
     const yTitle: string | undefined =
       (Array.isArray(valueAxis) ? valueAxis[0] : valueAxis)?.name || undefined
-    return extractCategoryAxisLong(visibleSeries.length ? visibleSeries : series, xTitle, yTitle)
+    return extractCategoryAxisLong(
+      visibleSeries.length ? visibleSeries : series,
+      categoryData,
+      xTitle,
+      yTitle,
+    )
   }
 
   // Scatter / bubble — all series are scatter type with numeric or string x values.
@@ -344,6 +351,7 @@ function extractHistogram(categoryData: string[], series: any[]): TableData | nu
  */
 function extractCategoryAxisLong(
   series: any[],
+  categoryData: string[],
   xTitle?: string,
   yTitle?: string,
 ): TableData | null {
@@ -362,7 +370,8 @@ function extractCategoryAxisLong(
   for (const s of series) {
     const groupName: string = s.name ?? 'Series'
     const data: any[] = s.data ?? []
-    for (const item of data) {
+    for (let idx = 0; idx < data.length; idx++) {
+      const item = data[idx]
       let xVal: unknown
       let yVal: unknown
       if (Array.isArray(item)) {
@@ -372,10 +381,27 @@ function extractCategoryAxisLong(
         xVal = item.name ?? item.x ?? null
         yVal = item.value ?? item.y ?? null
       } else {
+        // Scalar value — x comes from the parallel categoryData array (stacked
+        // time-series uses plain scalars with dates stored in categoryData).
+        xVal = categoryData[idx] ?? null
         yVal = item
       }
       if (yVal === null || yVal === undefined) continue
-      rows.push({ id: String(rowId++), group: groupName, [xKey]: xVal ?? null, [yKey]: yVal })
+      // Format date-like x-values the same way extractTimeSeries does
+      let displayX: unknown = xVal
+      if (typeof xVal === 'string' && !Number.isNaN(Date.parse(xVal))) {
+        const parsed = new Date(xVal)
+        if (!Number.isNaN(parsed.getTime())) {
+          const isDateOnly = /^\d{4}-\d{2}-\d{2}$/.test(xVal)
+          displayX = new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            ...(isDateOnly ? { timeZone: 'UTC' } : {}),
+          }).format(parsed)
+        }
+      }
+      rows.push({ id: String(rowId++), group: groupName, [xKey]: displayX ?? null, [yKey]: yVal })
     }
   }
 
