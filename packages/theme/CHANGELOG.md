@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.4.0](https://github.com/carbon-design-system/carbon-echarts-theme/compare/theme-v0.3.0...theme-v0.4.0) (2026-08-07)
+
+
+### Features
+
+* **area:** add stacked charts support ([10d7f42](https://github.com/carbon-design-system/carbon-echarts-theme/commit/10d7f42437249b65ba8d9d4510679fb40395bbd8))
+* **theme:** add grouped/stacked bar axis formatting and grouping geometry ([3c55f24](https://github.com/carbon-design-system/carbon-echarts-theme/commit/3c55f24bda86105f24eb113883d0b5e2dfbb875d))
+
+
+### Bug Fixes
+
+* **area:** remove duplicate tooltip key in area preset ([4ae1f64](https://github.com/carbon-design-system/carbon-echarts-theme/commit/4ae1f646c8932c2895a61fc4b64923b3f2b268fd))
+
 ## [0.3.0](https://github.com/carbon-design-system/carbon-echarts-theme/compare/theme-v0.2.1...theme-v0.3.0) (2026-08-07)
 
 
