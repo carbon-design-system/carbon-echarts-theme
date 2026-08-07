@@ -163,33 +163,56 @@ This project uses [Release Please](https://github.com/googleapis/release-please)
 type(scope): subject
 ```
 
-**Conventional Commits are enforced.** Commitlint runs on every commit via Husky and will block the commit if the message does not conform.
+**Conventional Commits are enforced.** Commitlint runs on every commit via Husky and will
+block the commit if the message does not conform.
+
+#### Length limits
+
+| Part            | Limit     |
+| --------------- | --------- |
+| Header (line 1) | 100 chars |
+| Body lines      | 100 chars |
+
+The header is `type(scope): subject` in full. Keep the subject concise — if more detail is
+needed, put it in the body (separated by a blank line), with each line wrapped at 100 chars.
 
 #### Allowed scopes
 
-Scope maps to the **package or area being changed** and drives which package release-please bumps. Using a sub-feature name (e.g. `area`, `bar`) instead of a package name causes incorrect version bumps across the monorepo.
+Scope maps to the **package or area being changed** and drives which package release-please
+bumps. Using a sub-feature name (e.g. `area`, `bar`) instead of a package name causes
+incorrect version bumps across the monorepo.
 
-| Scope      | When to use                                                                     |
-| ---------- | ------------------------------------------------------------------------------- |
-| `theme`    | Changes to `packages/theme` (`@carbon/echarts-theme`)                           |
-| `toolbar`  | Changes to `packages/toolbar` (`@carbon/echarts-toolbar`)                       |
-| `codemods` | Changes to `packages/codemods` (`@carbon/echarts-codemod`)                      |
-| `site`     | Changes to `packages/site` (showcase site, docs, MDX content)                   |
-| `deps`     | Dependency updates (Dependabot PRs, manual version bumps)                       |
-| `release`  | Release infrastructure (release-please config, manifests, tags)                 |
-| `repo`     | Root-level tooling — commitlint, lint-staged, husky, eslint, prettier, tsconfig |
+| Scope      | When to use                                                           |
+| ---------- | --------------------------------------------------------------------- |
+| `theme`    | Changes to `packages/theme` (`@carbon/echarts-theme`)                 |
+| `toolbar`  | Changes to `packages/toolbar` (`@carbon/echarts-toolbar`)             |
+| `codemods` | Changes to `packages/codemods` (`@carbon/echarts-codemod`)            |
+| `site`     | Changes to `packages/site` (showcase site, docs, MDX content)         |
+| `deps`     | Dependency updates (Dependabot PRs, manual version bumps)             |
+| `release`  | Release infrastructure (release-please config, manifests, tags)       |
+| `repo`     | Root-level tooling — commitlint, lint-staged, husky, eslint, prettier |
 
 #### Examples
 
 ```sh
-feat(theme): add createRadarOptions preset helper   # minor bump on @carbon/echarts-theme
-fix(theme): remove duplicate tooltip key in area preset  # patch bump on @carbon/echarts-theme
-feat(toolbar): add CSV export button                # minor bump on @carbon/echarts-toolbar
-docs(site): update contributing section             # no release
-chore(deps): update dev dependencies                # no release
+# minor bump on @carbon/echarts-theme
+feat(theme): add createRadarOptions preset helper
+
+# patch bump on @carbon/echarts-theme
+fix(theme): correct duplicate tooltip key in area preset
+
+# minor bump on @carbon/echarts-toolbar
+feat(toolbar): add CSV export button
+
+# no release
+docs(site): update contributing section
+
+# no release
+chore(deps): update dev dependencies
 ```
 
-Valid types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`, `build`, `revert`.
+Valid types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`,
+`build`, `revert`.
 
 PRs trigger a preview deploy to Netlify for visual review.
 
