@@ -2,6 +2,7 @@ import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import mdx from '@mdx-js/rollup'
 import remarkFrontmatter from 'remark-frontmatter'
+import remarkGfm from 'remark-gfm'
 import { fileURLToPath } from 'node:url'
 import { createRequire } from 'node:module'
 import fs from 'node:fs'
@@ -45,7 +46,7 @@ export default defineConfig({
       enforce: 'pre',
       ...mdx({
         providerImportSource: '@mdx-js/react',
-        remarkPlugins: [remarkFrontmatter],
+        remarkPlugins: [remarkFrontmatter, remarkGfm],
       }),
     },
     react({

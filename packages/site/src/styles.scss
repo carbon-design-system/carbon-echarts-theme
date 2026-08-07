@@ -217,6 +217,33 @@ body {
   }
 }
 
+.chart-page__overview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 $spacing-05;
+  @include type.type-style('body-01');
+}
+
+.chart-page__overview th,
+.chart-page__overview td {
+  text-align: left;
+  padding: $spacing-03 $spacing-05;
+  border-bottom: 1px solid $border-subtle-01;
+  color: $text-secondary;
+}
+
+.chart-page__overview th {
+  @include type.type-style('label-01');
+  font-weight: 600;
+  color: $text-primary;
+  background-color: $layer-01;
+  border-bottom: 2px solid $border-strong-01;
+}
+
+.chart-page__overview tr:last-child td {
+  border-bottom: none;
+}
+
 .chart-page__v2-banner {
   border: 1px solid $support-warning;
   background-color: var(--cds-notification-background-warning, #fcf4d6);
