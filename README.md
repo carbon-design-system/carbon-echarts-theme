@@ -157,19 +157,41 @@ packages/
 
 This project uses [Release Please](https://github.com/googleapis/release-please) for versioning and changelog generation. Releases are triggered automatically from the `main` branch based on [Conventional Commits](https://www.conventionalcommits.org).
 
-Commit messages follow the format `type(scope): subject`:
+### Commit format
+
+```
+type(scope): subject
+```
+
+**Conventional Commits are enforced.** Commitlint runs on every commit via Husky and will block the commit if the message does not conform.
+
+#### Allowed scopes
+
+Scope maps to the **package or area being changed** and drives which package release-please bumps. Using a sub-feature name (e.g. `area`, `bar`) instead of a package name causes incorrect version bumps across the monorepo.
+
+| Scope      | When to use                                                                     |
+| ---------- | ------------------------------------------------------------------------------- |
+| `theme`    | Changes to `packages/theme` (`@carbon/echarts-theme`)                           |
+| `toolbar`  | Changes to `packages/toolbar` (`@carbon/echarts-toolbar`)                       |
+| `codemods` | Changes to `packages/codemods` (`@carbon/echarts-codemod`)                      |
+| `site`     | Changes to `packages/site` (showcase site, docs, MDX content)                   |
+| `deps`     | Dependency updates (Dependabot PRs, manual version bumps)                       |
+| `release`  | Release infrastructure (release-please config, manifests, tags)                 |
+| `repo`     | Root-level tooling — commitlint, lint-staged, husky, eslint, prettier, tsconfig |
+
+#### Examples
 
 ```sh
-feat(presets): add createRadarOptions helper    # minor bump
-fix(bar): correct colour assignment in bar.ts   # patch bump
-docs(readme): update contributing section       # no release
-chore(deps): update dev dependencies            # no release
+feat(theme): add createRadarOptions preset helper   # minor bump on @carbon/echarts-theme
+fix(theme): remove duplicate tooltip key in area preset  # patch bump on @carbon/echarts-theme
+feat(toolbar): add CSV export button                # minor bump on @carbon/echarts-toolbar
+docs(site): update contributing section             # no release
+chore(deps): update dev dependencies                # no release
 ```
 
 Valid types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`, `build`, `revert`.
-Scope is required and must be lowercase. Commitlint enforces the format on every commit via Husky.
 
-PRs trigger a preview build deployed to GitHub Pages for visual review.
+PRs trigger a preview deploy to Netlify for visual review.
 
 ---
 
