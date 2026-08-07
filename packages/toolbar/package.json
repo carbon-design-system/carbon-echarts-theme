@@ -2,6 +2,12 @@
   "name": "@carbon/echarts-toolbar",
   "version": "0.0.0",
   "description": "Carbon-styled toolbar for Apache ECharts — show as table, fullscreen, and export",
+  "homepage": "https://github.com/carbon-design-system/carbon-echarts-theme#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carbon-design-system/carbon-echarts-theme.git",
+    "directory": "packages/toolbar"
+  },
   "license": "Apache-2.0",
   "type": "module",
   "exports": {
