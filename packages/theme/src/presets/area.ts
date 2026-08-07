@@ -210,7 +210,6 @@ export function createAreaOptions(
 
   return {
     ...(title ? { title: { text: title, top: dataZoom ? 44 : 'auto' } } : {}),
-    tooltip: { trigger: 'axis' },
     legend: {
       type: 'scroll',
       bottom: 0,
