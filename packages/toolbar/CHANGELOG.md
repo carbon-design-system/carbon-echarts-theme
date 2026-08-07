@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/carbon-design-system/carbon-echarts-theme/compare/toolbar-v0.1.0...toolbar-v0.2.0) (2026-08-07)
+
+
+### Features
+
+* **area:** add stacked charts support ([10d7f42](https://github.com/carbon-design-system/carbon-echarts-theme/commit/10d7f42437249b65ba8d9d4510679fb40395bbd8))
+
 ## 0.1.0 (2026-08-07)
 
 
