@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0](https://github.com/carbon-design-system/carbon-echarts-theme/compare/theme-v0.2.1...theme-v0.3.0) (2026-08-07)
+
+
+### Features
+
+* **toolbar:** add toolbar package for charts ([9577035](https://github.com/carbon-design-system/carbon-echarts-theme/commit/95770351cc48a43410c3719a613af4839d78ec4e))
+
+
+### Bug Fixes
+
+* **lollipop:** fix alignment to dots on lollipop lines ([#3](https://github.com/carbon-design-system/carbon-echarts-theme/issues/3)) ([3f280fd](https://github.com/carbon-design-system/carbon-echarts-theme/commit/3f280fd7c4cce546ffabc606605f791cdb1294f9))
+
 ## [0.2.1](https://github.com/carbon-design-system/carbon-echarts-theme/compare/theme-v0.2.0...theme-v0.2.1) (2026-08-05)
 
 
