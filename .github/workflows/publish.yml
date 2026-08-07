@@ -2,8 +2,21 @@ name: Publish to npm
 
 on:
   push:
-    # Release Please tags packages as `theme-v0.2.0`
+    # Release Please tags packages as `<component>-v<version>` e.g. theme-v0.3.0
     tags: ['theme-v*', 'toolbar-v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: >
+          Tag to publish (e.g. theme-v0.3.0, toolbar-v0.2.0).
+          The tag must already exist in the repo.
+        required: true
+        type: string
+      promote:
+        description: Promote to `latest` after publishing
+        required: true
+        type: boolean
+        default: true
 
 jobs:
   publish:
@@ -11,7 +24,19 @@ jobs:
     permissions:
       id-token: write # npm provenance
     steps:
+      - name: Resolve ref
+        id: ref
+        run: |
+          # For push triggers GITHUB_REF_NAME is the tag name.
+          # For workflow_dispatch use the manually supplied tag input.
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: refs/tags/${{ steps.ref.outputs.tag }}
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
@@ -22,20 +47,40 @@ jobs:
         id: pkg
         run: |
           # Tag format: <component>-v<version> e.g. toolbar-v0.1.0, theme-v0.3.0
-          COMPONENT="${GITHUB_REF_NAME%%-v*}"
+          TAG="${{ steps.ref.outputs.tag }}"
+          COMPONENT="${TAG%%-v*}"
+          VERSION="${TAG#*-v}"
           echo "path=packages/${COMPONENT}" >> "$GITHUB_OUTPUT"
           echo "name=@carbon/echarts-${COMPONENT}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
       - run: pnpm --filter "${{ steps.pkg.outputs.path }}" build
       - run: pnpm --filter "${{ steps.pkg.outputs.path }}" test
       - name: Publish to npm under `next` dist-tag
-        run: pnpm --filter "${{ steps.pkg.outputs.path }}" publish --tag next --no-git-checks --provenance
+        run: |
+          pkg="${{ steps.pkg.outputs.name }}"
+          version="${{ steps.pkg.outputs.version }}"
+          # If this exact version is already on npm (e.g. re-running a dispatch
+          # where publish succeeded but promote failed), skip re-publish.
+          # pnpm publish would otherwise fail with E403.
+          existing=$(npm view "$pkg@$version" version 2>/dev/null)
+          if [ "$existing" = "$version" ]; then
+            echo "::notice::$pkg@$version already on npm — skipping publish"
+            exit 0
+          fi
+          pnpm --filter "${{ steps.pkg.outputs.path }}" publish \
+            --tag next --no-git-checks --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.CARBON_BOT_NPM_TOKEN }}
 
   promote:
     needs: publish
-    # Only promote to `latest` if this is not a release candidate tag
-    if: ${{ !contains(github.ref_name, '-rc') }}
+    # For push: skip if the tag contains '-rc'.
+    # For workflow_dispatch: respect the promote input.
+    if: |
+      ${{
+        (github.event_name == 'workflow_dispatch' && inputs.promote) ||
+        (github.event_name != 'workflow_dispatch' && !contains(github.ref_name, '-rc'))
+      }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -48,12 +93,28 @@ jobs:
       - name: Resolve package name from tag
         id: pkg
         run: |
-          COMPONENT="${GITHUB_REF_NAME%%-v*}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${{ inputs.tag }}"
+          else
+            TAG="${GITHUB_REF_NAME}"
+          fi
+          COMPONENT="${TAG%%-v*}"
           echo "name=@carbon/echarts-${COMPONENT}" >> "$GITHUB_OUTPUT"
       - name: Promote package to `latest`
         run: |
           pkg="${{ steps.pkg.outputs.name }}"
-          version=$(npm view $pkg@next version)
-          npm dist-tag add $pkg@$version latest
+          # Retry up to 5 times with 10s back-off — npm registry can take a
+          # few seconds to make a newly published package visible.
+          for i in 1 2 3 4 5; do
+            version=$(npm view "$pkg@next" version 2>/dev/null)
+            [ -n "$version" ] && break
+            echo "Attempt $i: $pkg@next not yet visible, retrying in 10s…"
+            sleep 10
+          done
+          if [ -z "$version" ]; then
+            echo "::error::$pkg@next not found on npm after retries"
+            exit 1
+          fi
+          npm dist-tag add "$pkg@$version" latest
         env:
           NODE_AUTH_TOKEN: ${{ secrets.CARBON_BOT_NPM_TOKEN }}

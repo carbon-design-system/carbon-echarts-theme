@@ -32,6 +32,9 @@
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "echarts": ">=5.0.0"
   },
