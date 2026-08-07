@@ -59,16 +59,21 @@ jobs:
         run: |
           pkg="${{ steps.pkg.outputs.name }}"
           version="${{ steps.pkg.outputs.version }}"
+          path="${{ steps.pkg.outputs.path }}"
           # If this exact version is already on npm (e.g. re-running a dispatch
           # where publish succeeded but promote failed), skip re-publish.
           # pnpm publish would otherwise fail with E403.
-          existing=$(npm view "$pkg@$version" version 2>/dev/null)
+          existing=$(npm view "$pkg@$version" version 2>/dev/null || true)
           if [ "$existing" = "$version" ]; then
             echo "::notice::$pkg@$version already on npm — skipping publish"
             exit 0
           fi
-          pnpm --filter "${{ steps.pkg.outputs.name }}" publish \
-            --tag next --no-git-checks --provenance
+          # cd into the package directory so pnpm publish does not traverse the
+          # workspace root. Running `pnpm --filter … publish --provenance` from
+          # the root causes pnpm to spawn an `npm ls` workspace check that hangs
+          # and exits 1 before the actual publish can complete.
+          cd "$path"
+          pnpm publish --tag next --no-git-checks --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.CARBON_BOT_NPM_TOKEN }}
 
