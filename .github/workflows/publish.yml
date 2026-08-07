@@ -53,8 +53,8 @@ jobs:
           echo "path=packages/${COMPONENT}" >> "$GITHUB_OUTPUT"
           echo "name=@carbon/echarts-${COMPONENT}" >> "$GITHUB_OUTPUT"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
-      - run: pnpm --filter "${{ steps.pkg.outputs.path }}" build
-      - run: pnpm --filter "${{ steps.pkg.outputs.path }}" test
+      - run: pnpm --filter "${{ steps.pkg.outputs.name }}" build
+      - run: pnpm --filter "${{ steps.pkg.outputs.name }}" test
       - name: Publish to npm under `next` dist-tag
         run: |
           pkg="${{ steps.pkg.outputs.name }}"
@@ -67,7 +67,7 @@ jobs:
             echo "::notice::$pkg@$version already on npm — skipping publish"
             exit 0
           fi
-          pnpm --filter "${{ steps.pkg.outputs.path }}" publish \
+          pnpm --filter "${{ steps.pkg.outputs.name }}" publish \
             --tag next --no-git-checks --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.CARBON_BOT_NPM_TOKEN }}
