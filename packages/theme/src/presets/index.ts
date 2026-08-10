@@ -56,6 +56,10 @@ export {
 } from './treemap'
 export type { TreemapPresetOptions, TreemapHierarchyNode, RadarPresetOptions } from './treemap'
 
+// Sunburst
+export { createSunburstOptions } from './sunburst'
+export type { SunburstPresetOptions, SunburstNode } from './sunburst'
+
 // Boxplot
 export { createBoxplotOptions } from './boxplot'
 export type { BoxplotPresetOptions } from './boxplot'
@@ -85,7 +89,7 @@ export { createWordCloudOptions } from './wordcloud'
 export type { WordCloudPresetOptions, WordCloudDatum } from './wordcloud'
 
 // ── Shared data transform (re-exported for consumers building custom presets) ──
-export { groupByGroup, pickColors } from './_transform'
+export { groupByGroup, pickColors, sunburstPalette } from './_transform'
 export type {
   ChartTabularData,
   ChartTabularDatum,

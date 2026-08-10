@@ -25,7 +25,14 @@ import {
   magenta40,
   purple30,
 } from '@carbon/colors'
+import * as carbonColors from '@carbon/colors'
 import { lightCategorical, darkCategorical } from '../palettes'
+
+// Typed reference used by sunburstPalette below.
+// Double-cast through unknown because the @carbon/colors namespace also exports
+// grouped objects (e.g. `yellow`) alongside flat string tokens, so a direct
+// cast to Record<string,string> fails the overlap check.
+const cc = carbonColors as unknown as Record<string, string>
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -181,3 +188,68 @@ export function pickColors(count: number, colorScheme: 'light' | 'dark' = 'light
   // For N > 5, cycle through the full categorical palette
   return Array.from({ length: count }, (_, i) => fallback[i % fallback.length])
 }
+
+// ── Extended sunburst palette ─────────────────────────────────────────────────
+
+/**
+ * 45-colour palette for hierarchical charts (sunburst, treemap with many nodes).
+ * Sourced entirely from @carbon/colors mid-range stops (30–70) across all 9
+ * data-vis hues. Near-white (10, 20) and near-black (80–100) stops are excluded
+ * so every swatch is legible against both white background and label text.
+ *
+ * Ordered to maximise contrast between adjacent segments: hues cycle before
+ * stops step, so neighbours are always a different colour family.
+ * Design can trim or reorder this set — the constant name is the stable API.
+ */
+export const sunburstPalette: readonly string[] = [
+  // stop 50 — each hue's perceptual midpoint
+  cc.blue50,
+  cc.cyan50,
+  cc.teal50,
+  cc.green50,
+  cc.red50,
+  cc.magenta50,
+  cc.purple50,
+  cc.orange50,
+  cc.yellow50,
+  // stop 30 — lighter shade, same hue cycle
+  cc.blue30,
+  cc.cyan30,
+  cc.teal30,
+  cc.green30,
+  cc.red30,
+  cc.magenta30,
+  cc.purple30,
+  cc.orange30,
+  cc.yellow30,
+  // stop 70 — darker shade, same hue cycle
+  cc.blue70,
+  cc.cyan70,
+  cc.teal70,
+  cc.green70,
+  cc.red70,
+  cc.magenta70,
+  cc.purple70,
+  cc.orange70,
+  cc.yellow70,
+  // stop 40
+  cc.blue40,
+  cc.cyan40,
+  cc.teal40,
+  cc.green40,
+  cc.red40,
+  cc.magenta40,
+  cc.purple40,
+  cc.orange40,
+  cc.yellow40,
+  // stop 60
+  cc.blue60,
+  cc.cyan60,
+  cc.teal60,
+  cc.green60,
+  cc.red60,
+  cc.magenta60,
+  cc.purple60,
+  cc.orange60,
+  cc.yellow60,
+]
