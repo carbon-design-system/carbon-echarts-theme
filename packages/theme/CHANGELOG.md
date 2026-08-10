@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.0](https://github.com/carbon-design-system/carbon-echarts-theme/compare/theme-v0.4.0...theme-v0.5.0) (2026-08-10)
+
+
+### Features
+
+* **theme:** add choropleth chart preset and site page ([0e58173](https://github.com/carbon-design-system/carbon-echarts-theme/commit/0e58173d3da0cac7db1d4de5777ed26e61dc5cf2))
+* **theme:** add createSunburstOptions preset and 45-color sunburstPalette ([06d50fb](https://github.com/carbon-design-system/carbon-echarts-theme/commit/06d50fb815a2c21cfb6782eaeb6a76fef6525c9b))
+
 ## [0.4.0](https://github.com/carbon-design-system/carbon-echarts-theme/compare/theme-v0.3.0...theme-v0.4.0) (2026-08-07)
 
 
