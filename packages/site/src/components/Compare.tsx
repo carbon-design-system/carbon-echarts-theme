@@ -28,9 +28,14 @@ const TAB_LABELS: Record<FrameworkTab, string> = {
 function makeReact(optionCode: string): string {
   return `import { useEffect, useRef } from 'react'
 import ReactECharts from 'echarts-for-react'
+import * as echarts from 'echarts'
+import { registerCarbonThemes } from '@carbon/echarts-theme'
 import { createChartToolbar } from '@carbon/echarts-toolbar/vanilla'
 // Import once at your app entry point:
 // import '@carbon/echarts-toolbar/styles'
+
+// Register Carbon themes once at app startup (e.g. in main.tsx / index.tsx):
+// registerCarbonThemes(echarts)
 
 ${optionCode}
 
@@ -61,9 +66,13 @@ export function MyChart() {
 function makeAngular(optionCode: string): string {
   return `import { Component, ElementRef, OnInit, OnDestroy, ViewChild } from '@angular/core'
 import * as echarts from 'echarts'
+import { registerCarbonThemes } from '@carbon/echarts-theme'
 import { autoToolbar } from '@carbon/echarts-toolbar/vanilla'
 // Import once in angular.json styles or a global scss:
 // @import '@carbon/echarts-toolbar/styles'
+
+// Register Carbon themes once at app startup (e.g. in main.ts):
+// registerCarbonThemes(echarts)
 
 ${optionCode}
 
@@ -92,9 +101,11 @@ function makeVue(optionCode: string): string {
   return `<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
+import { registerCarbonThemes } from '@carbon/echarts-theme'
 import { autoToolbar } from '@carbon/echarts-toolbar/vanilla'
 // Import once in main.ts:
 // import '@carbon/echarts-toolbar/styles'
+// registerCarbonThemes(echarts)
 
 ${optionCode}
 
@@ -122,9 +133,11 @@ function makeSvelte(optionCode: string): string {
   return `<script lang="ts">
   import { onMount, onDestroy } from 'svelte'
   import * as echarts from 'echarts'
+  import { registerCarbonThemes } from '@carbon/echarts-theme'
   import { autoToolbar } from '@carbon/echarts-toolbar/vanilla'
   // Import once in your app entry:
   // import '@carbon/echarts-toolbar/styles'
+  // registerCarbonThemes(echarts)
 
   ${optionCode.split('\n').join('\n  ')}
 
@@ -146,8 +159,12 @@ function makeSvelte(optionCode: string): string {
 
 function makeVanilla(optionCode: string): string {
   return `import * as echarts from 'echarts'
+import { registerCarbonThemes } from '@carbon/echarts-theme'
 import { autoToolbar } from '@carbon/echarts-toolbar/vanilla'
 import '@carbon/echarts-toolbar/styles'
+
+// Register Carbon themes once at app startup:
+registerCarbonThemes(echarts)
 
 ${optionCode}
 
@@ -174,6 +191,11 @@ export interface CompareProps {
   /** Whether this is an extended chart (no Carbon Charts equivalent) */
   extended?: boolean
   /**
+   * Override the default chart height (default: '320px').
+   * Useful for charts that need more vertical space, e.g. graph/network layouts.
+   */
+  height?: string
+  /**
    * The chart-specific option construction code shown in framework tabs.
    * Should contain imports + (abbreviated) data + createXxxOptions() call.
    * Each framework tab wraps this with its own component boilerplate + toolbar.
@@ -199,6 +221,7 @@ export function Compare({
   carbonExample,
   echartsOption,
   extended = false,
+  height,
   optionCode,
   chartData,
   showLoading = false,
@@ -218,12 +241,13 @@ export function Compare({
     setCarbonToggle([expandAll, value])
   }
 
-  // Mirror the Carbon Charts height when provided
+  // Mirror the Carbon Charts height when provided; explicit `height` prop takes
+  // precedence, then Carbon Charts options height, then the 320 px default.
   const carbonHeight =
     carbonExample?.options && 'height' in carbonExample.options
       ? (carbonExample.options as { height?: string }).height
       : undefined
-  const chartHeight = carbonHeight ?? '320px'
+  const chartHeight = height ?? carbonHeight ?? '320px'
 
   const canCompare = !extended && !!carbonExample && !!chartClass
 
