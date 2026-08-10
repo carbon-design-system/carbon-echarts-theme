@@ -32,8 +32,9 @@ import {
   createLollipopOptions,
   createSparklineOptions,
   createWordCloudOptions,
+  createThemeRiverOptions,
 } from '../presets/index'
-import type { ChartTabularData } from '../presets/_transform'
+import type { ChartTabularData, ThemeRiverDatum } from '../presets/index'
 
 // ── Shared test fixtures ──────────────────────────────────────────────────────
 
@@ -1154,5 +1155,75 @@ describe('createWordCloudOptions', () => {
   it('omits title when not provided', () => {
     const opt = createWordCloudOptions(wordData)
     expect(opt.title).toBeUndefined()
+  })
+})
+
+// ── ThemeRiver ────────────────────────────────────────────────────────────────
+
+describe('createThemeRiverOptions', () => {
+  const themeRiverData: ThemeRiverDatum[] = [
+    ['2023-01-01', 320, 'Pop'],
+    ['2023-02-01', 302, 'Pop'],
+    ['2023-01-01', 220, 'Hip-Hop'],
+    ['2023-02-01', 182, 'Hip-Hop'],
+    ['2023-01-01', 150, 'Electronic'],
+    ['2023-02-01', 232, 'Electronic'],
+  ]
+
+  it('produces a themeRiver series', () => {
+    const opt = createThemeRiverOptions(themeRiverData)
+    const s = (opt.series as Array<{ type: string }>)[0]
+    expect(s?.type).toBe('themeRiver')
+  })
+
+  it('passes data through to the series unchanged', () => {
+    const opt = createThemeRiverOptions(themeRiverData)
+    const s = (opt.series as Array<{ data: ThemeRiverDatum[] }>)[0]
+    expect(s?.data).toBe(themeRiverData)
+  })
+
+  it('uses a time-type singleAxis', () => {
+    const opt = createThemeRiverOptions(themeRiverData)
+    expect((opt.singleAxis as { type: string }).type).toBe('time')
+  })
+
+  it('applies Carbon N-color palette derived from unique stream count', () => {
+    const opt = createThemeRiverOptions(themeRiverData)
+    const streamCount = 3 // Pop, Hip-Hop, Electronic
+    expect(opt.color).toEqual(pickColors(streamCount, 'light'))
+  })
+
+  it('uses dark palette when colorScheme is dark', () => {
+    const opt = createThemeRiverOptions(themeRiverData, { colorScheme: 'dark' })
+    expect(opt.color).toEqual(pickColors(3, 'dark'))
+  })
+
+  it('includes a legend with stream names by default', () => {
+    const opt = createThemeRiverOptions(themeRiverData)
+    const legend = opt.legend as { data: string[]; show?: boolean }
+    expect(legend.data).toEqual(['Pop', 'Hip-Hop', 'Electronic'])
+  })
+
+  it('hides legend when showLegend is false', () => {
+    const opt = createThemeRiverOptions(themeRiverData, { showLegend: false })
+    const legend = opt.legend as { show: boolean }
+    expect(legend.show).toBe(false)
+  })
+
+  it('includes a title when provided', () => {
+    const opt = createThemeRiverOptions(themeRiverData, { title: 'Streaming Trends' })
+    expect((opt.title as { text: string }).text).toBe('Streaming Trends')
+  })
+
+  it('omits title when not provided', () => {
+    const opt = createThemeRiverOptions(themeRiverData)
+    expect(opt.title).toBeUndefined()
+  })
+
+  it('respects custom axisTop and axisBottom', () => {
+    const opt = createThemeRiverOptions(themeRiverData, { axisTop: 80, axisBottom: 30 })
+    const axis = opt.singleAxis as { top: number; bottom: number }
+    expect(axis.top).toBe(80)
+    expect(axis.bottom).toBe(30)
   })
 })

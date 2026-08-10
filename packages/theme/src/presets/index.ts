@@ -96,6 +96,10 @@ export type { NetworkPresetOptions, NetworkNode, NetworkLink } from './network'
 export { createWordCloudOptions } from './wordcloud'
 export type { WordCloudPresetOptions, WordCloudDatum } from './wordcloud'
 
+// ThemeRiver (stream graph)
+export { createThemeRiverOptions } from './themeRiver'
+export type { ThemeRiverPresetOptions, ThemeRiverDatum } from './themeRiver'
+
 // ── Shared data transform (re-exported for consumers building custom presets) ──
 export { groupByGroup, pickColors, sunburstPalette } from './_transform'
 export type {
