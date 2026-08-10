@@ -8,7 +8,7 @@ import prettierConfig from 'eslint-config-prettier'
 /** @type {import("eslint").Linter.Config[]} */
 export default [
   {
-    ignores: ['**/dist/**', '**/build/**', '**/node_modules/**', 'packages/codemods/**'],
+    ignores: ['**/dist/**', '**/build/**', '**/node_modules/**', 'packages/codemods/**', 'temp/**'],
   },
   // Theme package source files — use each package's tsconfig.json (project: true)
   {

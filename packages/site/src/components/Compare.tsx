@@ -211,6 +211,8 @@ export interface CompareProps {
    * Equivalent to Carbon Charts `data: { loading: true }`.
    */
   showLoading?: boolean
+  /** ECharts event handlers passed directly to ReactECharts onEvents prop. */
+  onEvents?: Record<string, (...args: unknown[]) => unknown>
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -225,6 +227,7 @@ export function Compare({
   optionCode,
   chartData,
   showLoading = false,
+  onEvents,
 }: CompareProps) {
   const { echartsTheme } = useTheme()
   const { expandAll } = useCompareContext()
@@ -316,6 +319,7 @@ export function Compare({
             style={{ height: chartHeight, width: '100%' }}
             opts={{ renderer: 'canvas' }}
             onChartReady={(inst) => toolbarRef.current?.update(inst)}
+            onEvents={onEvents}
           />
           {showLoading && <div className="compare__skeleton" aria-hidden="true" />}
         </div>
