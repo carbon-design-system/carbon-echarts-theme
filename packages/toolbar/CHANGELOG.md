@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/carbon-design-system/carbon-echarts-theme/compare/toolbar-v0.1.0...toolbar-v0.2.0) (2026-08-10)
+
+
+### Features
+
+* **theme:** add createSunburstOptions preset and 45-color sunburstPalette ([06d50fb](https://github.com/carbon-design-system/carbon-echarts-theme/commit/06d50fb815a2c21cfb6782eaeb6a76fef6525c9b))
+
 ## 0.1.0 (2026-08-07)
 
 
