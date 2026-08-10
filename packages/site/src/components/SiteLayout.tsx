@@ -69,6 +69,7 @@ const NAV: NavGroup[] = [
       { label: 'Bar (simple, grouped, stacked)', path: '/bar' },
       { label: 'Boxplot', path: '/boxplot' },
       { label: 'Bubble', path: '/bubble' },
+      { label: 'Choropleth', path: '/choropleth' },
       { label: 'Combo', path: '/combo' },
       { label: 'Donut', path: '/donut' },
       { label: 'Gauge', path: '/gauge' },
@@ -102,7 +103,6 @@ const NAV: NavGroup[] = [
     label: 'Carbon Charts only',
     items: [
       { label: 'Bullet', path: '/bullet' },
-      { label: 'Choropleth', path: '/choropleth' },
       { label: 'Circle pack', path: '/circlepack' },
     ],
   },

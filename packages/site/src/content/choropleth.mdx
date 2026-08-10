@@ -8,7 +8,7 @@ Choropleth maps encode a quantitative variable as a color fill across geographic
 
 **When to use:**
 
-- Showing geographic distribution of a metric (e.g., GDP per capita by country)
+- Showing geographic distribution of a metric (e.g., population by state)
 - Comparing regions at a consistent geographic scale
 - When the map shape itself provides meaningful context
 
@@ -22,6 +22,42 @@ Choropleth maps encode a quantitative variable as a color fill across geographic
 
 Use a **sequential palette** (single-hue ramp) for a single variable. Use a **diverging palette** when data has a meaningful midpoint (e.g., above/below average).
 
-## ECharts status
+Carbon Charts does not hardcode hex values — it applies CSS classes (`fill-mono-1-1` … `fill-mono-1-11`) that resolve to Carbon palette colours via SCSS. The default choropleth palette is `mono-1` = purple. You can change it with `color.pairing.option`:
 
-ECharts map does not match Carbon Charts' D3-geo projection. Use [Carbon Charts ChoroplethChart](https://charts.carbondesignsystem.com/choropleth) for this visualization.
+| `pairing.option` | Palette |
+| ---------------- | ------- |
+| `1` (default)    | Purple  |
+| `2`              | Blue    |
+| `3`              | Cyan    |
+| `4`              | Teal    |
+
+For ECharts, pass the equivalent hex stops to `visualMap.inRange.color`. The `SEQUENTIAL_RAMPS` object in the code examples below contains all four palettes sourced directly from Carbon Charts' `_color-palette.scss`.
+
+## Additional dependency
+
+Choropleth charts require geographic boundary data. The most compact format is **TopoJSON**, which encodes shared borders once rather than duplicating them across every feature. To convert TopoJSON to the GeoJSON that `echarts.registerMap()` expects, install `topojson-client` — only needed if you are rendering a choropleth:
+
+```
+npm install topojson-client
+```
+
+`topojson-client` is already a runtime dependency of `@carbon/charts` (it uses the same conversion internally), so if you have Carbon Charts installed it will already be present in your lock file.
+
+## ECharts implementation
+
+Use `createChoroplethOptions` from `@carbon/echarts-theme/presets`. It selects the correct Carbon palette internally — no hex values needed in your code:
+
+```js
+import * as echarts from 'echarts'
+import { feature } from 'topojson-client'
+import { createChoroplethOptions } from '@carbon/echarts-theme/presets'
+import worldTopoJson from './world-110m.json'
+
+// Register the map once at app startup
+echarts.registerMap('world', feature(worldTopoJson, worldTopoJson.objects.countries))
+
+// pairing: 1=purple (default), 2=blue, 3=cyan, 4=teal
+const option = createChoroplethOptions(data, { pairing: 1 })
+```
+
+The `pairing` option mirrors Carbon Charts' `color.pairing.option`. For a custom ramp pass `colors: [...]`, which mirrors `color.gradient.colors`. For a diverging scale pass `diverging: true` with `divergingPairing: 1` (red↔cyan) or `2` (purple↔teal).

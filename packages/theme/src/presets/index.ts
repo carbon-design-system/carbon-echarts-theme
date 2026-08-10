@@ -40,6 +40,14 @@ export type { ScatterPresetOptions, BubblePresetOptions } from './scatter'
 export { createHeatmapOptions } from './heatmap'
 export type { HeatmapPresetOptions } from './heatmap'
 
+// Choropleth
+export { createChoroplethOptions } from './choropleth'
+export type {
+  ChoroplethPresetOptions,
+  ChoroplethPairingOption,
+  ChoroplethDivergingOption,
+} from './choropleth'
+
 // Gauge + Meter
 export { createGaugeOptions, createMeterOptions } from './gauge'
 export type { GaugePresetOptions, MeterPresetOptions, MeterStatusRange } from './gauge'
