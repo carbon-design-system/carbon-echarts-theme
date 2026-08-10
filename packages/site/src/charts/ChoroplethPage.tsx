@@ -19,7 +19,7 @@ import worldTopoJsonRaw from '../data/carboncharts/topojson-110-data.json'
 // feature() converts the bundled TopoJSON to the GeoJSON FeatureCollection that
 // echarts.registerMap() accepts — same approach as Carbon Charts' geo-projection.ts.
 const worldGeoJson = feature(worldTopoJsonRaw as any, (worldTopoJsonRaw as any).objects.countries)
-echarts.registerMap('world', worldGeoJson as Parameters<typeof echarts.registerMap>[1])
+echarts.registerMap('world', worldGeoJson as unknown as Parameters<typeof echarts.registerMap>[1])
 
 // ── Build ECharts options via preset ─────────────────────────────────────────
 
