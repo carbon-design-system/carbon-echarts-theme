@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: pages
+  group: pages-${{ github.event.release.tag_name || github.ref }}
   cancel-in-progress: true
 
 permissions:
