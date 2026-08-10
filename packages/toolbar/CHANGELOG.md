@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/carbon-design-system/carbon-echarts-theme/compare/toolbar-v0.2.0...toolbar-v0.3.0) (2026-08-10)
+
+
+### Features
+
+* **toolbar:** add extractParallel CSV export for parallel coordinates ([177bd78](https://github.com/carbon-design-system/carbon-echarts-theme/commit/177bd784629d83af7e7fa81f70085ac7b8434ff0))
+
 ## [0.2.0](https://github.com/carbon-design-system/carbon-echarts-theme/compare/toolbar-v0.1.0...toolbar-v0.2.0) (2026-08-10)
 
 
