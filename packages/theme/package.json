@@ -1,6 +1,6 @@
 {
   "name": "@carbon/echarts-theme",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Apache ECharts theme built on Carbon Design System v11 tokens and IBM data-vis color palettes",
   "keywords": [
     "carbon",

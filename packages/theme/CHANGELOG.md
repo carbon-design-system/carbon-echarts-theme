@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.0](https://github.com/carbon-design-system/carbon-echarts-theme/compare/theme-v0.5.0...theme-v0.6.0) (2026-08-11)
+
+
+### Features
+
+* **theme:** add createCandlestickOptions preset with hollow-body candle style ([d1804aa](https://github.com/carbon-design-system/carbon-echarts-theme/commit/d1804aacc1cdc6e3b409746de2b535b0f886d195))
+* **theme:** add createThemeRiverOptions preset ([35ca5a8](https://github.com/carbon-design-system/carbon-echarts-theme/commit/35ca5a8924cfb72f3cce98ec114528e06ff793cb))
+
 ## [0.5.0](https://github.com/carbon-design-system/carbon-echarts-theme/compare/theme-v0.4.0...theme-v0.5.0) (2026-08-10)
 
 
