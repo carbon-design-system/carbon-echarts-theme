@@ -27,6 +27,7 @@ import {
   createLineOptions,
   createStepLineOptions,
   createTimeSeriesLineOptions,
+  pickColors,
 } from '@carbon/echarts-theme/presets'
 
 // ── Shared datasets (values match carboncharts/line.ts exactly) ───────────────
@@ -358,3 +359,266 @@ export const lineDualAxis: EChartsOption = createTimeSeriesLineOptions(dualAxesD
 
 // ── Convenience re-export (step line, unchanged) ──────────────────────────────
 export const lineStep: EChartsOption = createStepLineOptions(lineData)
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SHOWCASE — Line Charts
+// Inspired by official Apache ECharts gallery examples, re-themed with Carbon.
+// https://echarts.apache.org/examples/en/index.html#chart-type-line
+// ══════════════════════════════════════════════════════════════════════════════
+
+// ── Showcase Line 1: Rainfall vs Evaporation ─────────────────────────────────
+// https://echarts.apache.org/examples/en/editor.html?c=line-rainfall
+//
+// areaStyle gradients and the markArea tint must reference explicit hex values —
+// the theme color array only applies to itemStyle/lineStyle, not to colorStops.
+// We source those hex values from pickColors() so they stay in sync.
+
+const _rainfallMonths = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+]
+const _rainfallData = [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
+const _evapData = [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+// [0] = Rainfall colour, [1] = Evaporation colour — matches what the theme assigns
+// to series 1 and 2 of a 2-series chart.
+const [_rfC1, _rfC2] = pickColors(2)
+// Accent tint for the markArea — use the 4th slot of the 4-colour palette so it
+// contrasts with the two series colours without being mistaken for a data series.
+const [, , , _rfAccent] = pickColors(4)
+
+export const lineShowcaseRainfall: EChartsOption = {
+  title: { text: 'Rainfall vs Evaporation', left: 'center', top: 8 },
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['Rainfall', 'Evaporation'], bottom: 0 },
+  grid: { top: 56, bottom: 56, left: 16, right: 24, containLabel: true },
+  xAxis: { type: 'category', data: _rainfallMonths },
+  yAxis: { type: 'value', name: 'mm', nameLocation: 'middle', nameGap: 40, nameRotate: 90 },
+  series: [
+    {
+      name: 'Rainfall',
+      type: 'line',
+      smooth: true,
+      data: _rainfallData,
+      // itemStyle/lineStyle intentionally omitted — the theme color array handles them
+      areaStyle: {
+        color: {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [
+            { offset: 0, color: _rfC1 + 'cc' },
+            { offset: 1, color: _rfC1 + '00' },
+          ],
+        },
+      },
+      markArea: {
+        silent: true,
+        data: [[{ name: 'Rainy season', xAxis: 'Jun' }, { xAxis: 'Sep' }]],
+        itemStyle: { color: _rfAccent + '1a' },
+        label: { color: _rfAccent, fontSize: 11 },
+      },
+    },
+    {
+      name: 'Evaporation',
+      type: 'line',
+      smooth: true,
+      data: _evapData,
+      lineStyle: { type: 'dashed' },
+      areaStyle: {
+        color: {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [
+            { offset: 0, color: _rfC2 + '99' },
+            { offset: 1, color: _rfC2 + '00' },
+          ],
+        },
+      },
+    },
+  ],
+}
+
+// ── Showcase Line 2: Stock Price Trends ───────────────────────────────────────
+// https://echarts.apache.org/examples/en/editor.html?c=line-smooth
+//
+// Five named series — the theme color array assigns each one its palette colour
+// automatically. No itemStyle/lineStyle colour overrides needed.
+
+const _stockDates = [
+  '2024-01-02',
+  '2024-01-09',
+  '2024-01-16',
+  '2024-01-23',
+  '2024-01-30',
+  '2024-02-06',
+  '2024-02-13',
+  '2024-02-20',
+  '2024-02-27',
+  '2024-03-05',
+  '2024-03-12',
+  '2024-03-19',
+  '2024-03-26',
+  '2024-04-02',
+  '2024-04-09',
+  '2024-04-16',
+  '2024-04-23',
+  '2024-04-30',
+]
+const _stockA = [
+  148, 152, 155, 149, 161, 170, 165, 172, 168, 175, 183, 179, 188, 192, 185, 198, 205, 201,
+]
+const _stockB = [
+  210, 208, 215, 218, 212, 225, 230, 228, 235, 240, 237, 245, 250, 244, 252, 258, 262, 270,
+]
+const _stockC = [
+  95, 98, 101, 99, 105, 108, 103, 110, 107, 115, 118, 112, 120, 116, 125, 128, 122, 130,
+]
+const _stockD = [
+  320, 325, 318, 330, 335, 328, 342, 338, 350, 345, 355, 360, 352, 365, 370, 362, 375, 380,
+]
+const _stockE = [55, 58, 56, 62, 59, 65, 63, 68, 70, 66, 73, 71, 75, 78, 74, 80, 83, 79]
+
+export const lineShowcaseStock: EChartsOption = {
+  title: { text: 'Weekly Stock Price Trends', left: 'center', top: 8 },
+  tooltip: { trigger: 'axis' },
+  legend: {
+    data: ['Tech Fund', 'Growth ETF', 'Value Index', 'Blue-Chip', 'Small-Cap'],
+    bottom: 0,
+    type: 'scroll',
+  },
+  grid: { top: 56, bottom: 76, left: 16, right: 24, containLabel: true },
+  dataZoom: [{ type: 'slider', bottom: 40, height: 20, start: 0, end: 100 }, { type: 'inside' }],
+  xAxis: { type: 'time' },
+  yAxis: { type: 'value', name: 'USD', nameLocation: 'middle', nameGap: 44, nameRotate: 90 },
+  series: [
+    {
+      name: 'Tech Fund',
+      type: 'line',
+      smooth: true,
+      data: _stockDates.map((d, i) => [d, _stockA[i]]),
+    },
+    {
+      name: 'Growth ETF',
+      type: 'line',
+      smooth: true,
+      data: _stockDates.map((d, i) => [d, _stockB[i]]),
+    },
+    {
+      name: 'Value Index',
+      type: 'line',
+      smooth: true,
+      data: _stockDates.map((d, i) => [d, _stockC[i]]),
+    },
+    {
+      name: 'Blue-Chip',
+      type: 'line',
+      smooth: true,
+      data: _stockDates.map((d, i) => [d, _stockD[i]]),
+    },
+    {
+      name: 'Small-Cap',
+      type: 'line',
+      smooth: true,
+      data: _stockDates.map((d, i) => [d, _stockE[i]]),
+    },
+  ],
+}
+
+// ── Showcase Line 3: Stacked Smooth Area with Gradient Fills ──────────────────
+// https://echarts.apache.org/examples/en/editor.html?c=area-stack-gradient
+//
+// areaStyle gradients must reference explicit hex values — the theme color array
+// doesn't reach into colorStops. We source them from pickColors(4) so they match
+// exactly what the theme assigns to these four series, then omit itemStyle/lineStyle.
+
+const _areaMonths = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+]
+const _areaSearch = [820, 932, 901, 934, 1290, 1330, 1320, 1250, 1100, 980, 870, 820]
+const _areaDirect = [620, 732, 701, 734, 890, 930, 920, 850, 780, 650, 600, 590]
+const _areaEmail = [420, 532, 501, 534, 690, 730, 720, 650, 610, 520, 480, 450]
+const _areaUnion = [220, 332, 301, 334, 490, 530, 520, 450, 410, 320, 280, 250]
+const _areaColors = pickColors(4)
+
+function _areaGradient(color: string) {
+  return {
+    type: 'linear' as const,
+    x: 0,
+    y: 0,
+    x2: 0,
+    y2: 1,
+    colorStops: [
+      { offset: 0, color: color + 'dd' },
+      { offset: 1, color: color + '11' },
+    ],
+  }
+}
+
+export const lineShowcaseStackedArea: EChartsOption = {
+  title: { text: 'Channel Traffic (Stacked Area)', left: 'center', top: 8 },
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['Search Engine', 'Direct', 'Email', 'Union Ads'], bottom: 0 },
+  grid: { top: 56, bottom: 56, left: 16, right: 24, containLabel: true },
+  xAxis: { type: 'category', data: _areaMonths, boundaryGap: false },
+  yAxis: { type: 'value' },
+  series: [
+    {
+      name: 'Search Engine',
+      type: 'line',
+      smooth: true,
+      stack: 'total',
+      data: _areaSearch,
+      areaStyle: { color: _areaGradient(_areaColors[0]) as never },
+    },
+    {
+      name: 'Direct',
+      type: 'line',
+      smooth: true,
+      stack: 'total',
+      data: _areaDirect,
+      areaStyle: { color: _areaGradient(_areaColors[1]) as never },
+    },
+    {
+      name: 'Email',
+      type: 'line',
+      smooth: true,
+      stack: 'total',
+      data: _areaEmail,
+      areaStyle: { color: _areaGradient(_areaColors[2]) as never },
+    },
+    {
+      name: 'Union Ads',
+      type: 'line',
+      smooth: true,
+      stack: 'total',
+      data: _areaUnion,
+      areaStyle: { color: _areaGradient(_areaColors[3]) as never },
+    },
+  ],
+}

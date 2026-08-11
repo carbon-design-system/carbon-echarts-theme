@@ -12,6 +12,10 @@ import {
   examplesStacked,
 } from '../data/carboncharts/bar'
 import {
+  // Showcase
+  barShowcaseWorldPop,
+  barShowcaseRevenue,
+  barShowcaseDivergent,
   // Simple
   barSimple,
   barTimeSeries,
@@ -569,6 +573,35 @@ export function BarPage() {
           </TabList>
           <TabPanels>
             <TabPanel>
+              {/* ── Showcase ── */}
+              <Compare
+                title="World Population by Region — horizontal bar with value labels"
+                echartsOption={barShowcaseWorldPop}
+                extended
+                height="380px"
+                optionCode={`import type { EChartsOption } from 'echarts'
+
+const palette = ['#6929c4','#009d9a','#e3008c','#1192e8','#005d5d','#9f1853','#6929c4','#009d9a','#e3008c','#1192e8']
+const regions = ['Northern Africa','Southern Africa','Central America','Eastern Europe','Southeast Asia',
+                  'Western Europe','South America','North America','East Asia','South Asia']
+const population = [254, 198, 175, 292, 688, 197, 438, 502, 1673, 2027]
+
+const option: EChartsOption = {
+  title: { text: 'Population by World Region (millions)', left: 'center' },
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  xAxis: { type: 'value', name: 'Population (M)' },
+  yAxis: { type: 'category', data: regions },
+  series: [{
+    type: 'bar',
+    data: population.map((v, i) => ({ value: v, itemStyle: { color: palette[i] } })),
+    label: { show: true, position: 'right', formatter: '{c}M' },
+    barMaxWidth: 28,
+  }],
+}
+
+<ReactECharts option={option} theme="carbon-white" />`}
+              />
+              {/* ── Carbon Charts parity comparisons ── */}
               {testExamples.map((ex, i) => (
                 <Compare
                   key={i}
@@ -582,6 +615,32 @@ export function BarPage() {
               ))}
             </TabPanel>
             <TabPanel>
+              {/* ── Showcase ── */}
+              <Compare
+                title="Monthly Revenue — grouped bar with positive and negative values"
+                echartsOption={barShowcaseRevenue}
+                extended
+                height="360px"
+                optionCode={`import type { EChartsOption } from 'echarts'
+
+const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+
+const option: EChartsOption = {
+  title: { text: 'Monthly Revenue Breakdown', left: 'center' },
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  legend: { data: ['Income', 'Profit', 'Expenses'], bottom: 0 },
+  xAxis: { type: 'category', data: months },
+  yAxis: { type: 'value', name: 'USD (K)' },
+  series: [
+    { name: 'Income',   type: 'bar', data: [320,302,341,374,390,450,410,390,450,355,402,382] },
+    { name: 'Profit',   type: 'bar', data: [200,170, 57,140,166,222,133,108,168,102, 93,172] },
+    { name: 'Expenses', type: 'bar', data: [-120,-132,-101,-134,-90,-230,-210,-182,-125,-83,-110,-190] },
+  ],
+}
+
+<ReactECharts option={option} theme="carbon-white" />`}
+              />
+              {/* ── Carbon Charts parity comparisons ── */}
               {testGroupedExamples.map((ex, i) => (
                 <Compare
                   key={i}
@@ -595,6 +654,34 @@ export function BarPage() {
               ))}
             </TabPanel>
             <TabPanel>
+              {/* ── Showcase ── */}
+              <Compare
+                title="Quarterly Sales by Region — stacked divergent (positive + negative stacks)"
+                echartsOption={barShowcaseDivergent}
+                extended
+                height="360px"
+                optionCode={`import type { EChartsOption } from 'echarts'
+
+const quarters = ['Q1 2023','Q2 2023','Q3 2023','Q4 2023','Q1 2024','Q2 2024']
+
+const option: EChartsOption = {
+  title: { text: 'Quarterly Sales by Region', left: 'center' },
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  legend: { data: ['North America','Europe','Asia Pacific','South America','MEA'], bottom: 0 },
+  xAxis: { type: 'category', data: quarters },
+  yAxis: { type: 'value', name: 'Revenue (M USD)' },
+  series: [
+    { name: 'North America', type: 'bar', stack: 'positive', data: [120,132,101,134, 90,230] },
+    { name: 'Europe',        type: 'bar', stack: 'positive', data: [220,182,191,234,290,330] },
+    { name: 'Asia Pacific',  type: 'bar', stack: 'positive', data: [150,212,201,154,190,330] },
+    { name: 'South America', type: 'bar', stack: 'negative', data: [[-98,0],[-77,0],[-101,0],[-134,0],[-90,0],[-130,0]] },
+    { name: 'MEA',           type: 'bar', stack: 'negative', data: [[-48,0],[-52,0],[-101,0],[-134,0],[-90,0], [-80,0]] },
+  ],
+}
+
+<ReactECharts option={option} theme="carbon-white" />`}
+              />
+              {/* ── Carbon Charts parity comparisons ── */}
               {testStackedExamples.map((ex, i) => (
                 <Compare
                   key={i}

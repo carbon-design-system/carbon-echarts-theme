@@ -3,7 +3,16 @@ import { ChartPage } from '../components/ChartPage'
 import { Compare } from '../components/Compare'
 import PieMdx from '../content/pie.mdx'
 import { chartTypes, examples } from '../data/carboncharts/pie'
-import { pie, pieCentered, pieValueMapsTo, data, dataMapsTo } from '../data/echarts/donut'
+import {
+  pie,
+  pieCentered,
+  pieValueMapsTo,
+  data,
+  dataMapsTo,
+  pieShowcaseRose,
+  pieShowcaseNested,
+  pieShowcaseRichLabel,
+} from '../data/echarts/donut'
 
 // Filter to test-tagged examples only
 // Carbon test order: [0] Pie, [1] Pie (centered), [2] Pie (value maps to count)
@@ -66,17 +75,139 @@ export function PiePage() {
       title="Pie"
       description="Show part-to-whole relationships as proportional slices."
       overview={<PieMdx />}
-      examples={testExamples.map((ex, i) => (
-        <Compare
-          key={i}
-          title={titles[i] ?? `Example ${i + 1}`}
-          echartsOption={echartsOptions[i] ?? pie}
-          carbonExample={ex}
-          chartClass={chartTypes.vanilla}
-          optionCode={codeSamples[i]}
-          chartData={chartDataSamples[i]}
-        />
-      ))}
+      examples={
+        <>
+          {/* ── Showcase: impressive ECharts examples from the official gallery ── */}
+          <Compare
+            title="Nightingale Rose — polar-area chart (roseType: 'area')"
+            echartsOption={pieShowcaseRose}
+            extended
+            height="440px"
+            optionCode={`import type { EChartsOption } from 'echarts'
+
+const option: EChartsOption = {
+  title: { text: 'Department Resource Allocation', left: 'center' },
+  tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+  color: ['#6929c4','#009d9a','#e3008c','#1192e8','#005d5d','#9f1853','#ee538b','#ff832b'],
+  series: [{
+    name: 'Resources',
+    type: 'pie',
+    radius: ['15%', '70%'],
+    roseType: 'area',           // ← Nightingale rose: radius encodes magnitude
+    itemStyle: { borderRadius: 4 },
+    label: { formatter: '{b}\\n{d}%' },
+    data: [
+      { value: 40, name: 'Analytics' },
+      { value: 38, name: 'Marketing' },
+      { value: 32, name: 'Product' },
+      // ...
+    ],
+  }],
+}
+
+<ReactECharts option={option} theme="carbon-white" />`}
+          />
+          <Compare
+            title="Nested Rings — inner channel ring + outer sub-source ring"
+            echartsOption={pieShowcaseNested}
+            extended
+            height="440px"
+            optionCode={`import type { EChartsOption } from 'echarts'
+
+// Solid Carbon palette tokens — no alpha, full contrast
+const inner = ['#6929c4','#009d9a','#e3008c','#1192e8','#005d5d']
+const outer = ['#6929c4','#009d9a','#e3008c','#1192e8','#005d5d','#9f1853','#ee538b']
+
+// Black pill label style — white text on #000 background reads against any slice fill
+const pillLabel = { color: '#ffffff', backgroundColor: '#000000', borderRadius: 2, padding: [2, 4] }
+
+const option: EChartsOption = {
+  title: { text: 'Traffic Source — Channel & Sub-source', left: 'center' },
+  tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+  series: [
+    {
+      name: 'Channel (inner)',
+      type: 'pie',
+      radius: ['18%', '40%'],
+      color: inner,
+      label: { ...pillLabel, show: true, position: 'inner', fontSize: 10, formatter: '{b}: {d}%' },
+      labelLine: { show: false },
+      data: [
+        { value: 335, name: 'Direct' },
+        { value: 310, name: 'Email' },
+        // ...
+      ],
+    },
+    {
+      name: 'Source (outer)',
+      type: 'pie',
+      radius: ['46%', '62%'],
+      label: { ...pillLabel, show: true, fontSize: 11, formatter: '{b}: {d}%' },
+      data: [
+        { value: 335, name: 'Direct',    itemStyle: { color: outer[0] } },
+        { value: 310, name: 'Email',     itemStyle: { color: outer[1] } },
+        { value: 234, name: 'Union Ads', itemStyle: { color: outer[2] } },
+        // ...
+      ],
+    },
+  ],
+}
+
+<ReactECharts option={option} theme="carbon-white" />`}
+          />
+          <Compare
+            title="Rich-label Pie — polyline connectors with name, value &amp; unit callouts"
+            echartsOption={pieShowcaseRichLabel}
+            extended
+            height="460px"
+            optionCode={`import type { EChartsOption } from 'echarts'
+
+const option: EChartsOption = {
+  title: { text: 'Website Traffic Sources', left: 'center' },
+  tooltip: { trigger: 'item', formatter: '{b}<br/>{c} visits ({d}%)' },
+  series: [{
+    name: 'Traffic',
+    type: 'pie',
+    radius: '55%',
+    itemStyle: { borderRadius: 6 },
+    label: {
+      show: true,
+      formatter: (p) =>
+        \`{name|\${p.name}}\\n{value|\${p.value.toLocaleString()}}{unit| visits}\`,
+      rich: {
+        name:  { fontSize: 12, fontWeight: 'bold', lineHeight: 18 },
+        value: { fontSize: 14, fontWeight: 600,    lineHeight: 20 },
+        unit:  { fontSize: 10, lineHeight: 20, color: '#6f6f6f' },
+      },
+    },
+    labelLine: { show: true, smooth: true, length: 16, length2: 24 },
+    data: [
+      { value: 1048, name: 'Search Engine' },
+      { value:  735, name: 'Direct' },
+      { value:  580, name: 'Email' },
+      { value:  484, name: 'Union Ads' },
+      { value:  300, name: 'Video Ads' },
+    ],
+  }],
+}
+
+<ReactECharts option={option} theme="carbon-white" />`}
+          />
+
+          {/* ── Carbon Charts parity comparisons ── */}
+          {testExamples.map((ex, i) => (
+            <Compare
+              key={i}
+              title={titles[i] ?? `Example ${i + 1}`}
+              echartsOption={echartsOptions[i] ?? pie}
+              carbonExample={ex}
+              chartClass={chartTypes.vanilla}
+              optionCode={codeSamples[i]}
+              chartData={chartDataSamples[i]}
+            />
+          ))}
+        </>
+      }
     />
   )
 }

@@ -27,6 +27,9 @@ import {
   logAxisData,
   rotatedTicksData,
   frenchLocaleData,
+  lineShowcaseRainfall,
+  lineShowcaseStock,
+  lineShowcaseStackedArea,
 } from '../data/echarts/line'
 
 // Filter to test-tagged examples only
@@ -334,17 +337,129 @@ export function LinePage() {
       title="Line"
       description="Display trends or changes over time."
       overview={<LineMdx />}
-      examples={testExamples.map((ex, i) => (
-        <Compare
-          key={i}
-          title={titles[i] ?? `Example ${i + 1}`}
-          echartsOption={echartsOptions[i] ?? lineDiscrete}
-          carbonExample={ex}
-          chartClass={chartTypes.vanilla}
-          optionCode={codeSamples[i]}
-          chartData={chartDataSamples[i]}
-        />
-      ))}
+      examples={
+        <>
+          {/* ── Showcase: impressive ECharts examples from the official gallery ── */}
+          <Compare
+            title="Rainfall vs Evaporation — area fill + markArea annotation"
+            echartsOption={lineShowcaseRainfall}
+            extended
+            height="360px"
+            optionCode={`import type { EChartsOption } from 'echarts'
+
+const C1 = '#6929c4', C2 = '#009d9a', C4 = '#1192e8'
+const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+
+const option: EChartsOption = {
+  title: { text: 'Rainfall vs Evaporation', left: 'center' },
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['Rainfall', 'Evaporation'], bottom: 0 },
+  xAxis: { type: 'category', data: months },
+  yAxis: { type: 'value', name: 'mm' },
+  series: [
+    {
+      name: 'Rainfall', type: 'line', smooth: true,
+      data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+      itemStyle: { color: C1 },
+      areaStyle: {
+        color: {
+          type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+          colorStops: [{ offset: 0, color: C1 + 'cc' }, { offset: 1, color: C1 + '00' }],
+        },
+      },
+      markArea: {
+        silent: true,
+        data: [[{ name: 'Rainy season', xAxis: 'Jun' }, { xAxis: 'Sep' }]],
+      },
+    },
+    {
+      name: 'Evaporation', type: 'line', smooth: true,
+      data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+      lineStyle: { type: 'dashed' },
+    },
+  ],
+}
+
+<ReactECharts option={option} theme="carbon-white" />`}
+          />
+          <Compare
+            title="Weekly Stock Price Trends — 5-series smooth + dataZoom slider"
+            echartsOption={lineShowcaseStock}
+            extended
+            height="420px"
+            optionCode={`import type { EChartsOption } from 'echarts'
+
+// Weekly date strings + per-fund weekly price arrays
+const dates = ['2024-01-02','2024-01-09', /* ... */]
+
+const option: EChartsOption = {
+  title: { text: 'Weekly Stock Price Trends', left: 'center' },
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['Tech Fund', 'Growth ETF', 'Value Index', 'Blue-Chip', 'Small-Cap'], bottom: 0 },
+  dataZoom: [
+    { type: 'slider', bottom: 40, height: 20 },
+    { type: 'inside' },
+  ],
+  xAxis: { type: 'time' },
+  yAxis: { type: 'value', name: 'USD' },
+  series: [
+    { name: 'Tech Fund',   type: 'line', smooth: true, data: dates.map((d, i) => [d, techPrices[i]]) },
+    { name: 'Growth ETF',  type: 'line', smooth: true, data: dates.map((d, i) => [d, growthPrices[i]]) },
+    // ... 3 more series
+  ],
+}
+
+<ReactECharts option={option} theme="carbon-white" />`}
+          />
+          <Compare
+            title="Channel Traffic — stacked smooth area with gradient fills"
+            echartsOption={lineShowcaseStackedArea}
+            extended
+            height="360px"
+            optionCode={`import type { EChartsOption } from 'echarts'
+
+const C1 = '#6929c4', C2 = '#009d9a', C3 = '#e3008c', C4 = '#1192e8'
+const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+
+function areaGradient(color: string) {
+  return {
+    type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+    colorStops: [{ offset: 0, color: color + 'dd' }, { offset: 1, color: color + '11' }],
+  }
+}
+
+const option: EChartsOption = {
+  title: { text: 'Channel Traffic (Stacked Area)', left: 'center' },
+  tooltip: { trigger: 'axis' },
+  xAxis: { type: 'category', data: months, boundaryGap: false },
+  yAxis: { type: 'value' },
+  series: [
+    {
+      name: 'Search Engine', type: 'line', smooth: true, stack: 'total',
+      data: [820, 932, 901, 934, 1290, 1330, 1320, 1250, 1100, 980, 870, 820],
+      areaStyle: { color: areaGradient(C1) as never },
+    },
+    // ... 3 more stacked series
+  ],
+}
+
+<ReactECharts option={option} theme="carbon-white" />`}
+          />
+
+          {/* ── Carbon Charts parity comparisons ── */}
+          {testExamples.map((ex, i) => (
+            <Compare
+              key={i}
+              title={titles[i] ?? `Example ${i + 1}`}
+              echartsOption={echartsOptions[i] ?? lineDiscrete}
+              carbonExample={ex}
+              chartClass={chartTypes.vanilla}
+              optionCode={codeSamples[i]}
+              chartData={chartDataSamples[i]}
+            />
+          ))}
+        </>
+      }
     />
   )
 }
