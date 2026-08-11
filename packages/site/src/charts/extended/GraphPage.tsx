@@ -1,4 +1,5 @@
 import React from 'react'
+import { white, black } from '@carbon/colors'
 import { ChartPage } from '../../components/ChartPage'
 import { Compare } from '../../components/Compare'
 import GraphMdx from '../../content/extended/graph.mdx'
@@ -332,8 +333,8 @@ const graphForceOption = {
         show: false,
         position: 'right' as const,
         formatter: '{b}',
-        color: '#ffffff',
-        backgroundColor: '#000000',
+        color: white,
+        backgroundColor: black,
         padding: [2, 4],
       },
       labelLayout: { hideOverlap: true },
@@ -386,8 +387,8 @@ const graphCircularOption = {
         show: true,
         formatter: '{b}',
         fontSize: 10,
-        color: '#ffffff',
-        backgroundColor: '#000000',
+        color: white,
+        backgroundColor: black,
         padding: [2, 4],
       },
       labelLayout: { hideOverlap: true },
@@ -411,7 +412,7 @@ const codeDefault = `const option = {
     links: links, // [{ source, target }]
     categories: categories.map(name => ({ name })),
     roam: true,
-    label: { show: false, position: 'right', formatter: '{b}', color: '#ffffff', backgroundColor: '#000000', padding: [2, 4] },
+    label: { show: false, position: 'right', formatter: '{b}', color: white, backgroundColor: black, padding: [2, 4] },
     labelLayout: { hideOverlap: true },
     force: { repulsion: 200, gravity: 0.1, edgeLength: [30, 100] },
     lineStyle: { color: 'source', curveness: 0.3, opacity: 0.7 },
@@ -432,7 +433,7 @@ const codeCircular = `const option = {
     links: links,
     categories: categories.map(name => ({ name })),
     roam: true,
-    label: { show: true, formatter: '{b}', fontSize: 10, color: '#ffffff', backgroundColor: '#000000', padding: [2, 4] },
+    label: { show: true, formatter: '{b}', fontSize: 10, color: white, backgroundColor: black, padding: [2, 4] },
     labelLayout: { hideOverlap: true },
     lineStyle: { color: 'source', curveness: 0.3, opacity: 0.6 },
     emphasis: { focus: 'adjacency' },

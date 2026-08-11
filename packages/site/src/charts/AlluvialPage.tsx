@@ -108,6 +108,7 @@ const option = createAlluvialOptions(data, { nodeAlign: 'left' })`,
 
   // [5] Custom colors
   `import { createAlluvialOptions } from '@carbon/echarts-theme/presets'
+import { magenta60, teal40, green30 } from '@carbon/colors'
 
 const data = [
   { source: 'About Modal', target: 'Data and AI, AI Apps', value: 5 },
@@ -118,9 +119,9 @@ const data = [
 // Color keys that don't match node names are ignored; nodes use the auto-palette.
 const option = createAlluvialOptions(data, {
   colors: {
-    A: '#d12771',
-    B: '#08bdba',
-    C: '#6fdc8c',
+    A: magenta60,
+    B: teal40,
+    C: green30,
   },
 })`,
 ]

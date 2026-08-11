@@ -4,7 +4,7 @@
  * Data matches carboncharts/pie.ts (pieData / pieDataMapsTo) exactly.
  */
 import type { EChartsOption } from 'echarts'
-import { gray60 } from '@carbon/colors'
+import { gray60, white, black } from '@carbon/colors'
 import { createDonutOptions, createPieOptions, pickColors } from '@carbon/echarts-theme/presets'
 
 // ── Shared data — mirrors carboncharts/pie.ts exactly ────────────────────────
@@ -140,8 +140,8 @@ export const pieShowcaseNested: EChartsOption = {
         show: true,
         position: 'inner',
         fontSize: 10,
-        color: '#ffffff',
-        backgroundColor: '#000000',
+        color: white,
+        backgroundColor: black,
         borderRadius: 2,
         padding: [2, 4],
         formatter: '{b}: {d}%',
@@ -166,8 +166,8 @@ export const pieShowcaseNested: EChartsOption = {
       label: {
         show: true,
         fontSize: 11,
-        color: '#ffffff',
-        backgroundColor: '#000000',
+        color: white,
+        backgroundColor: black,
         borderRadius: 2,
         padding: [2, 4],
         formatter: '{b}: {d}%',

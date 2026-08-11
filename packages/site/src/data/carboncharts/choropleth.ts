@@ -1,6 +1,7 @@
 import { type ChoroplethChartOptions, type ChartTabularData } from '@carbon/charts'
 import type { ChartTypes, Example } from './types'
 import worldTopoJsonRaw from './topojson-110-data.json'
+import { blue60, red20, gray50 } from '@carbon/colors'
 
 /* This data is only used for demo purposes, not an accurate world map representation */
 const worldTopoJson = worldTopoJsonRaw as any
@@ -29,7 +30,8 @@ export const customColorsOptions: ChoroplethChartOptions = {
   title: 'Custom colors',
   color: {
     gradient: {
-      colors: ['#0f62fe', '#ffc2c5', '#8d8d8d'],
+      // blue60, red20 (nearest canonical stop to Carbon Charts' #ffc2c5), gray50
+      colors: [blue60, red20, gray50],
     },
   },
   geoData: worldTopoJson,

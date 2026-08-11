@@ -10,6 +10,7 @@
  *  [5] Proportional meter truncated — same data, total 2000, unit 'MB'
  */
 import type { EChartsOption } from 'echarts'
+import { magenta70, orange20 } from '@carbon/colors'
 import { createGaugeOptions, createMeterOptions } from '@carbon/echarts-theme/presets'
 import { IBM_PLEX_FONT_FAMILY } from '@carbon/echarts-theme'
 
@@ -41,7 +42,7 @@ export function gaugeCustomColor(textColor: string): EChartsOption {
   return createGaugeOptions([{ group: 'value', value: 67 }], {
     unit: '%',
     type: 'full',
-    customColor: '#FFE5B4',
+    customColor: orange20,
     fontFamily: IBM_PLEX_FONT_FAMILY,
     color: textColor,
   })
@@ -64,7 +65,7 @@ export function getMeterWithStatusOption(textColor: string): EChartsOption {
   })
 }
 
-/** [1] Meter statuses + custom bar color '#925699'. Carbon value = 56. */
+/** [1] Meter statuses + custom bar color (magenta70). Carbon value = 56. */
 export function getMeterStatusCustomColorOption(textColor: string): EChartsOption {
   return createMeterOptions([{ group: 'Dataset 1', value: 56 }], {
     total: 100,
@@ -76,7 +77,7 @@ export function getMeterStatusCustomColorOption(textColor: string): EChartsOptio
       { range: [60, 100], status: 'danger' },
     ],
     peak: 70,
-    barColor: '#925699',
+    barColor: magenta70,
   })
 }
 

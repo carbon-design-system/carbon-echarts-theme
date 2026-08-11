@@ -23,6 +23,7 @@
  *  - Custom locale (French): ECharts time-axis uses the browser locale; no per-chart locale API.
  */
 import type { EChartsOption } from 'echarts'
+import { magenta70, cyan70, purple60, gray30 } from '@carbon/colors'
 import {
   createLineOptions,
   createStepLineOptions,
@@ -281,10 +282,10 @@ export const lineCustomColors: EChartsOption = createLineOptions(lineData, {
   xAxisTitle: '2023 Annual Sales Figures',
   yAxisTitle: 'Conversion rate',
   colorScale: {
-    'Dataset 1': '#925699',
-    'Dataset 2': '#525669',
-    'Dataset 3': '#725699',
-    'Dataset 4': '#ccc',
+    'Dataset 1': magenta70,
+    'Dataset 2': cyan70,
+    'Dataset 3': purple60,
+    'Dataset 4': gray30,
   },
 })
 

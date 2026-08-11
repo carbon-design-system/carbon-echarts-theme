@@ -1,4 +1,5 @@
 import React from 'react'
+import { white, gray10, gray20, gray30, gray70, gray80, gray90, gray100 } from '@carbon/colors'
 
 export function ThemesPage() {
   return (
@@ -23,34 +24,34 @@ export function ThemesPage() {
           {[
             {
               name: 'carbon-white',
-              bg: '#ffffff',
-              text: '#161616',
-              muted: '#525252',
-              border: '#e0e0e0',
+              bg: white,
+              text: gray100,
+              muted: gray70,
+              border: gray20,
               label: 'White',
             },
             {
               name: 'carbon-g10',
-              bg: '#f4f4f4',
-              text: '#161616',
-              muted: '#525252',
-              border: '#c6c6c6',
+              bg: gray10,
+              text: gray100,
+              muted: gray70,
+              border: gray30,
               label: 'G10',
             },
             {
               name: 'carbon-g90',
-              bg: '#262626',
-              text: '#f4f4f4',
-              muted: '#c6c6c6',
-              border: '#393939',
+              bg: gray90,
+              text: gray10,
+              muted: gray30,
+              border: gray80,
               label: 'G90',
             },
             {
               name: 'carbon-g100',
-              bg: '#161616',
-              text: '#f4f4f4',
-              muted: '#c6c6c6',
-              border: '#262626',
+              bg: gray100,
+              text: gray10,
+              muted: gray30,
+              border: gray90,
               label: 'G100',
             },
           ].map(({ name, bg, text, muted, border, label }) => (

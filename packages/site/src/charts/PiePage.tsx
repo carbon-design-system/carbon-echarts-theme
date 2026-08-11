@@ -114,14 +114,15 @@ const option: EChartsOption = {
             extended
             height="440px"
             optionCode={`import type { EChartsOption } from 'echarts'
+import { white, black } from '@carbon/colors'
 import { pickColors } from '@carbon/echarts-theme/presets'
 
 // Carbon palette — sourced from pickColors so slices stay in sync with the theme
 const inner = pickColors(5)
 const outer = pickColors(7)
 
-// Black pill label style — white text on #000 background reads against any slice fill
-const pillLabel = { color: '#ffffff', backgroundColor: '#000000', borderRadius: 2, padding: [2, 4] }
+// Black pill label style — white text on black background reads against any slice fill
+const pillLabel = { color: white, backgroundColor: black, borderRadius: 2, padding: [2, 4] }
 
 const option: EChartsOption = {
   title: { text: 'Traffic Source — Channel & Sub-source', left: 'center' },

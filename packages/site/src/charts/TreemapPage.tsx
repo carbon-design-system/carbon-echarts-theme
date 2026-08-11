@@ -30,6 +30,7 @@ const data = [
 const option = createTreemapOptions(data)`,
 
   `import { createTreemapOptions } from '@carbon/echarts-theme/presets'
+import { teal30, teal40, teal50, teal60, teal70, teal80 } from '@carbon/colors'
 
 const data = [
   { group: 'Oceania', key: 'A', value: 800 },
@@ -39,12 +40,12 @@ const data = [
 // Custom per-group colors — matches Carbon Charts color.scale
 const option = createTreemapOptions(data, {
   colors: {
-    Oceania:   '#3ddbd9',
-    Europe:    '#08bdba',
-    America:   '#009d9a',
-    Australia: '#007d79',
-    Africa:    '#005d5d',
-    Asia:      '#004144',
+    Oceania:   teal30,
+    Europe:    teal40,
+    America:   teal50,
+    Australia: teal60,
+    Africa:    teal70,
+    Asia:      teal80,
   },
 })`,
 ]

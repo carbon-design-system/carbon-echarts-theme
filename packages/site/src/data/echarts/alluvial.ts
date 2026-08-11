@@ -15,6 +15,8 @@ import {
   purple50,
   teal50,
   red50,
+  magenta60,
+  green30,
 } from '@carbon/colors'
 
 // ── Shared datasets ────────────────────────────────────────────────────────────
@@ -104,10 +106,11 @@ const gradientColors: Record<string, string> = {
 
 // Custom colors — keys A/B/C don't match any nodes in basicData,
 // so both Carbon Charts and ECharts render with their default auto-palette.
+// Values: magenta60 (#d02670), teal40 (#08bdba), green30 (#6fdc8c)
 const customColors: Record<string, string> = {
-  A: '#d12771',
-  B: '#08bdba',
-  C: '#6fdc8c',
+  A: magenta60,
+  B: teal40,
+  C: green30,
 }
 
 // ── Exports ────────────────────────────────────────────────────────────────────

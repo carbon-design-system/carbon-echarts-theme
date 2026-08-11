@@ -1,4 +1,5 @@
 import React from 'react'
+import { white, gray30, gray70 } from '@carbon/colors'
 import { ChartPage } from '../../components/ChartPage'
 import { Compare } from '../../components/Compare'
 import FunnelMdx from '../../content/extended/funnel.mdx'
@@ -76,11 +77,11 @@ function makeFunnelOption(colorScheme: 'light' | 'dark') {
         label: {
           position: 'inside' as const,
           formatter: '{c}%',
-          color: '#fff',
+          color: white,
         },
         itemStyle: {
           opacity: 0.5,
-          borderColor: '#fff',
+          borderColor: white,
           borderWidth: 2,
         },
         emphasis: {
@@ -137,7 +138,7 @@ function makeAlignedFunnelOption(colorScheme: 'light' | 'dark') {
         position: 'inside' as const,
         formatter: '{c}%',
         fontSize: 11,
-        color: '#fff',
+        color: white,
       },
       itemStyle: {
         color: colors[i],
@@ -185,7 +186,7 @@ function makeAlignedFunnelOption(colorScheme: 'light' | 'dark') {
         style: {
           text: channel,
           textAlign: 'center' as const,
-          fill: colorScheme === 'dark' ? '#c6c6c6' : '#525252',
+          fill: colorScheme === 'dark' ? gray30 : gray70,
           fontSize: 12,
           fontWeight: 'bold' as const,
         },
@@ -240,7 +241,7 @@ function makePyramidOption(colorScheme: 'light' | 'dark') {
           show: true,
           position: 'inside' as const,
           formatter: '{b}',
-          color: '#fff',
+          color: white,
           fontWeight: 'bold' as const,
           fontSize: 13,
         },
@@ -313,8 +314,8 @@ const option = {
     {
       name: 'Actual', type: 'funnel', colorBy: 'data',
       left: '10%', width: '80%', maxSize: '80%',
-      label: { position: 'inside', formatter: '{c}%', color: '#fff' },
-      itemStyle: { opacity: 0.5, borderColor: '#fff', borderWidth: 2 },
+      label: { position: 'inside', formatter: '{c}%', color: white },
+      itemStyle: { opacity: 0.5, borderColor: white, borderWidth: 2 },
       emphasis: { label: { position: 'inside', formatter: '{b}Actual: {c}%' } },
       data: actualData, z: 100,
     },
@@ -352,7 +353,7 @@ const series = channels.map((channel, i) => ({
   width: '22%',
   sort: 'descending',
   gap: 2,
-  label: { show: true, position: 'inside', formatter: '{c}%', fontSize: 11, color: '#fff' },
+  label: { show: true, position: 'inside', formatter: '{c}%', fontSize: 11, color: white },
   itemStyle: { color: colors[i], opacity: 0.9, borderWidth: 0 },
   data: stages.map((stage, j) => ({ name: stage, value: channelData[channel][j] })),
 }))
@@ -394,7 +395,7 @@ const option = {
     sort: 'ascending',   // ← pyramid shape: smallest at top, widens downward
     gap: 2,
     left: '20%', width: '60%',
-    label: { show: true, position: 'inside', formatter: '{b}', color: '#fff', fontWeight: 'bold' },
+    label: { show: true, position: 'inside', formatter: '{b}', color: white, fontWeight: 'bold' },
     itemStyle: { borderWidth: 0, opacity: 0.92 },
     data: levels.map(({ name, value }) => ({ name, value })),
   }],

@@ -10,6 +10,8 @@ import {
   purple50,
   teal50,
   red50,
+  magenta60,
+  green30,
 } from '@carbon/colors'
 
 const vanilla = 'AlluvialChart'
@@ -150,9 +152,9 @@ const optionsCustomColors: AlluvialChartOptions = {
   title: 'Custom Colors',
   color: {
     scale: {
-      A: '#d12771',
-      B: '#08bdba',
-      C: '#6fdc8c',
+      A: magenta60,
+      B: teal40,
+      C: green30,
     },
   },
 }

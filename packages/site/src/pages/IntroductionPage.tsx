@@ -1,4 +1,5 @@
 import React from 'react'
+import { gray10, gray30, gray70, gray20, blue60, blue10 } from '@carbon/colors'
 
 export function IntroductionPage() {
   const taxonomy = [
@@ -14,10 +15,10 @@ export function IntroductionPage() {
     <div>
       <div className="content-page__hero">
         <div style={{ padding: '0 0 1rem' }}>
-          <h1 style={{ fontSize: '40px', fontWeight: 300, margin: '0 0 1rem', color: '#f4f4f4' }}>
+          <h1 style={{ fontSize: '40px', fontWeight: 300, margin: '0 0 1rem', color: gray10 }}>
             Carbon ECharts Theme
           </h1>
-          <p style={{ fontSize: '18px', color: '#c6c6c6', margin: 0, maxWidth: '600px' }}>
+          <p style={{ fontSize: '18px', color: gray30, margin: 0, maxWidth: '600px' }}>
             Apache ECharts charts styled with the Carbon Design System v11 visual language — IBM
             Design Language data-vis color palettes, spacing tokens, and type tokens.
           </p>
@@ -27,8 +28,8 @@ export function IntroductionPage() {
       <div className="content-page" style={{ maxWidth: '960px' }}>
         <div
           style={{
-            border: '1px solid #0f62fe',
-            background: '#edf5ff',
+            border: `1px solid ${blue60}`,
+            background: blue10,
             padding: '1rem 1.5rem',
             borderRadius: '2px',
             marginBottom: '2rem',
@@ -57,7 +58,7 @@ export function IntroductionPage() {
             <div
               key={label}
               style={{
-                border: '1px solid #e0e0e0',
+                border: `1px solid ${gray20}`,
                 borderRadius: '2px',
                 padding: '1rem',
               }}
@@ -67,14 +68,14 @@ export function IntroductionPage() {
                   fontSize: '12px',
                   textTransform: 'uppercase',
                   letterSpacing: '0.32px',
-                  color: '#525252',
+                  color: gray70,
                 }}
               >
                 {label}
               </strong>
               <ul style={{ margin: '0.5rem 0 0', padding: '0 0 0 1rem', listStyle: 'disc' }}>
                 {charts.map((c) => (
-                  <li key={c} style={{ fontSize: '14px', color: '#525252' }}>
+                  <li key={c} style={{ fontSize: '14px', color: gray70 }}>
                     {c}
                   </li>
                 ))}

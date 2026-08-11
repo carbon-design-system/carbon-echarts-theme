@@ -145,6 +145,7 @@ const option = createLineOptions(data, { timeSeries: true, logScale: true })`,
 
   // [4] Custom colors — per-series colorScale matching Carbon Charts color.scale
   `import { createLineOptions } from '@carbon/echarts-theme/presets'
+import { magenta70, cyan70, purple60, gray30 } from '@carbon/colors'
 
 const data = [
   { group: 'Dataset 1', key: 'Qty', value: 34200 },
@@ -156,10 +157,10 @@ const option = createLineOptions(data, {
   xAxisTitle: '2023 Annual Sales Figures',
   yAxisTitle: 'Conversion rate',
   colorScale: {
-    'Dataset 1': '#925699',
-    'Dataset 2': '#525669',
-    'Dataset 3': '#725699',
-    'Dataset 4': '#ccc',
+    'Dataset 1': magenta70,
+    'Dataset 2': cyan70,
+    'Dataset 3': purple60,
+    'Dataset 4': gray30,
   },
 })`,
 

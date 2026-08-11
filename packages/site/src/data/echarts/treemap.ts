@@ -3,6 +3,7 @@
  * Data mirrors carboncharts/treemap.ts exactly.
  */
 import type { EChartsOption } from 'echarts'
+import { teal30, teal40, teal50, teal60, teal70, teal80 } from '@carbon/colors'
 import { createTreemapOptions } from '@carbon/echarts-theme/presets'
 
 // ── Flat format for slot [0] — same hierarchy expressed as group/key rows ────
@@ -58,15 +59,14 @@ export const flatData = [
 export const treemap: EChartsOption = createTreemapOptions(flatData)
 
 // Slot [1] — Custom colors (teal ramp) matching Carbon Charts customColorOptions
-// Carbon: { Oceania: '#3ddbd9', Europe: '#08bdba', America: '#009d9a',
-//           Australia: '#007d79', Africa: '#005d5d', Asia: '#004144' }
+// teal30 #3ddbd9, teal40 #08bdba, teal50 #009d9a, teal60 #007d79, teal70 #005d5d, teal80 #004144
 export const treemapNested: EChartsOption = createTreemapOptions(flatData, {
   colors: {
-    Oceania: '#3ddbd9',
-    Europe: '#08bdba',
-    America: '#009d9a',
-    Australia: '#007d79',
-    Africa: '#005d5d',
-    Asia: '#004144',
+    Oceania: teal30,
+    Europe: teal40,
+    America: teal50,
+    Australia: teal60,
+    Africa: teal70,
+    Asia: teal80,
   },
 })

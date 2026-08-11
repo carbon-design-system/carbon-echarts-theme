@@ -1,5 +1,6 @@
 import { type BarChartOptions, type ChartTabularData, ScaleTypes, Alignments } from '@carbon/charts'
 import type { ChartTypes, Example } from './types'
+import { magenta70, cyan70 } from '@carbon/colors'
 
 const vanilla = 'SimpleBarChart'
 
@@ -44,8 +45,8 @@ const simpleBarColorOverrideOptions: BarChartOptions = {
       option: 2,
     },
     scale: {
-      Qty: '#925699',
-      Misc: '#525669',
+      Qty: magenta70,
+      Misc: cyan70,
     },
   },
   height: '400px',

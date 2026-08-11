@@ -32,10 +32,11 @@ const option = createGaugeOptions(
 )`,
 
   `import { createGaugeOptions } from '@carbon/echarts-theme/presets'
+import { orange20 } from '@carbon/colors'
 
 const option = createGaugeOptions(
   [{ group: 'value', value: 67 }],
-  { unit: '%', type: 'full', customColor: '#FFE5B4' },
+  { unit: '%', type: 'full', customColor: orange20 },
 )`,
 ]
 

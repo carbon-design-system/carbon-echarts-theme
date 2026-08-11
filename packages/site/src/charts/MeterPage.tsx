@@ -63,6 +63,7 @@ const option = createMeterOptions(
 )`,
 
     `import { createMeterOptions } from '@carbon/echarts-theme/presets'
+import { magenta70 } from '@carbon/colors'
 
 const option = createMeterOptions(
   [{ group: 'Dataset 1', value: 56 }],
@@ -74,7 +75,7 @@ const option = createMeterOptions(
       { range: [60, 100], status: 'danger'  },
     ],
     peak: 70,
-    barColor: '#925699',
+    barColor: magenta70,
   },
 )`,
 

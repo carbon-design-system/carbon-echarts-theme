@@ -1,5 +1,6 @@
 import { type MeterChartOptions, type ChartTabularData } from '@carbon/charts'
 import type { ChartTypes, Example } from './types'
+import { magenta70 } from '@carbon/colors'
 
 const vanilla = 'MeterChart'
 
@@ -40,7 +41,7 @@ const meterOptionsCustomColor: MeterChartOptions = {
   },
   color: {
     scale: {
-      'Dataset 1': '#925699',
+      'Dataset 1': magenta70,
     },
   },
   height: '100px',

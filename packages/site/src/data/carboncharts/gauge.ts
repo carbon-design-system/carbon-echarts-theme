@@ -1,5 +1,6 @@
 import { type GaugeChartOptions, type ChartTabularData } from '@carbon/charts'
 import type { ChartTypes, Example } from './types'
+import { orange20 } from '@carbon/colors'
 
 const vanilla = 'GaugeChart'
 
@@ -40,7 +41,7 @@ const gaugeOptionsCircularNoDelta: GaugeChartOptions = {
   },
   color: {
     scale: {
-      value: '#FFE5B4',
+      value: orange20,
     },
   },
 }

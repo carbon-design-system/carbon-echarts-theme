@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import { red50, yellow30, blue40 } from '@carbon/colors'
 import { ChartPage } from '../../components/ChartPage'
 import { Compare } from '../../components/Compare'
 import ParallelMdx from '../../content/extended/parallel.mdx'
@@ -151,7 +152,8 @@ const parallelOption = {
     max: 150,
     dimension: 2,
     inRange: {
-      color: ['#d94e5d', '#eac736', '#50a3ba'].reverse(),
+      // red50 (#fa4d56), yellow30 (#f1c21b), blue40 (#78a9ff) — Carbon categorical alert/vis tokens
+      color: [red50, yellow30, blue40].reverse(),
     },
   },
   parallel: {

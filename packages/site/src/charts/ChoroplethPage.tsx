@@ -1,6 +1,7 @@
 import React from 'react'
 import * as echarts from 'echarts'
 import { feature } from 'topojson-client'
+import { blue60, red20, gray50 } from '@carbon/colors'
 import { createChoroplethOptions } from '@carbon/echarts-theme/presets'
 import { ChartPage } from '../components/ChartPage'
 import { Compare } from '../components/Compare'
@@ -37,8 +38,8 @@ const missingDataOption = createChoroplethOptions(echartsMissingData, {
 })
 const customColorsOption = createChoroplethOptions(echartsGeoData, {
   title: 'Custom colors',
-  // mirrors Carbon Charts color.gradient.colors: ['#0f62fe', '#ffc2c5', '#8d8d8d']
-  colors: ['#0f62fe', '#ffc2c5', '#8d8d8d'],
+  // mirrors Carbon Charts color.gradient.colors: blue60, red20, gray50
+  colors: [blue60, red20, gray50],
 })
 
 // ── Option code snippets ──────────────────────────────────────────────────────
@@ -83,8 +84,9 @@ const worldGeoJson = feature(worldTopoJson, worldTopoJson.objects.countries)
 echarts.registerMap('world', worldGeoJson)
 
 // colors mirrors Carbon Charts color.gradient.colors
+import { blue60, red20, gray50 } from '@carbon/colors'
 const option = createChoroplethOptions(data, {
-  colors: ['#0f62fe', '#ffc2c5', '#8d8d8d'],
+  colors: [blue60, red20, gray50],
 })`
 
 // ── Page ──────────────────────────────────────────────────────────────────────

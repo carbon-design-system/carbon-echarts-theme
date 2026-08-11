@@ -8,6 +8,7 @@ import {
   TimeIntervalNames,
 } from '@carbon/charts'
 import type { ChartTypes, Example } from './types'
+import { magenta70, cyan70, purple60, gray30, cyan40 } from '@carbon/colors'
 
 const vanilla = 'LineChart'
 
@@ -108,10 +109,10 @@ const lineCustomColorOptions: LineChartOptions = {
   },
   color: {
     scale: {
-      'Dataset 1': '#925699',
-      'Dataset 2': '#525669',
-      'Dataset 3': '#725699',
-      'Dataset 4': '#ccc',
+      'Dataset 1': magenta70,
+      'Dataset 2': cyan70,
+      'Dataset 3': purple60,
+      'Dataset 4': gray30,
     },
   },
   height: '400px',
@@ -157,7 +158,7 @@ const lineTimeSeriesWithThresholdsOptions: LineChartOptions = {
       scaleType: ScaleTypes.LINEAR,
       thresholds: [
         { value: 55000, label: 'Custom label', fillColor: 'orange' },
-        { value: 10000, fillColor: '#03a9f4' },
+        { value: 10000, fillColor: cyan40 },
       ],
     },
   },

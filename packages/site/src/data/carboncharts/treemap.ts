@@ -1,5 +1,6 @@
 import { type TreemapChartOptions, type ChartTabularData } from '@carbon/charts'
 import type { ChartTypes, Example } from './types'
+import { teal30, teal40, teal50, teal60, teal70, teal80 } from '@carbon/colors'
 
 const vanilla = 'TreemapChart'
 
@@ -21,12 +22,12 @@ const customColorOptions: TreemapChartOptions = {
   height: '600px',
   color: {
     scale: {
-      Oceania: '#3ddbd9',
-      Europe: '#08bdba',
-      America: '#009d9a',
-      Australia: '#007d79',
-      Africa: '#005d5d',
-      Asia: '#004144',
+      Oceania: teal30,
+      Europe: teal40,
+      America: teal50,
+      Australia: teal60,
+      Africa: teal70,
+      Asia: teal80,
     },
   },
 }
