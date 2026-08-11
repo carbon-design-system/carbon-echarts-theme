@@ -19,6 +19,7 @@
  *  [13] simpleHorizontalBarLongLabelOptions   → truncation (reuse horizontal)
  */
 import type { EChartsOption } from 'echarts'
+import { purple50, teal50 } from '@carbon/colors'
 import {
   createBarOptions,
   createGroupedBarOptions,
@@ -122,11 +123,11 @@ export const barCustomDomain: EChartsOption = createBarOptions(simpleBarData, {
   yDomain: [-100000, 100000],
 })
 
-/** [8] Custom colors — Qty '#925699', Misc '#525669' (maps to Carbon color.scale) */
+/** [8] Custom colors — Qty purple50, Misc teal50 (maps to Carbon color.scale) */
 export const barCustomColors: EChartsOption = createBarOptions(simpleBarData, {
   colors: {
-    Qty: '#925699',
-    Misc: '#525669',
+    Qty: purple50,
+    Misc: teal50,
   },
 })
 

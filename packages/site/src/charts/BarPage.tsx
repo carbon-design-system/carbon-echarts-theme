@@ -242,7 +242,8 @@ const data = [
 const option = createBarOptions(data, { yDomain: [-100000, 100000] })`,
 
   // [8] custom colors
-  `import { createBarOptions } from '@carbon/echarts-theme/presets'
+  `import { purple50, teal50 } from '@carbon/colors'
+import { createBarOptions } from '@carbon/echarts-theme/presets'
 
 const data = [
   { group: 'Qty', value: 65000 },
@@ -254,7 +255,7 @@ const data = [
 
 // colors map overrides palette for named groups — matches Carbon Charts color.scale
 const option = createBarOptions(data, {
-  colors: { Qty: '#925699', Misc: '#525669' },
+  colors: { Qty: purple50, Misc: teal50 },
 })`,
 
   // [9] centered legend — ECharts limitation: legend.align not configurable via preset
