@@ -1,4 +1,5 @@
 import type { EChartsOption } from 'echarts'
+import { gray70 } from '@carbon/colors'
 import type { ChartTabularData } from './_transform'
 import { pickColors } from './_transform'
 import { alertColors } from '../palettes'
@@ -258,7 +259,7 @@ export function createMeterOptions(
       firstSeries.markLine = {
         silent: true,
         symbol: 'none',
-        lineStyle: { color: '#525252', width: 2, type: 'solid' },
+        lineStyle: { color: gray70, width: 2, type: 'solid' },
         label: { show: false },
         data: [{ xAxis: peak }],
       }
@@ -313,7 +314,7 @@ export function createMeterOptions(
       ? {
           silent: true,
           symbol: 'none',
-          lineStyle: { color: '#525252', width: 2, type: 'solid' },
+          lineStyle: { color: gray70, width: 2, type: 'solid' },
           label: { show: false },
           data: [{ xAxis: peak }],
         }

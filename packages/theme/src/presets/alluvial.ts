@@ -1,6 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { ChartTabularData } from './_transform'
-import { pickColors } from './_transform'
+import { pickColors, pillLabel } from './_transform'
 
 // ── Alluvial (Sankey) preset ──────────────────────────────────────────────────
 
@@ -158,9 +158,7 @@ export function createAlluvialOptions(
         links: data.map((d) => ({ source: d.source, target: d.target, value: d.value })),
         label: {
           fontSize: 12,
-          color: '#ffffff',
-          backgroundColor: '#000000',
-          padding: [2, 4],
+          ...pillLabel,
           // Show "NodeName (total)" matching Carbon Charts node label format
           formatter: (params: { name: string }) =>
             `${params.name} (${nodeTotals[params.name] ?? 0})`,

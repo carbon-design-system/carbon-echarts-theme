@@ -1,4 +1,5 @@
 import type { EChartsOption } from 'echarts'
+import { gray50 } from '@carbon/colors'
 import { pickColors } from './_transform'
 
 // ── Network Diagram (graph) preset ───────────────────────────────────────────
@@ -96,7 +97,7 @@ export function createNetworkOptions(
         roam: true,
         draggable,
         force: { repulsion: 100, gravity: 0.1, edgeLength: 80 },
-        lineStyle: { color: '#8d8d8d', width: 1, opacity: 0.5 },
+        lineStyle: { color: gray50, width: 1, opacity: 0.5 },
         emphasis: { focus: 'adjacency' as const },
       },
     ],

@@ -1,4 +1,5 @@
 import type { EChartsOption } from 'echarts'
+import { gray70 } from '@carbon/colors'
 import type { ChartTabularData } from './_transform'
 import { pickColors } from './_transform'
 
@@ -200,7 +201,7 @@ export function createTreemapOptionsFromHierarchy(
   const levels: any[] = [
     {
       // level 0 — top-level parent nodes: colored border + bright label
-      itemStyle: { borderColor: '#555', borderWidth: 4, gapWidth: 4 },
+      itemStyle: { borderColor: gray70, borderWidth: 4, gapWidth: 4 },
       upperLabel: { show: true },
     },
     {

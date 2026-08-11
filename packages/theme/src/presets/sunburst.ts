@@ -1,4 +1,5 @@
 import type { EChartsOption } from 'echarts'
+import { white } from '@carbon/colors'
 import { sunburstPalette } from './_transform'
 
 // ── Sunburst preset ───────────────────────────────────────────────────────────
@@ -91,7 +92,7 @@ export function createSunburstOptions(
             r: '70%',
             label: {
               align: 'right',
-              color: '#fff',
+              color: white,
               textShadowBlur: 3,
               textShadowColor: 'rgba(0,0,0,0.6)',
               minAngle: 8,

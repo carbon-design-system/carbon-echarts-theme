@@ -1,5 +1,5 @@
 import type { EChartsOption } from 'echarts'
-import { pickColors } from './_transform'
+import { pickColors, pillLabel } from './_transform'
 
 // ── ThemeRiver preset ─────────────────────────────────────────────────────────
 
@@ -91,9 +91,7 @@ export function createThemeRiverOptions(
         label: {
           // White text on black pill — same treatment as alluvial node labels,
           // ensuring readability regardless of the stream colour beneath.
-          color: '#ffffff',
-          backgroundColor: '#000000',
-          padding: [2, 4] as [number, number],
+          ...pillLabel,
         },
         data,
       },

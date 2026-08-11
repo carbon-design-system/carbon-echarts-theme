@@ -24,6 +24,9 @@ import {
   blue50,
   magenta40,
   purple30,
+  // Shared structural colors
+  white as carbonWhite,
+  black as carbonBlack,
 } from '@carbon/colors'
 import * as carbonColors from '@carbon/colors'
 import { lightCategorical, darkCategorical } from '../palettes'
@@ -253,3 +256,17 @@ export const sunburstPalette: readonly string[] = [
   cc.orange60,
   cc.yellow60,
 ]
+
+// ── Shared label style constants ──────────────────────────────────────────────
+
+/**
+ * Black-pill label: white text on a black background.
+ * Used by alluvial (sankey), themeRiver, and any other preset that needs
+ * a legible label over an arbitrary-colored data element.
+ * Values come from Carbon's `white` / `black` tokens — no hardcoded hex.
+ */
+export const pillLabel = {
+  color: carbonWhite,
+  backgroundColor: carbonBlack,
+  padding: [2, 4] as [number, number],
+} as const

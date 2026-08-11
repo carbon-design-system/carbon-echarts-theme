@@ -1,4 +1,5 @@
 import type { EChartsOption } from 'echarts'
+import { white } from '@carbon/colors'
 import type { ChartTabularData } from './_transform'
 import { pickColors } from './_transform'
 
@@ -106,7 +107,7 @@ export function createHistogramOptions(
     data: closingLabel ? [...groupCounts[g], null] : groupCounts[g],
     barCategoryGap: '0%',
     barMaxWidth: Infinity,
-    itemStyle: { color: colors[i], borderColor: '#ffffff', borderWidth: 0.5 },
+    itemStyle: { color: colors[i], borderColor: white, borderWidth: 0.5 },
   }))
 
   return {

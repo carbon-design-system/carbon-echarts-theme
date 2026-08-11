@@ -1,4 +1,5 @@
 import type { EChartsOption } from 'echarts'
+import { white } from '@carbon/colors'
 import type { ChartTabularData } from './_transform'
 
 // ── Heatmap preset ────────────────────────────────────────────────────────────
@@ -129,7 +130,7 @@ export function createHeatmapOptions(
       min: scaleMin,
       max: scaleMax,
       inRange: {
-        color: [negColor, '#ffffff', posColor],
+        color: [negColor, white, posColor],
       },
       calculable: true,
       ...(isBottom
