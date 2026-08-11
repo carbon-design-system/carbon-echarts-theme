@@ -25,6 +25,7 @@ import {
   createStackedBarOptions,
   createHorizontalBarOptions,
   createFloatingBarOptions,
+  pickColors,
 } from '@carbon/echarts-theme/presets'
 
 // ── Simple discrete bar ───────────────────────────────────────────────────────
@@ -327,3 +328,161 @@ export const barStackedHorizontalTimeSeries: EChartsOption = createStackedBarOpt
   stackedBarTimeSeriesData,
   { xField: 'date', horizontal: true },
 )
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SHOWCASE — Bar Charts
+// Inspired by official Apache ECharts gallery examples, re-themed with Carbon.
+// https://echarts.apache.org/examples/en/index.html#chart-type-bar
+// ══════════════════════════════════════════════════════════════════════════════
+
+// ── Showcase Bar 1: World Population by Region (horizontal) ──────────────────
+// https://echarts.apache.org/examples/en/editor.html?c=bar-y-category
+//
+// Each bar is a different colour because this is a single series with 10 items
+// (regions are not comparable groups — each bar IS its own category).
+// The theme `color` array rotates by series, not by item within a series, so
+// per-item itemStyle.color is structurally required here.  We source the values
+// from pickColors() so they stay in sync with whatever the theme uses.
+
+const _worldRegions = [
+  'Northern Africa',
+  'Southern Africa',
+  'Central America',
+  'Eastern Europe',
+  'Southeast Asia',
+  'Western Europe',
+  'South America',
+  'North America',
+  'East Asia',
+  'South Asia',
+]
+const _worldPop = [254, 198, 175, 292, 688, 197, 438, 502, 1673, 2027]
+// 10 colours from the authoritative palette helper — wraps after 6 via the
+// full categorical fallback, same logic the theme itself uses for N > 5.
+const _worldPalette = pickColors(_worldPop.length)
+
+export const barShowcaseWorldPop: EChartsOption = {
+  title: { text: 'Population by World Region (millions)', left: 'center', top: 8 },
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: { type: 'shadow' },
+    formatter: (params: unknown) => {
+      const p = (params as Array<{ name: string; value: number }>)[0]
+      return `${p.name}<br/><strong>${p.value.toLocaleString()}M</strong>`
+    },
+  },
+  grid: { top: 48, bottom: 24, left: 8, right: 40, containLabel: true },
+  xAxis: { type: 'value', name: 'Population (M)', nameLocation: 'middle', nameGap: 32 },
+  yAxis: {
+    type: 'category',
+    data: _worldRegions,
+    axisLabel: { width: 130, overflow: 'truncate' as const },
+  },
+  series: [
+    {
+      name: 'Population',
+      type: 'bar',
+      data: _worldPop.map((v, i) => ({ value: v, itemStyle: { color: _worldPalette[i] } })),
+      label: { show: true, position: 'right', formatter: '{c}M', fontSize: 11 },
+      barMaxWidth: 28,
+    },
+  ],
+}
+
+// ── Showcase Bar 2: Monthly Revenue — grouped with negative values ─────────────
+// https://echarts.apache.org/examples/en/editor.html?c=bar-negative
+//
+// Three named series — the theme's color array assigns each one its palette
+// colour automatically. No itemStyle.color needed.
+
+const _revenueMonths = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+]
+const _revenueProfit = [200, 170, 57, 140, 166, 222, 133, 108, 168, 102, 93, 172]
+const _revenueExpense = [-120, -132, -101, -134, -90, -230, -210, -182, -125, -83, -110, -190]
+const _revenueIncome = [320, 302, 341, 374, 390, 450, 410, 390, 450, 355, 402, 382]
+
+export const barShowcaseRevenue: EChartsOption = {
+  title: { text: 'Monthly Revenue Breakdown', left: 'center', top: 8 },
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  legend: { data: ['Income', 'Profit', 'Expenses'], bottom: 0 },
+  grid: { top: 56, bottom: 56, left: 16, right: 16, containLabel: true },
+  xAxis: { type: 'category', data: _revenueMonths },
+  yAxis: {
+    type: 'value',
+    name: 'USD (K)',
+    nameLocation: 'middle',
+    nameGap: 44,
+    nameRotate: 90,
+    splitLine: { lineStyle: { type: 'dashed' } },
+  },
+  series: [
+    { name: 'Income', type: 'bar', data: _revenueIncome, barMaxWidth: 20 },
+    { name: 'Profit', type: 'bar', data: _revenueProfit, barMaxWidth: 20 },
+    { name: 'Expenses', type: 'bar', data: _revenueExpense, barMaxWidth: 20 },
+  ],
+}
+
+// ── Showcase Bar 3: Quarterly Sales — stacked divergent ───────────────────────
+// https://echarts.apache.org/examples/en/editor.html?c=bar-stack
+//
+// Five named series — the theme's color array assigns each one its palette
+// colour automatically. No itemStyle.color needed.
+
+const _quarters = ['Q1 2023', 'Q2 2023', 'Q3 2023', 'Q4 2023', 'Q1 2024', 'Q2 2024']
+const _salesNA = [120, 132, 101, 134, 90, 230]
+const _salesEU = [220, 182, 191, 234, 290, 330]
+const _salesAPAC = [150, 212, 201, 154, 190, 330]
+const _salesSA = [
+  [-98, 0],
+  [-77, 0],
+  [-101, 0],
+  [-134, 0],
+  [-90, 0],
+  [-130, 0],
+]
+const _salesMEA = [
+  [-48, 0],
+  [-52, 0],
+  [-101, 0],
+  [-134, 0],
+  [-90, 0],
+  [-80, 0],
+]
+
+export const barShowcaseDivergent: EChartsOption = {
+  title: { text: 'Quarterly Sales by Region', left: 'center', top: 8 },
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  legend: {
+    data: ['North America', 'Europe', 'Asia Pacific', 'South America', 'MEA'],
+    bottom: 0,
+    type: 'scroll',
+  },
+  grid: { top: 56, bottom: 56, left: 16, right: 16, containLabel: true },
+  xAxis: { type: 'category', data: _quarters },
+  yAxis: {
+    type: 'value',
+    name: 'Revenue (M USD)',
+    nameLocation: 'middle',
+    nameGap: 52,
+    nameRotate: 90,
+  },
+  series: [
+    { name: 'North America', type: 'bar', stack: 'positive', data: _salesNA, barMaxWidth: 40 },
+    { name: 'Europe', type: 'bar', stack: 'positive', data: _salesEU, barMaxWidth: 40 },
+    { name: 'Asia Pacific', type: 'bar', stack: 'positive', data: _salesAPAC, barMaxWidth: 40 },
+    { name: 'South America', type: 'bar', stack: 'negative', data: _salesSA, barMaxWidth: 40 },
+    { name: 'MEA', type: 'bar', stack: 'negative', data: _salesMEA, barMaxWidth: 40 },
+  ],
+}
