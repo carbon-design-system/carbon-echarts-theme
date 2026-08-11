@@ -166,8 +166,10 @@ function makeAlignedFunnelOption(colorScheme: 'light' | 'dark') {
     },
     tooltip: {
       trigger: 'item' as const,
-      formatter: (params: { seriesName: string; name: string; value: number }) =>
-        `${params.seriesName}<br/>${params.name}: <b>${params.value}%</b>`,
+      formatter: (params: unknown) => {
+        const p = params as { seriesName?: string; name: string; value: number }
+        return `${p.seriesName ?? ''}<br/>${p.name}: <b>${p.value}%</b>`
+      },
     },
     legend: {
       data: channels,
