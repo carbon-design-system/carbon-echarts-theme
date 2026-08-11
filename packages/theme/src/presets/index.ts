@@ -100,6 +100,10 @@ export type { WordCloudPresetOptions, WordCloudDatum } from './wordcloud'
 export { createThemeRiverOptions } from './themeRiver'
 export type { ThemeRiverPresetOptions, ThemeRiverDatum } from './themeRiver'
 
+// Candlestick (OHLC)
+export { createCandlestickOptions } from './candlestick'
+export type { CandlestickPresetOptions, OhlcTuple, VolumeDatum } from './candlestick'
+
 // ── Shared data transform (re-exported for consumers building custom presets) ──
 export { groupByGroup, pickColors, sunburstPalette } from './_transform'
 export type {

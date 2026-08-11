@@ -256,12 +256,15 @@ export function buildTheme(t: CarbonChartTokens, palettes: CarbonPalettes) {
     },
 
     candlestick: {
+      // Hollow-body convention: 20% opacity fill on the candle body, full-color
+      // border and wicks. Matches Carbon Charts' lighter-fill treatment on bar
+      // series and is visually distinct from ECharts' default solid candles.
       itemStyle: {
-        color: alertColors[3], // green60 — $support-success
-        color0: alertColors[0], // red60  — $support-error
-        borderColor: alertColors[3],
-        borderColor0: alertColors[0],
-        borderWidth: 1,
+        color: alertColors[3] + '33', // green60 @ 20% — rising body fill
+        color0: alertColors[0] + '33', // red60   @ 20% — falling body fill
+        borderColor: alertColors[3], // green60 full — rising border/wick
+        borderColor0: alertColors[0], // red60   full — falling border/wick
+        borderWidth: 1.5,
       },
     },
 

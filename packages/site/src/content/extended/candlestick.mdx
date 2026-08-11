@@ -12,11 +12,44 @@ Candlestick charts display the open, high, low, and close (OHLC) values of a fin
 - Any OHLC time-series data
 - When price movement direction (up/down) needs visual encoding
 
+## Preset: `createCandlestickOptions`
+
+Use `createCandlestickOptions(dates, ohlc, options?)` from `@carbon/echarts-theme/presets` to build a fully themed option object. The preset handles:
+
+- Carbon alert-palette candle colors (green60 for rising, red60 for falling)
+- Optional MA line overlays — pass any number of periods via `maPeriods`
+- Optional volume sub-chart aligned to the OHLC grid via `showVolume` + `volumeData`
+- Optional dataZoom slider + inside zoom via `showDataZoom`
+
+All MA line colors are drawn from Carbon's N-color categorical palette via `pickColors` — no hex strings required.
+
+```ts
+import { createCandlestickOptions } from '@carbon/echarts-theme/presets'
+import type { OhlcTuple } from '@carbon/echarts-theme/presets'
+
+const dates: string[] = ['2024-01-02', '2024-01-03', ...]
+const ohlc: OhlcTuple[] = [
+  [148.5, 150.2, 147.1, 151.3], // [open, close, low, high]
+  ...
+]
+
+const option = createCandlestickOptions(dates, ohlc, {
+  title: 'AAPL 2024',
+  maPeriods: [5, 20, 60],
+  showVolume: true,
+  volumeData: [...],
+  showDataZoom: true,
+})
+```
+
 ## Color
 
-- Rising candles (close > open): use Green 60 from the alert palette.
-- Falling candles (close ≤ open): use Red 60 from the alert palette.
+- Rising candles (close ≥ open): Green 60 (`$support-success`) border/wick, 20% opacity hollow body fill.
+- Falling candles (close < open): Red 60 (`$support-error`) border/wick, 20% opacity hollow body fill.
+- MA lines: Carbon N-color categorical palette, chosen via `pickColors`.
+
+The hollow-body treatment (full-color outline, tinted fill) follows Carbon Charts' convention of lighter fills on series bodies — distinct from ECharts' default solid-filled candles.
 
 ## ECharts implementation notes
 
-This chart type has no Carbon Charts equivalent. ECharts `candlestick` series accepts `[open, close, low, high]` tuples. All Carbon theme tokens apply. Alert palette colors are used for the two candle states via `itemStyle.color` and `itemStyle.color0`.
+This chart type has no Carbon Charts equivalent. ECharts `candlestick` series accepts `[open, close, low, high]` tuples. The `candlestick` key in the theme factory pre-configures alert-palette colors, so even without the preset the candle colors are Carbon-compliant. Use the preset for more complex layouts (MA overlays, volume sub-chart, dataZoom).

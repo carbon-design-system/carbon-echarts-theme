@@ -33,8 +33,9 @@ import {
   createSparklineOptions,
   createWordCloudOptions,
   createThemeRiverOptions,
+  createCandlestickOptions,
 } from '../presets/index'
-import type { ChartTabularData, ThemeRiverDatum } from '../presets/index'
+import type { ChartTabularData, ThemeRiverDatum, OhlcTuple } from '../presets/index'
 
 // ── Shared test fixtures ──────────────────────────────────────────────────────
 
@@ -1225,5 +1226,98 @@ describe('createThemeRiverOptions', () => {
     const axis = opt.singleAxis as { top: number; bottom: number }
     expect(axis.top).toBe(80)
     expect(axis.bottom).toBe(30)
+  })
+})
+
+// ── Candlestick ───────────────────────────────────────────────────────────────
+
+const ohlcDates = ['2024-01-02', '2024-01-03', '2024-01-04', '2024-01-05', '2024-01-08']
+const ohlcData: OhlcTuple[] = [
+  [148.5, 150.2, 147.1, 151.3],
+  [150.2, 148.8, 147.5, 151.0],
+  [148.8, 152.1, 148.0, 153.5],
+  [152.1, 149.7, 149.0, 153.0],
+  [149.7, 151.5, 149.2, 152.8],
+]
+const volumeData = [4_500_000, 3_800_000, 5_200_000, 4_100_000, 3_600_000]
+
+describe('createCandlestickOptions', () => {
+  it('produces a candlestick series', () => {
+    const opt = createCandlestickOptions(ohlcDates, ohlcData)
+    const s = opt.series as Array<{ type: string }>
+    expect(s[0]?.type).toBe('candlestick')
+  })
+
+  it('passes ohlc data to the series', () => {
+    const opt = createCandlestickOptions(ohlcDates, ohlcData)
+    const s = opt.series as Array<{ data: OhlcTuple[] }>
+    expect(s[0]?.data).toBe(ohlcData)
+  })
+
+  it('sets category x-axis with provided dates', () => {
+    const opt = createCandlestickOptions(ohlcDates, ohlcData)
+    const xAxis = Array.isArray(opt.xAxis) ? opt.xAxis[0] : opt.xAxis
+    expect((xAxis as { data: string[] }).data).toBe(ohlcDates)
+  })
+
+  it('adds MA line series for each maPeriod', () => {
+    const opt = createCandlestickOptions(ohlcDates, ohlcData, { maPeriods: [3, 5] })
+    const s = opt.series as Array<{ type: string; name: string }>
+    const maLines = s.filter((x) => x.type === 'line')
+    expect(maLines).toHaveLength(2)
+    expect(maLines[0]?.name).toBe('MA3')
+    expect(maLines[1]?.name).toBe('MA5')
+  })
+
+  it('adds a volume bar series when showVolume is true', () => {
+    const opt = createCandlestickOptions(ohlcDates, ohlcData, {
+      showVolume: true,
+      volumeData,
+    })
+    const s = opt.series as Array<{ type: string; name: string }>
+    const volBar = s.find((x) => x.name === 'Volume')
+    expect(volBar?.type).toBe('bar')
+  })
+
+  it('omits volume series when showVolume is false (default)', () => {
+    const opt = createCandlestickOptions(ohlcDates, ohlcData)
+    const s = opt.series as Array<{ name: string }>
+    expect(s.find((x) => x.name === 'Volume')).toBeUndefined()
+  })
+
+  it('adds dataZoom when showDataZoom is true', () => {
+    const opt = createCandlestickOptions(ohlcDates, ohlcData, { showDataZoom: true })
+    expect(Array.isArray(opt.dataZoom)).toBe(true)
+    expect((opt.dataZoom as unknown[]).length).toBeGreaterThan(0)
+  })
+
+  it('omits dataZoom when showDataZoom is false (default)', () => {
+    const opt = createCandlestickOptions(ohlcDates, ohlcData)
+    expect(opt.dataZoom).toBeUndefined()
+  })
+
+  it('includes a title when provided', () => {
+    const opt = createCandlestickOptions(ohlcDates, ohlcData, { title: 'AAPL 2024' })
+    expect((opt.title as { text: string }).text).toBe('AAPL 2024')
+  })
+
+  it('omits title when not provided', () => {
+    const opt = createCandlestickOptions(ohlcDates, ohlcData)
+    expect(opt.title).toBeUndefined()
+  })
+
+  it('uses two grids when showVolume is true', () => {
+    const opt = createCandlestickOptions(ohlcDates, ohlcData, {
+      showVolume: true,
+      volumeData,
+    })
+    expect(Array.isArray(opt.grid)).toBe(true)
+    expect((opt.grid as unknown[]).length).toBe(2)
+  })
+
+  it('uses one grid when showVolume is false', () => {
+    const opt = createCandlestickOptions(ohlcDates, ohlcData)
+    expect(Array.isArray(opt.grid)).toBe(true)
+    expect((opt.grid as unknown[]).length).toBe(1)
   })
 })

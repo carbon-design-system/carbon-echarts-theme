@@ -77,10 +77,14 @@ describe('themes', () => {
   describe('Track B — ECharts-extended series keys', () => {
     const themes = [carbonWhite, carbonG10, carbonG90, carbonG100] as const
 
-    it('all themes have candlestick with support-success/error colours', () => {
+    it('all themes have candlestick with support-success/error colours (hollow body)', () => {
       for (const t of themes) {
-        expect(t.candlestick.itemStyle.color.toLowerCase()).toBe('#198038')
-        expect(t.candlestick.itemStyle.color0.toLowerCase()).toBe('#da1e28')
+        // Body fill: green60/red60 @ 20% opacity (hex suffix '33')
+        expect(t.candlestick.itemStyle.color.toLowerCase()).toBe('#19803833')
+        expect(t.candlestick.itemStyle.color0.toLowerCase()).toBe('#da1e2833')
+        // Border/wick: full green60/red60
+        expect(t.candlestick.itemStyle.borderColor.toLowerCase()).toBe('#198038')
+        expect(t.candlestick.itemStyle.borderColor0.toLowerCase()).toBe('#da1e28')
       }
     })
 
