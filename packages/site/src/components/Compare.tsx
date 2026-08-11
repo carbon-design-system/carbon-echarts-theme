@@ -233,6 +233,9 @@ export function Compare({
   const { expandAll } = useCompareContext()
   const chartWrapRef = React.useRef<HTMLDivElement>(null)
   const toolbarRef = React.useRef<ReturnType<typeof createChartToolbar>>(null)
+  // Holds the ECharts instance if onChartReady fires before the toolbar is created.
+  const pendingInstanceRef =
+    React.useRef<Parameters<ReturnType<typeof createChartToolbar>['update']>[0]>(null)
   const [codeCopied, setCodeCopied] = React.useState(false)
   const [activeTab, setActiveTab] = React.useState<FrameworkTab>('react')
 
@@ -254,15 +257,23 @@ export function Compare({
 
   const canCompare = !extended && !!carbonExample && !!chartClass
 
-  // Mount toolbar shell. The instance is wired via onChartReady (below) once
-  // ReactECharts finishes initialising, bypassing the echarts.getInstanceByDom
-  // registry mismatch between the outer echarts import and the copy bundled
-  // inside echarts-for-react.
-  React.useEffect(() => {
+  // Mount toolbar shell using useLayoutEffect so it runs synchronously before the
+  // browser paint — this guarantees the toolbar exists before ReactECharts fires
+  // onChartReady (which resolves asynchronously after the echarts 'finished' event).
+  // If onChartReady somehow fires first, the instance is stashed in pendingInstanceRef
+  // and wired here immediately after toolbar creation.
+  React.useLayoutEffect(() => {
     const wrap = chartWrapRef.current
     if (!wrap) return
     toolbarRef.current = createChartToolbar(wrap, null, { title, fullscreenTarget: wrap })
-    return () => toolbarRef.current?.destroy()
+    if (pendingInstanceRef.current) {
+      toolbarRef.current.update(pendingInstanceRef.current)
+      pendingInstanceRef.current = null
+    }
+    return () => {
+      toolbarRef.current?.destroy()
+      toolbarRef.current = null
+    }
   }, [title])
 
   // ── Build per-tab content ───────────────────────────────────────────────────
@@ -318,7 +329,14 @@ export function Compare({
             theme={echartsTheme}
             style={{ height: chartHeight, width: '100%' }}
             opts={{ renderer: 'canvas' }}
-            onChartReady={(inst) => toolbarRef.current?.update(inst)}
+            onChartReady={(inst) => {
+              if (toolbarRef.current) {
+                toolbarRef.current.update(inst)
+              } else {
+                // Toolbar not yet created (layout effect hasn't run) — stash for later.
+                pendingInstanceRef.current = inst
+              }
+            }}
             onEvents={onEvents}
           />
           {showLoading && <div className="compare__skeleton" aria-hidden="true" />}
