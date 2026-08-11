@@ -4,6 +4,7 @@
  * Data matches carboncharts/pie.ts (pieData / pieDataMapsTo) exactly.
  */
 import type { EChartsOption } from 'echarts'
+import { gray60 } from '@carbon/colors'
 import { createDonutOptions, createPieOptions, pickColors } from '@carbon/echarts-theme/presets'
 
 // ── Shared data — mirrors carboncharts/pie.ts exactly ────────────────────────
@@ -215,7 +216,7 @@ export const pieShowcaseRichLabel: EChartsOption = {
         rich: {
           name: { fontSize: 12, fontWeight: 'bold', lineHeight: 18 },
           value: { fontSize: 14, fontWeight: 600, lineHeight: 20 },
-          unit: { fontSize: 10, lineHeight: 20, color: '#6f6f6f' },
+          unit: { fontSize: 10, lineHeight: 20, color: gray60 },
         },
       },
       labelLine: { show: true, length: 16, length2: 24, smooth: true },

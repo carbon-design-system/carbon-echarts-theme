@@ -581,11 +581,12 @@ export function BarPage() {
                 extended
                 height="380px"
                 optionCode={`import type { EChartsOption } from 'echarts'
+import { pickColors } from '@carbon/echarts-theme/presets'
 
-const palette = ['#6929c4','#009d9a','#e3008c','#1192e8','#005d5d','#9f1853','#6929c4','#009d9a','#e3008c','#1192e8']
 const regions = ['Northern Africa','Southern Africa','Central America','Eastern Europe','Southeast Asia',
                   'Western Europe','South America','North America','East Asia','South Asia']
 const population = [254, 198, 175, 292, 688, 197, 438, 502, 1673, 2027]
+const palette = pickColors(population.length)
 
 const option: EChartsOption = {
   title: { text: 'Population by World Region (millions)', left: 'center' },

@@ -84,11 +84,12 @@ export function PiePage() {
             extended
             height="440px"
             optionCode={`import type { EChartsOption } from 'echarts'
+import { pickColors } from '@carbon/echarts-theme/presets'
 
 const option: EChartsOption = {
   title: { text: 'Department Resource Allocation', left: 'center' },
   tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
-  color: ['#6929c4','#009d9a','#e3008c','#1192e8','#005d5d','#9f1853','#ee538b','#ff832b'],
+  color: pickColors(8),
   series: [{
     name: 'Resources',
     type: 'pie',
@@ -113,10 +114,11 @@ const option: EChartsOption = {
             extended
             height="440px"
             optionCode={`import type { EChartsOption } from 'echarts'
+import { pickColors } from '@carbon/echarts-theme/presets'
 
-// Solid Carbon palette tokens — no alpha, full contrast
-const inner = ['#6929c4','#009d9a','#e3008c','#1192e8','#005d5d']
-const outer = ['#6929c4','#009d9a','#e3008c','#1192e8','#005d5d','#9f1853','#ee538b']
+// Carbon palette — sourced from pickColors so slices stay in sync with the theme
+const inner = pickColors(5)
+const outer = pickColors(7)
 
 // Black pill label style — white text on #000 background reads against any slice fill
 const pillLabel = { color: '#ffffff', backgroundColor: '#000000', borderRadius: 2, padding: [2, 4] }
@@ -161,6 +163,7 @@ const option: EChartsOption = {
             extended
             height="460px"
             optionCode={`import type { EChartsOption } from 'echarts'
+import { gray60 } from '@carbon/colors'
 
 const option: EChartsOption = {
   title: { text: 'Website Traffic Sources', left: 'center' },
@@ -177,7 +180,7 @@ const option: EChartsOption = {
       rich: {
         name:  { fontSize: 12, fontWeight: 'bold', lineHeight: 18 },
         value: { fontSize: 14, fontWeight: 600,    lineHeight: 20 },
-        unit:  { fontSize: 10, lineHeight: 20, color: '#6f6f6f' },
+        unit:  { fontSize: 10, lineHeight: 20, color: gray60 },
       },
     },
     labelLine: { show: true, smooth: true, length: 16, length2: 24 },

@@ -346,8 +346,9 @@ export function LinePage() {
             extended
             height="360px"
             optionCode={`import type { EChartsOption } from 'echarts'
+import { pickColors } from '@carbon/echarts-theme/presets'
 
-const C1 = '#6929c4', C2 = '#009d9a', C4 = '#1192e8'
+const [C1, C2] = pickColors(2)
 const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
 const option: EChartsOption = {
@@ -417,8 +418,9 @@ const option: EChartsOption = {
             extended
             height="360px"
             optionCode={`import type { EChartsOption } from 'echarts'
+import { pickColors } from '@carbon/echarts-theme/presets'
 
-const C1 = '#6929c4', C2 = '#009d9a', C3 = '#e3008c', C4 = '#1192e8'
+const [C1, C2, C3, C4] = pickColors(4)
 const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
 function areaGradient(color: string) {
