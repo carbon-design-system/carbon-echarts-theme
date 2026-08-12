@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/carbon-design-system/carbon-echarts-theme/compare/theme-v0.6.0...theme-v0.6.1) (2026-08-12)
+
+
+### Bug Fixes
+
+* **theme:** replace hardcoded hex values with @carbon/colors tokens in presets ([2f96774](https://github.com/carbon-design-system/carbon-echarts-theme/commit/2f967746b6705336d3ab9ad3b7c12ffaa4d6d835))
+
 ## [0.6.0](https://github.com/carbon-design-system/carbon-echarts-theme/compare/theme-v0.5.0...theme-v0.6.0) (2026-08-11)
 
 
