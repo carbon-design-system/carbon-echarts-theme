@@ -136,6 +136,10 @@ importers:
         version: 6.4.3(@types/node@26.1.2)(jiti@2.6.1)(sass@1.102.0)(yaml@2.9.0)
 
   packages/theme:
+    dependencies:
+      '@ibm/telemetry-js':
+        specifier: ^1.11.0
+        version: 1.11.0
     devDependencies:
       '@carbon/colors':
         specifier: ^11.30.0
@@ -160,6 +164,10 @@ importers:
         version: 3.2.7(@types/debug@4.1.13)(@types/node@26.1.2)(jiti@2.6.1)(jsdom@28.1.0)(sass@1.102.0)(yaml@2.9.0)
 
   packages/toolbar:
+    dependencies:
+      '@ibm/telemetry-js':
+        specifier: ^1.11.0
+        version: 1.11.0
     devDependencies:
       '@vitest/coverage-v8':
         specifier: ^3.0.0

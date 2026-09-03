@@ -33,6 +33,7 @@
   "scripts": {
     "build": "tsup && sass src/styles/toolbar.scss dist/styles.css --style=compressed --no-source-map",
     "dev": "tsup --watch",
+    "postinstall": "ibmtelemetry --config=telemetry.yml",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -51,5 +52,8 @@
     "tsup": "^8.5.1",
     "typescript": "^5.8.3",
     "vitest": "^3.0.0"
+  },
+  "dependencies": {
+    "@ibm/telemetry-js": "^1.11.0"
   }
 }
