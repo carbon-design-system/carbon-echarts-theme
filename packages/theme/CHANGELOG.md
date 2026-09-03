@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/carbon-design-system/carbon-echarts-theme/compare/theme-v0.6.1...theme-v0.7.0) (2026-09-03)
+
+
+### Features
+
+* **theme,toolbar:** add IBM telemetry config ([b0475bd](https://github.com/carbon-design-system/carbon-echarts-theme/commit/b0475bde65565b40ed25df29de60a9a00c92561a))
+
 ## [0.6.1](https://github.com/carbon-design-system/carbon-echarts-theme/compare/theme-v0.6.0...theme-v0.6.1) (2026-08-12)
 
 
