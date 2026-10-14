@@ -75,9 +75,41 @@ export default [
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
     },
   },
+  // Standalone examples — each has its own tsconfig.json
+  {
+    files: ['examples/**/*.ts', 'examples/**/*.tsx'],
+    ignores: ['examples/**/vite.config.ts'],
+    languageOptions: {
+      parser: tsparser,
+      parserOptions: {
+        project: true,
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tseslint,
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
+    },
+    settings: {
+      react: { version: 'detect' },
+    },
+    rules: {
+      ...tseslint.configs.recommended.rules,
+      ...reactPlugin.configs.recommended.rules,
+      ...reactHooksPlugin.configs.recommended.rules,
+      'react/react-in-jsx-scope': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+    },
+  },
   // Build / test config files — use the dedicated tsconfig.node.json for each package
   {
-    files: ['**/tsup.config.ts', '**/vitest.config.ts', '**/vite.config.ts'],
+    files: [
+      'packages/**/tsup.config.ts',
+      'packages/**/vitest.config.ts',
+      'packages/**/vite.config.ts',
+      'examples/**/vite.config.ts',
+    ],
     languageOptions: {
       parser: tsparser,
       parserOptions: {
@@ -85,6 +117,7 @@ export default [
           './packages/theme/tsconfig.node.json',
           './packages/site/tsconfig.node.json',
           './packages/toolbar/tsconfig.node.json',
+          './examples/line/tsconfig.json',
         ],
         tsconfigRootDir: import.meta.dirname,
       },
