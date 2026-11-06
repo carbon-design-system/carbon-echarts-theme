@@ -27,6 +27,7 @@
     "react-router-dom": "^7.6.1",
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.1",
+    "semiotic": "^3.13.3",
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {

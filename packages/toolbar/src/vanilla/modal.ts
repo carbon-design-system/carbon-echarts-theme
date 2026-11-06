@@ -1,16 +1,15 @@
-import type { EChartsType } from 'echarts'
-import { buildTableData } from '../core/extract'
 import { downloadCSV } from '../core/export'
+import { toChartSource, type ChartSourceInput } from '../core/source'
 import { makeSvg, ICON_CLOSE } from './icons'
 
 export interface TableModalOptions {
   title: string
-  instance: EChartsType
+  instance: ChartSourceInput
   onClose: () => void
 }
 
 export function createTableModal({ title, instance, onClose }: TableModalOptions): () => void {
-  const data = buildTableData(instance)
+  const data = toChartSource(instance).getTableData()
 
   // ── Overlay ────────────────────────────────────────────────────────────────
   const overlay = document.createElement('div')

@@ -18,6 +18,11 @@ export interface CarbonChartTokens {
   borderStrong01: string
   // Interactive
   interactive: string
+  // Status
+  supportError: string
+  supportSuccess: string
+  supportWarning: string
+  supportInfo: string
 }
 
 export const tokens: Record<ThemeKey, CarbonChartTokens> = {
@@ -33,6 +38,10 @@ export const tokens: Record<ThemeKey, CarbonChartTokens> = {
     borderSubtle01: white.borderSubtle01,
     borderStrong01: white.borderStrong01,
     interactive: white.interactive,
+    supportError: white.supportError,
+    supportSuccess: white.supportSuccess,
+    supportWarning: white.supportWarning,
+    supportInfo: white.supportInfo,
   },
   g10: {
     background: g10.background,
@@ -46,6 +55,10 @@ export const tokens: Record<ThemeKey, CarbonChartTokens> = {
     borderSubtle01: g10.borderSubtle01,
     borderStrong01: g10.borderStrong01,
     interactive: g10.interactive,
+    supportError: g10.supportError,
+    supportSuccess: g10.supportSuccess,
+    supportWarning: g10.supportWarning,
+    supportInfo: g10.supportInfo,
   },
   g90: {
     background: g90.background,
@@ -59,6 +72,10 @@ export const tokens: Record<ThemeKey, CarbonChartTokens> = {
     borderSubtle01: g90.borderSubtle01,
     borderStrong01: g90.borderStrong01,
     interactive: g90.interactive,
+    supportError: g90.supportError,
+    supportSuccess: g90.supportSuccess,
+    supportWarning: g90.supportWarning,
+    supportInfo: g90.supportInfo,
   },
   g100: {
     background: g100.background,
@@ -72,5 +89,9 @@ export const tokens: Record<ThemeKey, CarbonChartTokens> = {
     borderSubtle01: g100.borderSubtle01,
     borderStrong01: g100.borderStrong01,
     interactive: g100.interactive,
+    supportError: g100.supportError,
+    supportSuccess: g100.supportSuccess,
+    supportWarning: g100.supportWarning,
+    supportInfo: g100.supportInfo,
   },
 }

@@ -55,6 +55,11 @@ import { ThemeRiverPage } from './charts/extended/ThemeRiverPage'
 import { CandlestickPage } from './charts/extended/CandlestickPage'
 import { GanttPage } from './charts/extended/GanttPage'
 
+// Exploration
+import { SemioticBarPage } from './charts/SemioticBarPage'
+import { SemioticLinePage } from './charts/SemioticLinePage'
+import { SemioticHeatmapPage } from './charts/SemioticHeatmapPage'
+
 export function App() {
   return (
     <>
@@ -111,6 +116,11 @@ export function App() {
           <Route path="/extended/gantt" element={<GanttPage />} />
           <Route path="/extended/network-diagrams" element={<NetworkDiagramPage />} />
           <Route path="/extended/wordcloud" element={<WordcloudPage />} />
+
+          {/* Exploration */}
+          <Route path="/semiotic/bar" element={<SemioticBarPage />} />
+          <Route path="/semiotic/line" element={<SemioticLinePage />} />
+          <Route path="/semiotic/heatmap" element={<SemioticHeatmapPage />} />
 
           {/* 404 fallback */}
           <Route

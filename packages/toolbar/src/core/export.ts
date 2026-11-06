@@ -1,8 +1,7 @@
-import type { EChartsType } from 'echarts'
-import { buildTableData } from './extract'
+import { toChartSource, type ChartSource, type ChartSourceInput } from './source'
 
-function buildCSV(instance: EChartsType): string {
-  const data = buildTableData(instance)
+function buildCSV(source: ChartSource): string {
+  const data = source.getTableData()
   if (!data) return ''
   const { headers, rows } = data
   const colKeys = headers.map((h) => h.key).filter((k) => k !== 'id')
@@ -15,8 +14,8 @@ function buildCSV(instance: EChartsType): string {
 }
 
 /** Triggers a browser download of the chart data as a CSV file. */
-export function downloadCSV(instance: EChartsType, filename: string): void {
-  const csv = buildCSV(instance)
+export function downloadCSV(input: ChartSourceInput, filename: string): void {
+  const csv = buildCSV(toChartSource(input))
   const blob = new Blob([csv], { type: 'text/csv' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -28,16 +27,17 @@ export function downloadCSV(instance: EChartsType, filename: string): void {
 
 /**
  * Triggers a browser download of the chart as a PNG or JPG image.
- * Uses ECharts getDataURL() for canvas renderer.
- * Falls back to SVG serialisation → canvas for the SVG renderer.
+ * Uses the source's native `getDataURL()` when it provides one (ECharts canvas).
+ * Otherwise falls back to SVG serialisation → canvas.
  */
-export function exportImage(instance: EChartsType, filename: string, format: 'png' | 'jpg'): void {
+export function exportImage(
+  input: ChartSourceInput,
+  filename: string,
+  format: 'png' | 'jpg',
+): void {
+  const source = toChartSource(input)
   try {
-    const url = instance.getDataURL({
-      type: format === 'jpg' ? 'jpeg' : 'png',
-      pixelRatio: 2,
-      backgroundColor: '#ffffff',
-    })
+    const url = source.getDataURL?.(format === 'jpg' ? 'jpeg' : 'png')
     if (url) {
       const a = document.createElement('a')
       a.href = url
@@ -46,12 +46,10 @@ export function exportImage(instance: EChartsType, filename: string, format: 'pn
       return
     }
   } catch {
-    // SVG renderer fallback below
+    // SVG fallback below
   }
 
-  const container = (instance as any).getDom?.() as HTMLElement | null
-  if (!container) return
-  const svgEl = container.querySelector('svg')
+  const svgEl = source.getSvgElement?.()
   if (!svgEl) return
 
   const svgStr = new XMLSerializer().serializeToString(svgEl)

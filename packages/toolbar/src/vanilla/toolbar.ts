@@ -1,4 +1,5 @@
 import type { EChartsType } from 'echarts'
+import type { ChartSourceInput } from '../core/source'
 import {
   enterFullscreen,
   exitFullscreen,
@@ -29,13 +30,14 @@ export type GetInstanceByDom = (el: HTMLElement) => EChartsType | undefined
 export interface ChartToolbarHandle {
   /** Remove the toolbar and all event listeners from the DOM. */
   destroy(): void
-  /** Re-render the toolbar (e.g. after chartInstance changes). */
-  update(instance: EChartsType | null): void
+  /** Re-render the toolbar (e.g. after the chart instance/source changes). */
+  update(instance: ChartSourceInput | null): void
 }
 
 /**
- * Mounts a Carbon-styled toolbar onto `container` for the given ECharts instance.
- * Returns a handle — call destroy() on cleanup.
+ * Mounts a Carbon-styled toolbar onto `container` for the given chart.
+ * Accepts an ECharts instance, or a `ChartSource` for any other library
+ * (see `createSvgChartSource`). Returns a handle — call destroy() on cleanup.
  *
  * @example
  * const toolbar = createChartToolbar(wrapperEl, chartInstance, { title: 'My Chart' })
@@ -44,7 +46,7 @@ export interface ChartToolbarHandle {
  */
 export function createChartToolbar(
   container: HTMLElement,
-  instance: EChartsType | null,
+  instance: ChartSourceInput | null,
   options: ChartToolbarOptions = {},
 ): ChartToolbarHandle {
   const title = options.title ?? 'chart'
@@ -199,7 +201,7 @@ export function createChartToolbar(
       document.body.removeEventListener('click', bodyClickHandler)
       toolbar.remove()
     },
-    update(newInstance: EChartsType | null) {
+    update(newInstance: ChartSourceInput | null) {
       currentInstance = newInstance
       tableBtn.disabled = !newInstance
       overflowBtn.disabled = !newInstance

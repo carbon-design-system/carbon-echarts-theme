@@ -100,6 +100,14 @@ const NAV: NavGroup[] = [
     ],
   },
   {
+    label: 'Semiotic (exploration)',
+    items: [
+      { label: 'Bar (simple)', path: '/semiotic/bar' },
+      { label: 'Line', path: '/semiotic/line' },
+      { label: 'Heatmap', path: '/semiotic/heatmap' },
+    ],
+  },
+  {
     label: 'Carbon Charts only',
     items: [
       { label: 'Bullet', path: '/bullet' },

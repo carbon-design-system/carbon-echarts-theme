@@ -22,6 +22,10 @@ export {
 export type { ThemeKey, CarbonChartTokens } from './tokens'
 export type { CarbonPalettes, CarbonSequentialPalette, CarbonDivergingPalette } from './palettes'
 
+// ── Engine-neutral data helpers ───────────────────────────────────────────────
+export { pickColors, groupByGroup } from './presets/_transform'
+export type { ChartTabularData, ChartTabularDatum } from './presets/_transform'
+
 // ── Font constants ────────────────────────────────────────────────────────────
 export { IBM_PLEX_FONT_FAMILY, IBM_PLEX_FONT_FAMILY_CONDENSED } from './themes/factory'
 

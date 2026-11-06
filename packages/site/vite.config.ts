@@ -78,6 +78,10 @@ export default defineConfig({
         replacement: path.resolve(__dirname, '../../packages/theme/src/presets/index.ts'),
       },
       {
+        find: '@carbon/echarts-theme/semiotic',
+        replacement: path.resolve(__dirname, '../../packages/theme/src/semiotic/index.ts'),
+      },
+      {
         find: '@carbon/echarts-theme',
         replacement: path.resolve(__dirname, '../../packages/theme/src/index.ts'),
       },

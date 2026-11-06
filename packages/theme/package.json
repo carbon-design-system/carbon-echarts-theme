@@ -29,6 +29,11 @@
       "import": "./dist/presets/index.js",
       "require": "./dist/presets/index.cjs"
     },
+    "./semiotic": {
+      "types": "./dist/semiotic/index.d.ts",
+      "import": "./dist/semiotic/index.js",
+      "require": "./dist/semiotic/index.cjs"
+    },
     "./skeleton": {
       "types": "./dist/skeleton.d.ts",
       "import": "./dist/skeleton.js",
