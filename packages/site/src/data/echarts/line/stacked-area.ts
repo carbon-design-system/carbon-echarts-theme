@@ -32,7 +32,7 @@ export const option: EChartsOption = {
       smooth: true,
       stack: 'total',
       data: [820, 932, 901, 934, 1290, 1330, 1320, 1250, 1100, 980, 870, 820],
-      areaStyle: { color: gradient(C1) as never },
+      areaStyle: { color: gradient(C1) },
     },
     {
       name: 'Direct',
@@ -40,7 +40,7 @@ export const option: EChartsOption = {
       smooth: true,
       stack: 'total',
       data: [620, 732, 701, 734, 890, 930, 920, 850, 780, 650, 600, 590],
-      areaStyle: { color: gradient(C2) as never },
+      areaStyle: { color: gradient(C2) },
     },
     {
       name: 'Email',
@@ -48,7 +48,7 @@ export const option: EChartsOption = {
       smooth: true,
       stack: 'total',
       data: [420, 532, 501, 534, 690, 730, 720, 650, 610, 520, 480, 450],
-      areaStyle: { color: gradient(C3) as never },
+      areaStyle: { color: gradient(C3) },
     },
     {
       name: 'Union Ads',
@@ -56,7 +56,7 @@ export const option: EChartsOption = {
       smooth: true,
       stack: 'total',
       data: [220, 332, 301, 334, 490, 530, 520, 450, 410, 320, 280, 250],
-      areaStyle: { color: gradient(C4) as never },
+      areaStyle: { color: gradient(C4) },
     },
   ],
 }

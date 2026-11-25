@@ -283,6 +283,39 @@ body {
   color: $text-primary;
 }
 
+.compare__launchers {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: $background-inverse;
+}
+
+.compare__launcher {
+  @include type.type-style('body-compact-02');
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-07;
+  min-width: 8rem;
+  padding: $spacing-05 $spacing-05;
+  border: 0;
+  background: transparent;
+  color: $text-inverse;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $background-inverse-hover;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $focus-inverse;
+    outline-offset: -2px;
+  }
+
+  svg {
+    fill: currentColor;
+  }
+}
+
 .compare__extended-banner {
   @include type.type-style('body-01');
   color: $text-secondary;

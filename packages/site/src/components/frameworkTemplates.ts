@@ -122,7 +122,7 @@ onUnmounted(() => cleanup?.())
 
 export function makeSvelte(optionCode: string): string {
   return `<script lang="ts">
-  import { onMount, onDestroy } from 'svelte'
+  import { onMount } from 'svelte'
   import * as echarts from 'echarts'
   import { registerCarbonThemes } from '@carbon/echarts-theme'
   import { autoToolbar } from '@carbon/echarts-toolbar/vanilla'

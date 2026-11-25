@@ -2,6 +2,7 @@ import React from 'react'
 import type { EChartsOption } from 'echarts'
 import ReactECharts from 'echarts-for-react'
 import { Toggle } from '@carbon/react'
+import { Launch } from '@carbon/icons-react'
 import { createChartToolbar } from '@carbon/echarts-toolbar/vanilla'
 import { useTheme } from './ThemeContext'
 import { useCompareContext } from './CompareContext'
@@ -18,6 +19,9 @@ import {
   makeVanilla,
 } from './frameworkTemplates'
 import type { FrameworkTab } from './frameworkTemplates'
+import { FRAMEWORKS, FRAMEWORK_LABELS, getProject } from '../stackblitz'
+import { openStackBlitz } from '../stackblitz/open'
+import type { ProjectInput } from '../stackblitz'
 
 // ── Props ─────────────────────────────────────────────────────────────────────
 
@@ -32,9 +36,9 @@ export interface CompareProps {
   /** Whether this is an extended chart (no Carbon Charts equivalent) */
   extended?: boolean
   /**
-   * When provided, renders an "Open in StackBlitz" link in the header.
+   * When provided, renders a launcher bar below the chart: one StackBlitz button per framework.
    */
-  stackblitzUrl?: string
+  stackblitz?: ProjectInput
   /**
    * Override the default chart height (default: '320px').
    * Useful for charts that need more vertical space, e.g. graph/network layouts.
@@ -68,7 +72,7 @@ export function Compare({
   carbonExample,
   echartsOption,
   extended = false,
-  stackblitzUrl,
+  stackblitz,
   height,
   optionCode,
   chartData,
@@ -157,11 +161,6 @@ export function Compare({
     <div className="compare">
       <div className="compare__header">
         <h3 className="compare__title">{title}</h3>
-        {stackblitzUrl && (
-          <a href={stackblitzUrl} target="_blank" rel="noreferrer" className="compare__stackblitz">
-            Open in StackBlitz
-          </a>
-        )}
       </div>
 
       {extended && (
@@ -193,6 +192,24 @@ export function Compare({
           {showLoading && <div className="compare__skeleton" aria-hidden="true" />}
         </div>
       </div>
+
+      {/* StackBlitz launchers — one runnable project per framework */}
+      {stackblitz && (
+        <div className="compare__launchers" role="group" aria-label="Open in StackBlitz">
+          {FRAMEWORKS.filter((fw) => getProject[fw]).map((fw) => (
+            <button
+              key={fw}
+              type="button"
+              className="compare__launcher"
+              aria-label={`Open ${FRAMEWORK_LABELS[fw]} example in StackBlitz`}
+              onClick={() => openStackBlitz(fw, stackblitz)}
+            >
+              <span>{FRAMEWORK_LABELS[fw]}</span>
+              <Launch size={16} aria-hidden="true" />
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Compare toggle — only when a Carbon Charts equivalent exists */}
       {canCompare && (
