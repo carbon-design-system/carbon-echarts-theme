@@ -19,6 +19,7 @@
     "@carbon/icons-react": "^11.84.0",
     "@carbon/react": "^1.75.0",
     "@mdx-js/react": "^3.1.0",
+    "@stackblitz/sdk": "^1.11.0",
     "echarts": "^6.1.0",
     "echarts-for-react": "^3.0.2",
     "echarts-wordcloud": "^2.1.0",

@@ -75,6 +75,25 @@ export default [
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
     },
   },
+  // Chart variants are copied on their own into generated StackBlitz projects (as
+  // `src/option.ts`), so they must not depend on sibling files.
+  {
+    files: ['packages/site/src/data/echarts/*/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              regex: '^\\.{1,2}(/|$)',
+              message:
+                'Variant files must be self-contained: StackBlitz projects ship only this file. Inline the data instead of importing a sibling.',
+            },
+          ],
+        },
+      ],
+    },
+  },
   // Build / test config files — use the dedicated tsconfig.node.json for each package
   {
     files: ['**/tsup.config.ts', '**/vitest.config.ts', '**/vite.config.ts'],
